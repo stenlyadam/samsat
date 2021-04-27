@@ -1,24 +1,13 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {color} from 'react-native-reanimated';
-import {colors, fonts, IconAddVehicle, IMGKorlantas} from '../../assets';
-import {Gap, TextInput, CheckBox, Button, TopBar} from '../../components';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {colors, fonts, IconAddVehicle} from '../../assets';
+import {Button, TopBar} from '../../components';
 import Content from './Content';
 
 const DetailSTNK = ({navigation}) => {
   return (
     <SafeAreaView style={styles.page}>
-      <TopBar
-        title="Tambah kendaraan"
-        onBack={() => navigation.navigate('AddVehicle')}
-      />
+      <TopBar title="Tambah kendaraan" onBack={() => navigation.goBack()} />
       <View style={styles.contentWrapper}>
         <View style={styles.contentTitleContainer}>
           <IconAddVehicle width={58} height={39} />

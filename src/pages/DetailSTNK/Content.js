@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {color} from 'react-native-reanimated';
-import {colors, fonts, IconAddVehicle, IMGKorlantas} from '../../assets';
-import {Gap, TextInput, CheckBox, Button, TopBar} from '../../components';
+import {StyleSheet, Text, View} from 'react-native';
+import {colors, fonts} from '../../assets';
 
 const Content = ({title, content}) => {
   return (

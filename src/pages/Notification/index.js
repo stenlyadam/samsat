@@ -1,30 +1,26 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {colors, fonts, IconInfo, IMGKorlantas, IMGVehicle} from '../../assets';
-import {Gap, TextInput, CheckBox, Button, TopBar} from '../../components';
-import Content from './Content';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {colors, fonts} from '../../assets';
+import {TopBar} from '../../components';
 import TimeSection from './TimeSection';
-
-let x = 1;
 
 const Notification = ({navigation}) => {
   return (
     <SafeAreaView style={styles.page}>
-      <TopBar
-        title="Notifikasi"
-        onBack={() => navigation.navigate('Dashboard')}
-      />
+      <TopBar title="Notifikasi" onBack={() => navigation.goBack()} />
       <View style={styles.contentContainer}>
-        <TimeSection type="Minggu Ini" />
-        <TimeSection type="Bulan Ini" />
-        <TimeSection type="Lainnya" />
+        <TimeSection
+          type="Minggu Ini"
+          onPress={() => navigation.navigate('VehicleDetail')}
+        />
+        <TimeSection
+          type="Bulan Ini"
+          onPress={() => navigation.navigate('VehicleDetail')}
+        />
+        <TimeSection
+          type="Lainnya"
+          onPress={() => navigation.navigate('VehicleDetail')}
+        />
       </View>
     </SafeAreaView>
   );

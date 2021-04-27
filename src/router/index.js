@@ -10,9 +10,6 @@ import {
   Notification,
   VehicleDetail,
 } from '../pages';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {fonts, colors} from '../assets';
-import {IconVehicle, IconAdd, IconProfileBottomTab} from '../assets';
 import {TopBar} from '../components';
 
 const Stack = createStackNavigator();

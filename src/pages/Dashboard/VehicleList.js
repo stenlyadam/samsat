@@ -9,32 +9,16 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {colors, fonts, IMGVehicle} from '../../assets';
+import DATA from './VehicleData';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    policeNumber: 'DB 5848 C',
-    vehicleName: 'Honda CB150R',
-    vehicleType: 'HONDA H5C02R20M1 M/T',
-    price: '312.100',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    policeNumber: 'DB 5848 C',
-    vehicleName: 'Honda CB150R',
-    vehicleType: 'HONDA H5C02R20M1 M/T',
-    price: '312.100',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    policeNumber: 'DB 5848 C',
-    vehicleName: 'Honda CB150R',
-    vehicleType: 'HONDA H5C02R20M1 M/T',
-    price: '312.100',
-  },
-];
-
-const Vehicle = ({policeNumber, vehicleName, vehicleType, price, onPress}) => (
+const Vehicle = ({
+  policeNumber,
+  vehicleName,
+  vehicleType,
+  price,
+  onPress,
+  dueDate,
+}) => (
   <TouchableWithoutFeedback onPress={onPress}>
     <View style={styles.vehicleContainer}>
       <View style={styles.pictureContainer}>
@@ -55,7 +39,7 @@ const Vehicle = ({policeNumber, vehicleName, vehicleType, price, onPress}) => (
             <Text style={styles.expire}>Berlaku Sampai</Text>
           </View>
           <View style={styles.expireDateContainer}>
-            <Text style={styles.expire}>26 Jan 2020</Text>
+            <Text style={styles.expire}>{dueDate}</Text>
           </View>
         </View>
       </View>
@@ -71,6 +55,7 @@ const VehicleList = ({onPress}) => {
       vehicleType={item.vehicleType}
       price={item.price}
       onPress={onPress}
+      dueDate={item.dueDate}
     />
   );
 
@@ -136,7 +121,6 @@ const styles = StyleSheet.create({
     width: 160,
     height: 18,
     flexDirection: 'row',
-    backgroundColor: 'yellow',
   },
   expireTextContainer: {
     flex: 2,

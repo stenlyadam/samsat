@@ -3,17 +3,27 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {colors, fonts, IMGDashboard} from '../../assets';
 import {Button, Carousel} from '../../components';
 import VehicleList from './VehicleList';
+import IconBadge from 'react-native-icon-badge';
 
+let notification = 6;
 const Dashboard = ({navigation}) => {
   return (
     <View style={styles.page}>
       <Image source={IMGDashboard} style={styles.backgroundImage} />
       <View style={styles.topIconContainer}>
         <Button type="icon-only" icon="icon-help" />
-        <Button
-          type="icon-only"
-          icon="icon-notification"
-          onPress={() => navigation.navigate('Notification')}
+
+        <IconBadge
+          MainElement={
+            <Button
+              type="icon-only"
+              icon="icon-notification"
+              onPress={() => navigation.navigate('Notification')}
+            />
+          }
+          BadgeElement={<Text style={styles.badgeElement}>{notification}</Text>}
+          IconBadgeStyle={styles.iconBadgeStyle}
+          Hidden={notification === 0}
         />
       </View>
       <View style={styles.titleContainer}>
@@ -21,6 +31,7 @@ const Dashboard = ({navigation}) => {
           type="icon-only"
           icon="icon-main-profile"
           style={styles.iconMainProfile}
+          onPress={() => navigation.navigate('Profile')}
         />
         <Text style={styles.title}>SAMSAT Minahasa Utara</Text>
       </View>
@@ -61,6 +72,7 @@ export default Dashboard;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
+    backgroundColor: colors.white,
   },
   backgroundImage: {
     position: 'absolute',
@@ -99,7 +111,7 @@ const styles = StyleSheet.create({
   more: {
     fontFamily: fonts.Poppins.regular,
     fontSize: 12,
-    color: colors.grey,
+    color: colors.darkGrey,
   },
   bottomTabContainer: {
     width: '100%',
@@ -115,5 +127,16 @@ const styles = StyleSheet.create({
   },
   add: {
     marginBottom: 15,
+    left: -5,
+  },
+  iconBadgeStyle: {
+    width: 20,
+    height: 20,
+    backgroundColor: 'red',
+    top: -0,
+    right: -10,
+  },
+  badgeElement: {
+    color: 'white',
   },
 });

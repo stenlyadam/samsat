@@ -15,10 +15,7 @@ import VehicleDetailContent from './VehicleDetailContent';
 const VehicleDetail = ({navigation}) => {
   return (
     <SafeAreaView style={styles.page}>
-      <TopBar
-        title="Rincian Kendaraan"
-        onBack={() => navigation.navigate('Dashboard')}
-      />
+      <TopBar title="Rincian Kendaraan" onBack={() => navigation.goBack()} />
       <View style={styles.contentContainer}>
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>

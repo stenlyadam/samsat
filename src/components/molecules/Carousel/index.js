@@ -1,12 +1,15 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import {colors, IMGCarousel} from '../../../assets';
+import {Image, StyleSheet, View} from 'react-native';
+import {IMGCarousel} from '../../../assets';
 import Swiper from 'react-native-swiper';
 
 const Carousel = () => {
   return (
     <View style={styles.carouselContainer}>
-      <Swiper showsPagination={false} style={styles.carouselWrapper}>
+      <Swiper
+        showsPagination={false}
+        style={styles.carouselWrapper}
+        showsButtons={true}>
         <View style={styles.slide}>
           <Image source={IMGCarousel} style={styles.carouselPicture} />
         </View>

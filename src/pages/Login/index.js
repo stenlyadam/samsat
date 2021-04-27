@@ -7,15 +7,23 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {colors, fonts, IMGKorlantas} from '../../assets';
+import {
+  colors,
+  fonts,
+  IMGBapenda,
+  IMGJasaRaharja,
+  IMGPemprov,
+  IMGSatlantas,
+} from '../../assets';
 import {Gap, TextInput, CheckBox, Button} from '../../components';
 
 const Login = ({navigation}) => {
   return (
     <SafeAreaView style={styles.page}>
       <Gap height={20} />
-      <Image source={IMGKorlantas} />
-      <Gap height={13} />
+
+      <Image source={IMGBapenda} style={styles.bapenda} />
+      <Gap height={30} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
       <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
       <Gap height={45} />
@@ -44,6 +52,11 @@ const Login = ({navigation}) => {
           <Text style={styles.registerButtonText}>Daftar</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.logoContainer}>
+        <Image source={IMGSatlantas} style={styles.satlantas} />
+        <Image source={IMGPemprov} style={styles.pemprov} />
+        <Image source={IMGJasaRaharja} style={styles.jasaraharja} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -54,6 +67,29 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: colors.white,
+  },
+  bapenda: {
+    width: 250,
+    height: 77.63,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    width: 209,
+    justifyContent: 'space-between',
+    marginTop: 35,
+  },
+  satlantas: {
+    width: 48,
+    height: 43,
+  },
+  pemprov: {
+    width: 45,
+    height: 43,
+  },
+  jasaraharja: {
+    height: 47,
+    width: 43,
   },
   mainTitle: {
     fontSize: 36,

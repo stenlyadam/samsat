@@ -1,25 +1,20 @@
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-import {colors, fonts, IconInfo, IMGKorlantas, IMGVehicle} from '../../assets';
-import {Gap, TextInput, CheckBox, Button, TopBar} from '../../components';
+import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {colors, fonts} from '../../assets';
 import Content from './Content';
 import DATA_MINGGU_INI from './DATA_MINGGU_INI';
 import DATA_BULAN_INI from './DATA_BULAN_INI';
 import DATA_LAINNYA from './DATA_LAINNYA';
 
-const TimeSection = ({type}) => {
-  const [selectedId, setSelectedId] = useState(null);
+const TimeSection = ({type, onPress}) => {
+  const [selectedId] = useState(null);
 
   const renderItem = ({item}) => {
-    return <Content item={item} />;
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <Content item={item} />
+      </TouchableOpacity>
+    );
   };
   if (type === 'Minggu Ini') {
     return (
