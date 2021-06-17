@@ -30,11 +30,11 @@ const Login = ({navigation}) => {
 
     firebase
       .auth()
-      .signInWithEmailAndPassword(form.email, form.password)
+      .createUserWithEmailAndPassword(form.email, form.password)
       .then(response => {
         firebase.database().ref(`users/${response.user.uid}/`);
         setForm('reset');
-        navigation.navigate('Dashboard');
+        navigation.navigate('Login');
       })
       .catch(error => {
         console.log(error.message);
@@ -66,26 +66,22 @@ const Login = ({navigation}) => {
       />
       <Gap height={10} />
       <View style={styles.passwordExtrasContainer}>
-        <View style={styles.checkBoxContainer}>
+        {/* <View style={styles.checkBoxContainer}>
           <CheckBox label="Ingat" />
         </View>
         <TouchableOpacity>
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Gap height={40} />
-      <Button
-        label="Masuk"
-        // onPress={() => navigation.navigate('Dashboard')}
-        onPress={onContinue}
-      />
+      <Button label="Daftar" onPress={onContinue} />
       <Gap height={10} />
       <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Belum memiliki akun? </Text>
+        <Text style={styles.registerText}>Sudah memiliki akun? </Text>
         <TouchableOpacity
           style={styles.registerButton}
-          onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.registerButtonText}>Daftar</Text>
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.registerButtonText}>Login</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>
