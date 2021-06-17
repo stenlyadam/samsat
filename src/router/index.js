@@ -9,6 +9,7 @@ import {
   DetailSTNK,
   Notification,
   VehicleDetail,
+  Register,
 } from '../pages';
 import {TopBar} from '../components';
 
@@ -20,6 +21,11 @@ const Router = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
         options={{headerShown: false}}
       />
       <Stack.Screen
