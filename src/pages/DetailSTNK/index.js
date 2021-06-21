@@ -4,7 +4,15 @@ import {colors, fonts, IconAddVehicle} from '../../assets';
 import {Button, TopBar} from '../../components';
 import Content from './Content';
 
-const DetailSTNK = ({navigation}) => {
+const DetailSTNK = ({navigation, route}) => {
+  const {
+    nomorMesin,
+    tahunPembuatan,
+    type,
+    seri,
+    nomorPolisi,
+    masaBerlakuSTNK,
+  } = route.params;
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Tambah kendaraan" onBack={() => navigation.goBack()} />
@@ -13,12 +21,12 @@ const DetailSTNK = ({navigation}) => {
           <IconAddVehicle width={58} height={39} />
           <Text style={styles.contentTitle}>Rincian Kendaraan</Text>
         </View>
-        <Content title="NOMOR MESIN" content="HGAI-7588976" />
-        <Content title="TAHUN PEMBUATAN" content="2016" />
-        <Content title="TYPE" content="HSGD" />
-        <Content title="SERI" content="HGA163" />
-        <Content title="NOMOR POLISI" content="DB 5848 C" />
-        <Content title="MASA BERLAKU STNK" content="25 MEI 2023" />
+        <Content title="NOMOR MESIN" content={nomorMesin} />
+        <Content title="TAHUN PEMBUATAN" content={tahunPembuatan} />
+        <Content title="TYPE" content={type} />
+        <Content title="SERI" content={seri} />
+        <Content title="NOMOR POLISI" content={nomorPolisi} />
+        <Content title="MASA BERLAKU STNK" content={masaBerlakuSTNK} />
         <Content title="TAMBHAKAN FOTO STNK" content="STNK" />
         <View style={styles.buttonContainer}>
           <Button label="Tambah" paddingHorizontal={0} height={43} />

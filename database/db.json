@@ -1,0 +1,46 @@
+{
+  "vehicles": [
+    {
+      "id": "HGAI-7588976",
+      "nomorMesin": "HGAI-7588976",
+      "tahunPembuatan": 2020,
+      "type": "HSGD",
+      "seri": "HGAI163",
+      "nomorPolisi": "DB 5848 C",
+      "vehicleName": "Honda CB150R",
+      "vehicleType": "HONDA H5C02R20M1 M/T",
+      "masaBerlakuSTNK": "25 Jan 2020",
+      "price": 1312000,
+      "fotoSTNK": "",
+      "fotoMotor": ""
+    },
+    {
+      "id": "HGAI-7588971",
+      "nomorMesin": "HGAI-7588971",
+      "tahunPembuatan": 2016,
+      "type": "HSGD",
+      "seri": "HGAI163",
+      "nomorPolisi": "DB 5848 C",
+      "vehicleName": "Honda CB150R",
+      "vehicleType": "HONDA H5C02R20M1 M/T",
+      "masaBerlakuSTNK": "25 Jan 2020",
+      "price": 2312000,
+      "fotoSTNK": "",
+      "fotoMotor": ""
+    },
+    {
+      "id": "HGAI-7588972",
+      "nomorMesin": "HGAI-7588972",
+      "tahunPembuatan": 2016,
+      "type": "HSGD",
+      "seri": "HGAI163",
+      "nomorPolisi": "DB 5848 C",
+      "vehicleName": "Honda CB150R",
+      "vehicleType": "HONDA H5C02R20M1 M/T",
+      "masaBerlakuSTNK": "25 Jan 2020",
+      "price": 3312000,
+      "fotoSTNK": "",
+      "fotoMotor": ""
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,10 +14,12 @@ import {
   IMGJasaRaharja,
   IMGPemprov,
   IMGSatlantas,
+  storeData,
 } from '../../assets';
 import {useForm} from '../../assets/useForm';
-import {Gap, TextInput, CheckBox, Button} from '../../components';
+import {Gap, TextInput, CheckBox, Button, Loading} from '../../components';
 import {firebase} from '../../config';
+import {showError} from '../../utils/showMessage';
 
 const Login = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -25,71 +27,94 @@ const Login = ({navigation}) => {
     password: '',
   });
 
+  const [loading, setLoading] = useState(false);
+
   const onContinue = () => {
     console.log(form);
+    // .then(response => {
+    //   firebase.database().ref(`users/${response.user.uid}/`);
+    //   setForm('reset');
+    //   navigation.navigate('Login');
+    // })
 
     firebase
       .auth()
       .createUserWithEmailAndPassword(form.email, form.password)
-      .then(response => {
-        firebase.database().ref(`users/${response.user.uid}/`);
+      .then(success => {
+        setLoading(false);
         setForm('reset');
-        navigation.navigate('Login');
+        const data = {
+          email: form.email,
+          uid: success.user.uid,
+        };
+        console.log('wkwkwkwkwk');
+        firebase
+          .database()
+          .ref('users/' + success.user.uid + '/')
+          .set(data);
+        console.log('data: ', data);
+        storeData('user', data);
+        navigation.navigate('Login', data);
       })
       .catch(error => {
+        setLoading(false);
+        showError(error.message);
         console.log(error.message);
       });
   };
 
   return (
-    <SafeAreaView style={styles.page}>
-      <Gap height={20} />
+    <>
+      <SafeAreaView style={styles.page}>
+        <Gap height={20} />
 
-      <Image source={IMGBapenda} style={styles.bapenda} />
-      <Gap height={30} />
-      <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
-      <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
-      <Gap height={45} />
-      <TextInput
-        title="No. Ponsel atau Email"
-        paddingHorizontal={55}
-        value={form.email}
-        onChangeText={value => setForm('email', value)}
-      />
-      <Gap height={26} />
-      <TextInput
-        title="Password"
-        paddingHorizontal={55}
-        value={form.password}
-        onChangeText={value => setForm('password', value)}
-        secureTextEntry={true}
-      />
-      <Gap height={10} />
-      <View style={styles.passwordExtrasContainer}>
-        {/* <View style={styles.checkBoxContainer}>
+        <Image source={IMGBapenda} style={styles.bapenda} />
+        <Gap height={30} />
+        <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
+        <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
+        <Gap height={45} />
+        <TextInput
+          title="No. Ponsel atau Email"
+          paddingHorizontal={55}
+          value={form.email}
+          onChangeText={value => setForm('email', value)}
+        />
+        <Gap height={26} />
+        <TextInput
+          title="Password"
+          paddingHorizontal={55}
+          value={form.password}
+          onChangeText={value => setForm('password', value)}
+          secureTextEntry={true}
+        />
+        <Gap height={10} />
+        <View style={styles.passwordExtrasContainer}>
+          {/* <View style={styles.checkBoxContainer}>
           <CheckBox label="Ingat" />
         </View>
         <TouchableOpacity>
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
         </TouchableOpacity> */}
-      </View>
-      <Gap height={40} />
-      <Button label="Daftar" onPress={onContinue} />
-      <Gap height={10} />
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Sudah memiliki akun? </Text>
-        <TouchableOpacity
-          style={styles.registerButton}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.registerButtonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.logoContainer}>
-        <Image source={IMGSatlantas} style={styles.satlantas} />
-        <Image source={IMGPemprov} style={styles.pemprov} />
-        <Image source={IMGJasaRaharja} style={styles.jasaraharja} />
-      </View>
-    </SafeAreaView>
+        </View>
+        <Gap height={40} />
+        <Button label="Daftar" onPress={onContinue} />
+        <Gap height={10} />
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Sudah memiliki akun? </Text>
+          <TouchableOpacity
+            style={styles.registerButton}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.registerButtonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.logoContainer}>
+          <Image source={IMGSatlantas} style={styles.satlantas} />
+          <Image source={IMGPemprov} style={styles.pemprov} />
+          <Image source={IMGJasaRaharja} style={styles.jasaraharja} />
+        </View>
+      </SafeAreaView>
+      {loading && <Loading />}
+    </>
   );
 };
 

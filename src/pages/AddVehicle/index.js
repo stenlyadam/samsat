@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,10 +7,29 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {colors, fonts, IconAddVehicle} from '../../assets';
+import {colors, fonts, getData, IconAddVehicle, storeData} from '../../assets';
 import {TopBar} from '../../components';
+import axios from 'axios';
+import {firebase} from '../../config';
 
 const AddVehicle = ({navigation}) => {
+  const [nomorMesin, setNomorMesin] = useState('');
+  const [uid, setUid] = useState('');
+
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      setUid(data.uid);
+    });
+  }, []);
+
+  const searchVehicle = () => {
+    axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
+      console.log('searchVehicle response: ', response.data);
+      // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
+      navigation.navigate('DetailSTNK', response.data);
+    });
+  };
   return (
     <SafeAreaView style={styles.page}>
       <TopBar
@@ -28,10 +47,13 @@ const AddVehicle = ({navigation}) => {
             style={styles.engineNumberInput}
             placeholder="Nomor Mesin"
             textAlign="center"
+            value={nomorMesin}
+            onChangeText={value => setNomorMesin(value)}
           />
           <TouchableOpacity
             style={styles.engineNumberInputButton}
-            onPress={() => navigation.navigate('DetailSTNK')}>
+            // onPress={() => navigation.navigate('DetailSTNK')}>
+            onPress={() => searchVehicle()}>
             <Text style={styles.buttonTitle}>Cari Nomor Mesin</Text>
           </TouchableOpacity>
         </View>

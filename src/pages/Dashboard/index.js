@@ -1,12 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {colors, fonts, IMGDashboard} from '../../assets';
+import {colors, fonts, getData, IMGDashboard} from '../../assets';
 import {Button, Carousel} from '../../components';
 import VehicleList from './VehicleList';
 import IconBadge from 'react-native-icon-badge';
 
 let notification = 6;
 const Dashboard = ({navigation}) => {
+  const [vehicle, setVehicle] = useState({
+    image: '',
+    nomorPolisi: '',
+    namaKendaraan: '',
+    vehicleType: '',
+    price: '',
+    masaBerlakuSTNK: '',
+  });
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      data.price = response.price;
+      setVehicle(data);
+    });
+  }, []);
+
   return (
     <View style={styles.page}>
       <Image source={IMGDashboard} style={styles.backgroundImage} />

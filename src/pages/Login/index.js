@@ -11,33 +11,51 @@ import {
   colors,
   fonts,
   IMGBapenda,
+  IMGFik,
   IMGJasaRaharja,
   IMGPemprov,
   IMGSatlantas,
+  IMGUnklab,
+  storeData,
 } from '../../assets';
 import {useForm} from '../../assets/useForm';
 import {Gap, TextInput, CheckBox, Button} from '../../components';
 import {firebase} from '../../config';
+import {useDispatch} from 'react-redux';
+import {showError} from '../../utils';
 
 const Login = ({navigation}) => {
   const [form, setForm] = useForm({
     email: '',
     password: '',
   });
+  const dispatch = useDispatch();
 
   const onContinue = () => {
-    console.log(form);
-
+    console.log('onContinue', form);
+    // dispatch({type: 'SET_LOADING', value: true});
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
       .then(response => {
-        firebase.database().ref(`users/${response.user.uid}/`);
-        setForm('reset');
-        navigation.navigate('Dashboard');
+        // dispatch({type: 'SET_LOADING', value: false});
+        firebase
+          .database()
+          .ref(`users/${response.user.uid}/`)
+          .once('value')
+          .then(responseDB => {
+            console.log('Response :', responseDB.val());
+            if (responseDB.val()) {
+              storeData('user', responseDB.val());
+              navigation.navigate('Dashboard');
+            }
+          });
+        // setForm('reset');
       })
       .catch(error => {
+        // dispatch({type: 'SET_LOADING', value: false});
         console.log(error.message);
+        showError(error.message);
       });
   };
 
@@ -89,9 +107,11 @@ const Login = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.logoContainer}>
+        <Image source={IMGFik} style={styles.fik} />
         <Image source={IMGSatlantas} style={styles.satlantas} />
         <Image source={IMGPemprov} style={styles.pemprov} />
         <Image source={IMGJasaRaharja} style={styles.jasaraharja} />
+        <Image source={IMGUnklab} style={styles.unklab} />
       </View>
     </SafeAreaView>
   );
@@ -111,9 +131,10 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flexDirection: 'row',
-    width: 209,
-    justifyContent: 'space-between',
+    width: '100%',
+    justifyContent: 'space-around',
     marginTop: 35,
+    paddingHorizontal: 15,
   },
   satlantas: {
     width: 48,
@@ -125,6 +146,14 @@ const styles = StyleSheet.create({
   },
   jasaraharja: {
     height: 47,
+    width: 43,
+  },
+  fik: {
+    height: 43,
+    width: 34,
+  },
+  unklab: {
+    height: 43,
     width: 43,
   },
   mainTitle: {

@@ -8,6 +8,8 @@ const firebaseConfig = {
   messagingSenderId: '817667071135',
   appId: '1:817667071135:web:0da1b52b74b41fd817d6aa',
   measurementId: 'G-75NBB5RS1J',
+  databaseURL:
+    'https://samsat-bapenda-default-rtdb.asia-southeast1.firebasedatabase.app/',
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

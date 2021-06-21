@@ -7,8 +7,12 @@ import IMGSatlantas from './img-satlantas.png';
 import IMGJasaRaharja from './img-jasaraharja.png';
 import IMGPemprov from './img-pemprov.png';
 import IMGBapenda from './img-bapenda.png';
+import IMGFik from './img-fik.png';
+import IMGUnklab from './img-unklab.png';
 
 export {
+  IMGFik,
+  IMGUnklab,
   IMGKorlantas,
   IMGDashboard,
   IMGCarousel,
