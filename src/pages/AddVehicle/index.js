@@ -11,6 +11,7 @@ import {colors, fonts, getData, IconAddVehicle, storeData} from '../../assets';
 import {TopBar} from '../../components';
 import axios from 'axios';
 import {firebase} from '../../config';
+import {showError} from '../../utils';
 
 const AddVehicle = ({navigation}) => {
   const [nomorMesin, setNomorMesin] = useState('');
@@ -27,7 +28,11 @@ const AddVehicle = ({navigation}) => {
     axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
       console.log('searchVehicle response: ', response.data);
       // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
-      navigation.navigate('DetailSTNK', response.data);
+      if (nomorMesin === '') {
+        showError('Nomor Mesin perlu diisi');
+      } else {
+        navigation.navigate('DetailSTNK', response.data);
+      }
     });
   };
   return (

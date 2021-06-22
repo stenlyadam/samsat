@@ -11,13 +11,15 @@ import {
   colors,
   fonts,
   IMGBapenda,
+  IMGFik,
   IMGJasaRaharja,
   IMGPemprov,
   IMGSatlantas,
+  IMGUnklab,
   storeData,
 } from '../../assets';
 import {useForm} from '../../assets/useForm';
-import {Gap, TextInput, CheckBox, Button, Loading} from '../../components';
+import {Gap, TextInput, Button, Loading} from '../../components';
 import {firebase} from '../../config';
 import {showError} from '../../utils/showMessage';
 
@@ -31,11 +33,6 @@ const Login = ({navigation}) => {
 
   const onContinue = () => {
     console.log(form);
-    // .then(response => {
-    //   firebase.database().ref(`users/${response.user.uid}/`);
-    //   setForm('reset');
-    //   navigation.navigate('Login');
-    // })
 
     firebase
       .auth()
@@ -108,9 +105,11 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.logoContainer}>
+          <Image source={IMGFik} style={styles.fik} />
           <Image source={IMGSatlantas} style={styles.satlantas} />
           <Image source={IMGPemprov} style={styles.pemprov} />
           <Image source={IMGJasaRaharja} style={styles.jasaraharja} />
+          <Image source={IMGUnklab} style={styles.unklab} />
         </View>
       </SafeAreaView>
       {loading && <Loading />}
@@ -132,9 +131,10 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flexDirection: 'row',
-    width: 209,
-    justifyContent: 'space-between',
+    width: '100%',
+    justifyContent: 'space-around',
     marginTop: 35,
+    paddingHorizontal: 15,
   },
   satlantas: {
     width: 48,
@@ -146,6 +146,14 @@ const styles = StyleSheet.create({
   },
   jasaraharja: {
     height: 47,
+    width: 43,
+  },
+  fik: {
+    height: 43,
+    width: 34,
+  },
+  unklab: {
+    height: 43,
     width: 43,
   },
   mainTitle: {

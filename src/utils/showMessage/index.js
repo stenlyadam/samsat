@@ -5,8 +5,8 @@ export const showError = message => {
   showMessage({
     message: message,
     type: 'default',
-    backgroundColor: colors.primaryRed,
-    color: colors.white,
+    backgroundColor: 'yellow',
+    color: colors.black,
   });
 };
 
