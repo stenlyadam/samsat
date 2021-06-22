@@ -34,12 +34,11 @@ const DetailSTNK = ({navigation, route}) => {
 
     axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
       // setVehicle(response.data);
-      setId(response.data.id);
       console.log('searchVehicle response: ', response.data);
       firebase
         .database()
         .ref(`users/${uid}/vehicles`)
-        .child(id)
+        .child(response.data.id)
         .set(response.data)
         .catch(error => {
           // dispatch({type: 'SET_LOADING', value: false});

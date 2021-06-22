@@ -33,12 +33,13 @@ const Login = ({navigation}) => {
 
   const onContinue = () => {
     console.log('onContinue', form);
-    // dispatch({type: 'SET_LOADING', value: true});
+    dispatch({type: 'SET_LOADING', value: true});
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
       .then(response => {
-        // dispatch({type: 'SET_LOADING', value: false});
+        dispatch({type: 'SET_LOADING', value: false});
+        console.log('wkwkwkwkwkwk');
         firebase
           .database()
           .ref(`users/${response.user.uid}/`)
@@ -50,10 +51,10 @@ const Login = ({navigation}) => {
               navigation.navigate('Dashboard');
             }
           });
-        // setForm('reset');
+        setForm('reset');
       })
       .catch(error => {
-        // dispatch({type: 'SET_LOADING', value: false});
+        dispatch({type: 'SET_LOADING', value: false});
         console.log(error.message);
         showError(error.message);
       });
