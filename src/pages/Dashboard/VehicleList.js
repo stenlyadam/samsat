@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,9 +7,12 @@ import {
   Image,
   FlatList,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
-import {colors, fonts, IMGVehicle} from '../../assets';
+import {colors, fonts, getData, IMGVehicle} from '../../assets';
 import DATA from './VehicleData';
+import {firebase} from '../../config';
+import {useDispatch} from 'react-redux';
 
 const Vehicle = ({
   policeNumber,
@@ -47,7 +50,44 @@ const Vehicle = ({
   </TouchableWithoutFeedback>
 );
 
-const VehicleList = ({onPress}) => {
+const VehicleList = ({onPress, uid, vehicles}) => {
+  // const [vehicles, setVehicles] = useState([]);
+  const dispatch = useDispatch();
+  const [vehiclesList, setVehiclesList] = useState([]);
+
+  useEffect(() => {
+    console.log('wkwkwk uid', uid);
+    // firebase
+    //   .database()
+    //   .ref(`users/${uid}/vehicles`)
+    //   .once('value')
+    //   .then(response => {
+    //     if (response.val()) {
+    //       const oldData = response.val();
+    //       const data = [];
+    //       Object.keys(oldData).map(key => {
+    //         data.push({
+    //           id: key,
+    //           data: oldData[key],
+    //         });
+    //       });
+    //       setVehicles(data);
+    //     }
+    //   });
+    if (vehicles) {
+      const oldData = vehicles;
+      const data = [];
+      Object.keys(oldData).map(key => {
+        data.push({
+          id: key,
+          data: oldData[key],
+        });
+      });
+      setVehiclesList(data);
+    }
+    console.log('vehicles ', vehicles);
+  }, []);
+
   const renderItem = ({item}) => (
     <Vehicle
       policeNumber={item.policeNumber}
@@ -60,15 +100,28 @@ const VehicleList = ({onPress}) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
+    <ScrollView horizontal={true} style={styles.container}>
+      {/* <FlatList
         horizontal
         data={DATA}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         showsHorizontalScrollIndicator={false}
-      />
-    </SafeAreaView>
+      /> */}
+      {vehiclesList.map(vehicle => {
+        return (
+          <Vehicle
+            key={vehicle.id}
+            policeNumber={vehicle.data.nomorPolisi}
+            vehicleName={vehicle.data.vehicleName}
+            vehicleType={vehicle.data.vehicleType}
+            price={vehicle.data.price}
+            onPress={onPress}
+            dueDate={vehicle.data.masaBerlakuSTNK}
+          />
+        );
+      })}
+    </ScrollView>
   );
 };
 

@@ -5,7 +5,7 @@ import {colors, fonts} from '../../../assets';
 const Loading = () => {
   return (
     <View style={styles.wrapper}>
-      <ActivityIndicator size="large" color={colors.primaryRed} />
+      <ActivityIndicator size="large" color={colors.white} />
       <Text style={styles.text}>Loading...</Text>
     </View>
   );
@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: colors.blackTransparent,
     width: '100%',
     height: '100%',
   },
   text: {
     fontSize: 18,
-    color: colors.primaryRed,
+    color: colors.white,
     fontFamily: fonts.Poppins[800],
     marginTop: 16,
   },

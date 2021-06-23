@@ -5,6 +5,7 @@ const listColors = {
   grey2: '#A5ECD7',
   grey3: '#F3F2F2',
   red: '#9A0000',
+  black2: 'rgba(0,0,0, 0.5)',
 };
 
 export const colors = {
@@ -16,4 +17,5 @@ export const colors = {
   darkGrey: listColors.grey1,
   grey: listColors.grey2,
   lightGrey: listColors.grey3,
+  blackTransparent: listColors.black2,
 };

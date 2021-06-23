@@ -39,7 +39,6 @@ const Login = ({navigation}) => {
       .signInWithEmailAndPassword(form.email, form.password)
       .then(response => {
         dispatch({type: 'SET_LOADING', value: false});
-        console.log('wkwkwkwkwkwk');
         firebase
           .database()
           .ref(`users/${response.user.uid}/`)
@@ -93,11 +92,7 @@ const Login = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <Gap height={40} />
-      <Button
-        label="Masuk"
-        // onPress={() => navigation.navigate('Dashboard')}
-        onPress={onContinue}
-      />
+      <Button label="Masuk" onPress={onContinue} />
       <Gap height={10} />
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Belum memiliki akun? </Text>

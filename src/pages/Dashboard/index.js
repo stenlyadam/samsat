@@ -7,19 +7,14 @@ import IconBadge from 'react-native-icon-badge';
 
 let notification = 6;
 const Dashboard = ({navigation}) => {
-  const [vehicle, setVehicle] = useState({
-    image: '',
-    nomorPolisi: '',
-    namaKendaraan: '',
-    vehicleType: '',
-    price: '',
-    masaBerlakuSTNK: '',
-  });
+  const [vehicles, setVehicles] = useState([]);
+  const [uid, setUid] = useState('');
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
-      data.price = response.price;
-      setVehicle(data);
+      setVehicles(data.vehicles);
+      setUid(data.uid);
+      console.log('dashboard vehicle', vehicles);
     });
   }, []);
 
@@ -58,7 +53,11 @@ const Dashboard = ({navigation}) => {
           <Text style={styles.more}>Lihat Semua</Text>
         </TouchableOpacity>
       </View>
-      <VehicleList onPress={() => navigation.navigate('VehicleDetail')} />
+      <VehicleList
+        onPress={() => navigation.navigate('VehicleDetail')}
+        uid={uid}
+        vehicles={vehicles}
+      />
 
       <View style={styles.bottomTabContainer}>
         <Button
