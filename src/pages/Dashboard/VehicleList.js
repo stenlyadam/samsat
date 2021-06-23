@@ -50,12 +50,19 @@ const Vehicle = ({
   </TouchableWithoutFeedback>
 );
 
-const VehicleList = ({onPress, uid, vehicles}) => {
-  // const [vehicles, setVehicles] = useState([]);
-  const dispatch = useDispatch();
-  const [vehiclesList, setVehiclesList] = useState([]);
+const VehicleList = ({onPress}) => {
+  const [vehicles, setVehicles] = useState([]);
+  const [uid, setUid] = useState('');
+  const [vehiclesList, setVehiclesList] = useState(vehicles);
 
   useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      setVehicles(data.vehicles);
+      setUid(data.uid);
+      console.log('get DATA', data);
+    });
+
     console.log('wkwkwk uid', uid);
     // firebase
     //   .database()
@@ -71,9 +78,24 @@ const VehicleList = ({onPress, uid, vehicles}) => {
     //           data: oldData[key],
     //         });
     //       });
-    //       setVehicles(data);
+    //       setVehiclesList(data);
     //     }
     //   });
+    // if (vehicles) {
+    //   const oldData = vehicles;
+    //   const data = [];
+    //   Object.keys(oldData).map(key => {
+    //     data.push({
+    //       id: key,
+    //       data: oldData[key],
+    //     });
+    //   });
+    //   setVehiclesList(data);
+    // }
+    // console.log('vehicles ', vehicles);
+  }, []);
+
+  useEffect(() => {
     if (vehicles) {
       const oldData = vehicles;
       const data = [];
@@ -86,28 +108,21 @@ const VehicleList = ({onPress, uid, vehicles}) => {
       setVehiclesList(data);
     }
     console.log('vehicles ', vehicles);
-  }, []);
+  }, [uid]);
 
-  const renderItem = ({item}) => (
-    <Vehicle
-      policeNumber={item.policeNumber}
-      vehicleName={item.vehicleName}
-      vehicleType={item.vehicleType}
-      price={item.price}
-      onPress={onPress}
-      dueDate={item.dueDate}
-    />
-  );
+  // const renderItem = ({item}) => (
+  //   <Vehicle
+  //     policeNumber={item.policeNumber}
+  //     vehicleName={item.vehicleName}
+  //     vehicleType={item.vehicleType}
+  //     price={item.price}
+  //     onPress={onPress}
+  //     dueDate={item.dueDate}
+  //   />
+  // );
 
   return (
     <ScrollView horizontal={true} style={styles.container}>
-      {/* <FlatList
-        horizontal
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        showsHorizontalScrollIndicator={false}
-      /> */}
       {vehiclesList.map(vehicle => {
         return (
           <Vehicle

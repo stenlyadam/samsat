@@ -16,5 +16,6 @@ export const getData = async key => {
     }
   } catch (e) {
     // error reading value
+    console.log('Error getData');
   }
 };
