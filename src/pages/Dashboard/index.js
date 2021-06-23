@@ -7,18 +7,6 @@ import IconBadge from 'react-native-icon-badge';
 
 let notification = 6;
 const Dashboard = ({navigation}) => {
-  // const [vehicles, setVehicles] = useState([]);
-  // const [uid, setUid] = useState('');
-
-  // useEffect(() => {
-  //   getData('user').then(response => {
-  //     const data = response;
-  //     setVehicles(data.vehicles);
-  //     setUid(data.uid);
-  //     console.log('dashboard vehicle', vehicles);
-  //   });
-  // }, []);
-
   return (
     <View style={styles.page}>
       <Image source={IMGDashboard} style={styles.backgroundImage} />
@@ -55,9 +43,9 @@ const Dashboard = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <VehicleList
-        onPress={() => navigation.navigate('VehicleDetail')}
-        // uid={uid}
-        // vehicles={vehicles}
+      // onPress={() => navigation.navigate('VehicleDetail')}
+      // uid={uid}
+      // vehicles={vehicles}
       />
 
       <View style={styles.bottomTabContainer}>

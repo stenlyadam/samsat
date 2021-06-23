@@ -12,7 +12,9 @@ import {TopBar} from '../../components';
 import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
 
-const VehicleDetail = ({navigation}) => {
+const VehicleDetail = ({route, navigation}) => {
+  const value = route.params;
+  console.log('Key sent : ', value);
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Rincian Kendaraan" onBack={() => navigation.goBack()} />
@@ -43,7 +45,7 @@ const VehicleDetail = ({navigation}) => {
               </View>
               <View style={styles.paymentTotalContainer}>
                 <Text style={styles.paymentTotal}>Rp</Text>
-                <Text style={styles.paymentTotal}>312.100</Text>
+                <Text style={styles.paymentTotal}>300000</Text>
               </View>
               <View style={styles.paymentDueDateContainer}>
                 <Text style={styles.paymentDueText}>26 Januari 2020</Text>

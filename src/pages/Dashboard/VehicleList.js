@@ -10,47 +10,57 @@ import {
   ScrollView,
 } from 'react-native';
 import {colors, fonts, getData, IMGVehicle} from '../../assets';
-import DATA from './VehicleData';
-import {firebase} from '../../config';
-import {useDispatch} from 'react-redux';
+import NumberFormat from 'react-number-format';
+import {useNavigation} from '@react-navigation/native';
 
 const Vehicle = ({
   policeNumber,
   vehicleName,
   vehicleType,
   price,
-  onPress,
   dueDate,
-}) => (
-  <TouchableWithoutFeedback onPress={onPress}>
-    <View style={styles.vehicleContainer}>
-      <View style={styles.pictureContainer}>
-        <Image source={IMGVehicle} />
-      </View>
-      <View style={styles.vehicleText}>
-        <Text style={styles.policeNumber}>{policeNumber}</Text>
-        <Text style={styles.vehicleName}>
-          {vehicleName}
-          <Text style={styles.vehicleType}> {vehicleType}</Text>
-        </Text>
-        <Text style={styles.taxPrice}>
-          Rp <Text style={styles.taxPrice}>{price}</Text>
-        </Text>
+  keyId,
+}) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate('VehicleDetail', {keyId})}>
+      <View style={styles.vehicleContainer}>
+        <View style={styles.pictureContainer}>
+          <Image source={IMGVehicle} />
+        </View>
+        <View style={styles.vehicleText}>
+          <Text style={styles.policeNumber}>{policeNumber}</Text>
+          <Text style={styles.vehicleName}>
+            {vehicleName}
+            <Text style={styles.vehicleType}> {vehicleType}</Text>
+          </Text>
+          <Text style={styles.taxPrice}>
+            Rp
+            <NumberFormat
+              value={price}
+              displayType={'text'}
+              thousandSeparator="."
+              decimalSeparator=","
+              renderText={value => <Text style={styles.taxPrice}>{value}</Text>}
+            />
+          </Text>
 
-        <View style={styles.expireContainer}>
-          <View style={styles.expireTextContainer}>
-            <Text style={styles.expire}>Berlaku Sampai</Text>
-          </View>
-          <View style={styles.expireDateContainer}>
-            <Text style={styles.expire}>{dueDate}</Text>
+          <View style={styles.expireContainer}>
+            <View style={styles.expireTextContainer}>
+              <Text style={styles.expire}>Berlaku Sampai</Text>
+            </View>
+            <View style={styles.expireDateContainer}>
+              <Text style={styles.expire}>{dueDate}</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  </TouchableWithoutFeedback>
-);
+    </TouchableWithoutFeedback>
+  );
+};
 
-const VehicleList = ({onPress}) => {
+const VehicleList = ({navigation}) => {
   const [vehicles, setVehicles] = useState([]);
   const [uid, setUid] = useState('');
   const [vehiclesList, setVehiclesList] = useState(vehicles);
@@ -64,35 +74,6 @@ const VehicleList = ({onPress}) => {
     });
 
     console.log('wkwkwk uid', uid);
-    // firebase
-    //   .database()
-    //   .ref(`users/${uid}/vehicles`)
-    //   .once('value')
-    //   .then(response => {
-    //     if (response.val()) {
-    //       const oldData = response.val();
-    //       const data = [];
-    //       Object.keys(oldData).map(key => {
-    //         data.push({
-    //           id: key,
-    //           data: oldData[key],
-    //         });
-    //       });
-    //       setVehiclesList(data);
-    //     }
-    //   });
-    // if (vehicles) {
-    //   const oldData = vehicles;
-    //   const data = [];
-    //   Object.keys(oldData).map(key => {
-    //     data.push({
-    //       id: key,
-    //       data: oldData[key],
-    //     });
-    //   });
-    //   setVehiclesList(data);
-    // }
-    // console.log('vehicles ', vehicles);
   }, []);
 
   useEffect(() => {
@@ -110,29 +91,17 @@ const VehicleList = ({onPress}) => {
     console.log('vehicles ', vehicles);
   }, [uid]);
 
-  // const renderItem = ({item}) => (
-  //   <Vehicle
-  //     policeNumber={item.policeNumber}
-  //     vehicleName={item.vehicleName}
-  //     vehicleType={item.vehicleType}
-  //     price={item.price}
-  //     onPress={onPress}
-  //     dueDate={item.dueDate}
-  //   />
-  // );
-
   return (
     <ScrollView horizontal={true} style={styles.container}>
       {vehiclesList.map(vehicle => {
         return (
           <Vehicle
-            key={vehicle.id}
             policeNumber={vehicle.data.nomorPolisi}
             vehicleName={vehicle.data.vehicleName}
             vehicleType={vehicle.data.vehicleType}
             price={vehicle.data.price}
-            onPress={onPress}
             dueDate={vehicle.data.masaBerlakuSTNK}
+            keyId={vehicle.id}
           />
         );
       })}
