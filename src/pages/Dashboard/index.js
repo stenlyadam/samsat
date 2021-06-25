@@ -42,11 +42,7 @@ const Dashboard = ({navigation}) => {
           <Text style={styles.more}>Lihat Semua</Text>
         </TouchableOpacity>
       </View>
-      <VehicleList
-      // onPress={() => navigation.navigate('VehicleDetail')}
-      // uid={uid}
-      // vehicles={vehicles}
-      />
+      <VehicleList />
 
       <View style={styles.bottomTabContainer}>
         <Button

@@ -22,6 +22,7 @@
     "json-server": "^0.16.3",
     "react": "17.0.1",
     "react-native": "0.64.0",
+    "react-native-cli": "^2.0.1",
     "react-native-flash-message": "^0.1.23",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-icon-badge": "^1.1.3",

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,14 +7,23 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import {colors, fonts, IconEdit, IMGStnk, IMGVehicle} from '../../assets';
-import {TopBar} from '../../components';
+import { colors, fonts, IconEdit, IMGStnk, IMGVehicle } from '../../assets';
+import { TopBar } from '../../components';
 import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
+import { firebase } from '../../config';
+import NumberFormat from 'react-number-format';
 
-const VehicleDetail = ({route, navigation}) => {
+const VehicleDetail = ({ route, navigation }) => {
   const value = route.params;
-  console.log('Key sent : ', value);
+  const vehicle = value.vehicle.data;
+  // useEffect(() => {
+  //   firebase
+  //   .database()
+  //   .
+  // }, [])
+
+  console.log('Key sent : ', vehicle);
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Rincian Kendaraan" onBack={() => navigation.goBack()} />
@@ -37,7 +46,7 @@ const VehicleDetail = ({route, navigation}) => {
                 <Text style={styles.paymentDueText}>Pembayaran Sebelum</Text>
               </View>
             </View>
-            <View>
+            <View style={styles.paymentContainerLine}>
               <View style={styles.paymentTitleContainer}>
                 <Text style={styles.paymentTitle}>
                   JUMLAH YANG HARUS DIBAYAR
@@ -45,10 +54,21 @@ const VehicleDetail = ({route, navigation}) => {
               </View>
               <View style={styles.paymentTotalContainer}>
                 <Text style={styles.paymentTotal}>Rp</Text>
-                <Text style={styles.paymentTotal}>300000</Text>
+                {/* <Text style={styles.paymentTotal}>{vehicle.price}</Text> */}
+                <NumberFormat
+                  value={vehicle.price}
+                  displayType={'text'}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  renderText={value => (
+                    <Text style={styles.paymentTotal}>{value}</Text>
+                  )}
+                />
               </View>
               <View style={styles.paymentDueDateContainer}>
-                <Text style={styles.paymentDueText}>26 Januari 2020</Text>
+                <Text style={styles.paymentDueText}>
+                  {vehicle.masaBerlakuSTNK}
+                </Text>
               </View>
             </View>
           </View>
@@ -64,24 +84,24 @@ const VehicleDetail = ({route, navigation}) => {
                 <View style={styles.column}>
                   <VehicleDetailContent
                     title="NOMOR MESIN"
-                    content="HGAI-7588976"
+                    content={vehicle.nomorMesin}
                   />
                   <VehicleDetailContent
                     title="TAHUN PEMBUATAN"
-                    content="2016"
+                    content={vehicle.tahunPembuatan}
                   />
-                  <VehicleDetailContent title="TYPE" content="HSGD" />
+                  <VehicleDetailContent title="TYPE" content={vehicle.type} />
                 </View>
                 <View style={styles.column}>
                   <VehicleDetailContent
                     title="NOMOR POLISI"
-                    content="DB 5848 C"
+                    content={vehicle.nomorPolisi}
                   />
                   <VehicleDetailContent
                     title="MASA BERLAKU STNK"
-                    content="25 MEI 2023"
+                    content={vehicle.masaBerlakuSTNK}
                   />
-                  <VehicleDetailContent title="SERI" content="HGA163" />
+                  <VehicleDetailContent title="SERI" content={vehicle.seri} />
                 </View>
               </View>
             </View>
@@ -159,10 +179,13 @@ const styles = StyleSheet.create({
   },
   paymentTitleContainer: {
     height: 85 / 2,
-    width: 246,
+    width: '100%',
     borderTopRightRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  paymentContainerLine: {
+    flex: 1,
   },
   paymentTitle: {
     fontFamily: fonts.Poppins.medium,
@@ -171,7 +194,7 @@ const styles = StyleSheet.create({
   },
   paymentTotalContainer: {
     height: 85 / 2,
-    width: 246,
+    width: '100%',
     borderTopColor: colors.white,
     borderTopWidth: 4,
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,9 +9,9 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
-import {colors, fonts, getData, IMGVehicle} from '../../assets';
+import { colors, fonts, getData, IMGVehicle } from '../../assets';
 import NumberFormat from 'react-number-format';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Vehicle = ({
   policeNumber,
@@ -19,12 +19,12 @@ const Vehicle = ({
   vehicleType,
   price,
   dueDate,
-  keyId,
+  vehicle,
 }) => {
   const navigation = useNavigation();
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate('VehicleDetail', {keyId})}>
+      onPress={() => navigation.navigate('VehicleDetail', { vehicle })}>
       <View style={styles.vehicleContainer}>
         <View style={styles.pictureContainer}>
           <Image source={IMGVehicle} />
@@ -60,7 +60,7 @@ const Vehicle = ({
   );
 };
 
-const VehicleList = ({navigation}) => {
+const VehicleList = ({ navigation }) => {
   const [vehicles, setVehicles] = useState([]);
   const [uid, setUid] = useState('');
   const [vehiclesList, setVehiclesList] = useState(vehicles);
@@ -93,7 +93,7 @@ const VehicleList = ({navigation}) => {
 
   return (
     <ScrollView horizontal={true} style={styles.container}>
-      {vehiclesList.map(vehicle => {
+      {vehiclesList.map((vehicle, i) => {
         return (
           <Vehicle
             policeNumber={vehicle.data.nomorPolisi}
@@ -101,7 +101,8 @@ const VehicleList = ({navigation}) => {
             vehicleType={vehicle.data.vehicleType}
             price={vehicle.data.price}
             dueDate={vehicle.data.masaBerlakuSTNK}
-            keyId={vehicle.id}
+            vehicle={vehicle}
+            key={i}
           />
         );
       })}
