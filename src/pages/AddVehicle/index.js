@@ -1,136 +1,186 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TextInput,
+  Image,
+  FlatList,
+  TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
-import {colors, fonts, getData, IconAddVehicle, storeData} from '../../assets';
-import {TopBar} from '../../components';
-import axios from 'axios';
-import {firebase} from '../../config';
-import {showError} from '../../utils';
+import { colors, fonts, getData, IMGVehicle } from '../../assets';
+import NumberFormat from 'react-number-format';
+import { useNavigation } from '@react-navigation/native';
 
-const AddVehicle = ({navigation}) => {
-  const [nomorMesin, setNomorMesin] = useState('');
+const Vehicle = ({
+  policeNumber,
+  vehicleName,
+  vehicleType,
+  price,
+  dueDate,
+  vehicle,
+}) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate('VehicleDetail', { vehicle })}>
+      <View style={styles.vehicleContainer}>
+        <View style={styles.pictureContainer}>
+          <Image source={IMGVehicle} />
+        </View>
+        <View style={styles.vehicleText}>
+          <Text style={styles.policeNumber}>{policeNumber}</Text>
+          <Text style={styles.vehicleName}>
+            {vehicleName}
+            <Text style={styles.vehicleType}> {vehicleType}</Text>
+          </Text>
+          <Text style={styles.taxPrice}>
+            Rp
+            <NumberFormat
+              value={price}
+              displayType={'text'}
+              thousandSeparator="."
+              decimalSeparator=","
+              renderText={value => <Text style={styles.taxPrice}>{value}</Text>}
+            />
+          </Text>
+
+          <View style={styles.expireContainer}>
+            <View style={styles.expireTextContainer}>
+              <Text style={styles.expire}>Berlaku Sampai</Text>
+            </View>
+            <View style={styles.expireDateContainer}>
+              <Text style={styles.expire}>{dueDate}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+const VehicleList = ({ navigation }) => {
+  const [vehicles, setVehicles] = useState([]);
   const [uid, setUid] = useState('');
+  const [vehiclesList, setVehiclesList] = useState(vehicles);
 
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
+      setVehicles(data.vehicles);
       setUid(data.uid);
+      console.log('get DATA', data);
     });
+
+    console.log('wkwkwk uid', uid);
   }, []);
 
-  const searchVehicle = () => {
-    axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
-      console.log('searchVehicle response: ', response.data);
-      // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
-      if (nomorMesin === '') {
-        showError('Nomor Mesin perlu diisi');
-      } else {
-        navigation.navigate('DetailSTNK', response.data);
-      }
-    });
-  };
+  useEffect(() => {
+    if (vehicles) {
+      const oldData = vehicles;
+      const data = [];
+      Object.keys(oldData).map(key => {
+        data.push({
+          id: key,
+          data: oldData[key],
+        });
+      });
+      setVehiclesList(data);
+    }
+    console.log('vehicles ', vehicles);
+  }, [uid]);
+
   return (
-    <SafeAreaView style={styles.page}>
-      <TopBar
-        title="Tambah Kendaraan"
-        onBack={() => navigation.navigate('Dashboard')}
-      />
-      <View style={styles.contentContainer}>
-        <IconAddVehicle />
-        <Text style={styles.text}>
-          Masukkan <Text style={styles.boldText}>nomor mesin</Text> yang ada di
-          bagian bawah STNK anda
-        </Text>
-        <View style={styles.engineNumberInputContainer}>
-          <TextInput
-            style={styles.engineNumberInput}
-            placeholder="Nomor Mesin"
-            textAlign="center"
-            value={nomorMesin}
-            onChangeText={value => setNomorMesin(value)}
+    <ScrollView horizontal={true} style={styles.container}>
+      {vehiclesList.map((vehicle, i) => {
+        return (
+          <Vehicle
+            policeNumber={vehicle.data.nomorPolisi}
+            vehicleName={vehicle.data.vehicleName}
+            vehicleType={vehicle.data.vehicleType}
+            price={vehicle.data.price}
+            dueDate={vehicle.data.masaBerlakuSTNK}
+            vehicle={vehicle}
+            key={i}
           />
-          <TouchableOpacity
-            style={styles.engineNumberInputButton}
-            // onPress={() => navigation.navigate('DetailSTNK')}>
-            onPress={() => searchVehicle()}>
-            <Text style={styles.buttonTitle}>Cari Nomor Mesin</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
+        );
+      })}
+    </ScrollView>
   );
 };
 
-export default AddVehicle;
-
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
-  topBarContainer: {
-    width: '100%',
-    height: 70,
-    backgroundColor: colors.primaryRed,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+  container: {
+    height: 350,
     flexDirection: 'row',
-    paddingLeft: 16,
   },
-  topBarTitle: {
-    color: colors.white,
+  pictureContainer: {
+    height: 160,
+    width: 160,
+    borderRadius: 18,
+    marginTop: -60,
+  },
+  vehicleContainer: {
+    height: 228,
+    width: 200,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    elevation: 10,
+    alignItems: 'center',
+    marginTop: 75,
+    marginHorizontal: 15,
+  },
+  policeNumber: {
     fontFamily: fonts.Poppins.medium,
     fontSize: 18,
-    marginLeft: 16,
+    color: colors.primaryBlack,
   },
-  contentContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: colors.white,
-    paddingBottom: 100,
-  },
-  text: {
-    fontSize: 14,
-    fontFamily: fonts.Poppins.regular,
-    textAlign: 'center',
-    width: 240,
-  },
-  boldText: {
-    fontFamily: fonts.Poppins.bold,
-  },
-
-  engineNumberInputContainer: {
-    paddingHorizontal: 52,
-    width: '100%',
-    height: 85,
-    marginTop: 20,
-  },
-  engineNumberInput: {
-    width: '100%',
-    height: 46,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    backgroundColor: colors.white,
-    elevation: 10,
-  },
-  engineNumberInputButton: {
-    flex: 1,
-    backgroundColor: colors.primaryRed,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 10,
-  },
-  buttonTitle: {
+  vehicleName: {
     fontFamily: fonts.Poppins.medium,
-    fontSize: 14,
+    fontSize: 12,
+  },
+  vehicleType: {
+    width: 160,
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 10,
+    color: colors.darkGrey,
+  },
+  taxPrice: {
+    fontFamily: fonts.Poppins.medium,
+    fontSize: 18,
+    color: colors.primaryBlack,
+  },
+  vehicleText: {
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  expireContainer: {
+    width: 160,
+    height: 18,
+    flexDirection: 'row',
+  },
+  expireTextContainer: {
+    flex: 2,
+    backgroundColor: colors.primaryBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+  },
+  expireDateContainer: {
+    flex: 2,
+    backgroundColor: colors.darkGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopEndRadius: 3,
+    borderBottomEndRadius: 3,
+  },
+  expire: {
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 8,
     color: colors.white,
   },
 });
+
+export default VehicleList;

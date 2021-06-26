@@ -1,13 +1,7 @@
-import {createStore} from 'redux';
-
-// const [profile, setProfile] = useState("dennis");
-
-//setProfile("billy")
+import { createStore } from 'redux';
 
 const initialState = {
   loading: false,
-  name: 'Dennis Billy',
-  address: 'Sario Tumpaan',
 };
 
 const reducer = (state = initialState, action) => {

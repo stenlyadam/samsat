@@ -6,34 +6,41 @@ import {
   View,
   Image,
   TextInput,
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import { colors, fonts, IconEdit, IMGStnk, IMGVehicle } from '../../assets';
-import { TopBar } from '../../components';
+import {
+  colors,
+  fonts,
+  getData,
+  IconEdit,
+  IMGStnk,
+  IMGVehicle,
+} from '../../assets';
+import { Button, TopBar } from '../../components';
 import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
 import { firebase } from '../../config';
 import NumberFormat from 'react-number-format';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { showError } from '../../utils';
 
 const VehicleDetail = ({ route, navigation }) => {
-  const value = route.params;
-  const vehicle = value.vehicle.data;
-  // useEffect(() => {
-  //   firebase
-  //   .database()
-  //   .
-  // }, [])
-
-  console.log('Key sent : ', vehicle);
+  const values = route.params;
+  const vehicle = values.vehicle.data;
+  const Simpan = () => {
+    console.log('Berhasil Simpan');
+  };
   return (
-    <SafeAreaView style={styles.page}>
+    <ScrollView style={styles.page}>
       <TopBar title="Rincian Kendaraan" onBack={() => navigation.goBack()} />
       <View style={styles.contentContainer}>
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>
           <View style={styles.pictureContainer}>
-            <Image source={IMGVehicle} style={styles.image} />
-            <AddPicture text="Foto Kedua" />
-            <AddPicture text="Foto Ketiga" />
+            <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} />
+            <AddPicture text="Foto Kedua" count={1} vehicle={vehicle} />
+            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} />
           </View>
 
           <View style={styles.taxInformationContainer}>
@@ -54,7 +61,6 @@ const VehicleDetail = ({ route, navigation }) => {
               </View>
               <View style={styles.paymentTotalContainer}>
                 <Text style={styles.paymentTotal}>Rp</Text>
-                {/* <Text style={styles.paymentTotal}>{vehicle.price}</Text> */}
                 <NumberFormat
                   value={vehicle.price}
                   displayType={'text'}
@@ -104,11 +110,12 @@ const VehicleDetail = ({ route, navigation }) => {
                   <VehicleDetailContent title="SERI" content={vehicle.seri} />
                 </View>
               </View>
+              <Button label="Simpan" onPress={Simpan} />
             </View>
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

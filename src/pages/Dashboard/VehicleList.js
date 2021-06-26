@@ -60,7 +60,7 @@ const Vehicle = ({
   );
 };
 
-const VehicleList = ({ navigation }) => {
+const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
   const [uid, setUid] = useState('');
   const [vehiclesList, setVehiclesList] = useState(vehicles);
@@ -68,12 +68,10 @@ const VehicleList = ({ navigation }) => {
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
+      console.log('get DATA', response);
       setVehicles(data.vehicles);
       setUid(data.uid);
-      console.log('get DATA', data);
     });
-
-    console.log('wkwkwk uid', uid);
   }, []);
 
   useEffect(() => {
@@ -88,7 +86,7 @@ const VehicleList = ({ navigation }) => {
       });
       setVehiclesList(data);
     }
-    console.log('vehicles ', vehicles);
+    console.log('vehicles wkwkwkwkwk', vehicles);
   }, [uid]);
 
   return (
