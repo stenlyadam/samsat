@@ -20,11 +20,12 @@ const Vehicle = ({
   price,
   dueDate,
   vehicle,
+  id,
 }) => {
   const navigation = useNavigation();
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate('VehicleDetail', { vehicle })}>
+      onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
       <View style={styles.vehicleContainer}>
         <View style={styles.pictureContainer}>
           <Image source={IMGVehicle} />
@@ -100,6 +101,7 @@ const VehicleList = () => {
             price={vehicle.data.price}
             dueDate={vehicle.data.masaBerlakuSTNK}
             vehicle={vehicle}
+            id={vehicle.id}
             key={i}
           />
         );

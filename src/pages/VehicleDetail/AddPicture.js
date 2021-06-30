@@ -32,38 +32,48 @@ const AddPicture = ({ text, count, vehicle }) => {
   };
   const [uid, setUid] = useState('');
   const [image, setImage] = useState('');
+  const [user, setUser] = useState('');
+  const [kendaraan, setKendaraan] = useState({
+    vehicle,
+  });
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
       setUid(data.uid);
+      setUser(response);
+      const item = { vehicle: data.vehicles[vehicle.id] };
+      setKendaraan(item);
     });
   }, []);
   useEffect(() => {
     console.log('Get data uid : ', uid);
+
+    // firebase
+    //   .database()
+    //   .ref(`users/${uid}/vehicles/${vehicle.id}`)
+    //   .get()
+    //   .then(responseDB => {});
   }, [uid]);
 
   const openLibrary = () => {
     launchImageLibrary(options, response => {
-      if (response.didCancel === true) {
+      if (response.didCancel || response.error) {
+        console.log('Launch Image Library Error');
       } else {
         const imageBase64 = JSON.stringify(response.assets[0].base64);
-        // setImage(imageBase64);
         console.log('response launch image library', response.assets);
         firebase
           .database()
-          .ref(`users/${uid}/vehicles/${vehicle.id}/fotoMotor`)
+          .ref(`users/${uid}/vehicles/${vehicle.id}/fotoKendaraan`)
           .update({ [count]: imageBase64 })
           .then(res => {
             firebase
               .database()
-              .ref(`users/${uid}/vehicles/${vehicle.id}`)
+              .ref(`users/${uid}`)
               .get()
               .then(responseDB => {
-                setImage(responseDB.val().fotoMotor);
-                console.log('wkwkwkwk', responseDB.val());
-                if (responseDB.val()) {
-                  storeData('user', responseDB.val());
-                }
+                setImage(responseDB.val().vehicles[vehicle.id].fotoKendaraan);
+                storeData('user', responseDB.val());
               });
           })
           .catch(error => {
@@ -74,7 +84,9 @@ const AddPicture = ({ text, count, vehicle }) => {
     });
   };
   console.log('Key sent : ', vehicle);
-  if (vehicle.fotoMotor[count] || image[count]) {
+  console.log('Vehicle image list : ', kendaraan);
+
+  if (kendaraan.vehicle.fotoKendaraan[count] || image[count]) {
     return (
       <View>
         <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>
@@ -82,7 +94,7 @@ const AddPicture = ({ text, count, vehicle }) => {
             source={{
               uri: image
                 ? `data:image/jpg;base64,${image[count]}`
-                : `data:image/jpg;base64,${vehicle.fotoMotor[count]}`,
+                : `data:image/jpg;base64,${kendaraan.vehicle.fotoKendaraan[count]}`,
             }}
             style={{ width: 100, height: 100 }}
           />

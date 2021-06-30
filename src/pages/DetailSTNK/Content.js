@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {colors, fonts} from '../../assets';
+import { StyleSheet, Text, View } from 'react-native';
+import { colors, fonts } from '../../assets';
 
-const Content = ({title, content}) => {
+const Content = ({ title, content }) => {
   return (
     <View style={styles.contentContainer}>
       <Text style={styles.title}>{title}</Text>

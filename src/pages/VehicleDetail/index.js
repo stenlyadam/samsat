@@ -14,6 +14,7 @@ import {
   fonts,
   getData,
   IconEdit,
+  IconPlus,
   IMGStnk,
   IMGVehicle,
 } from '../../assets';
@@ -29,7 +30,39 @@ const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
   const vehicle = values.vehicle.data;
   const Simpan = () => {
-    console.log('Berhasil Simpan');
+    console.log('Simpan Clicked!');
+    // const data = form;
+    // if (getImageCheck) {
+    //   data.photo = photoForDB;
+    //   console.log('data from get Image: ', data.photo);
+    // }
+    // if (!getImageCheck) {
+    //   data.photo = form.photo;
+    //   console.log('data from useEffect: ', data.photo);
+    // }
+    // firebase
+    //   .database()
+    //   .ref('users/' + form.uid + '/')
+    //   .update(data)
+    //   .then(() => {
+    //     firebase
+    //       .database()
+    //       .ref(`users/${form.uid}/`)
+    //       .once('value')
+    //       .then(snapshot => {
+    //         console.log('snapshot success:' + JSON.stringify(snapshot.val()));
+    //         storeData('user', snapshot.val());
+    //         navigation.replace('HomeScreen');
+    //       });
+    //   })
+    //   .catch(error => {
+    //     showMessage({
+    //       message: error.message,
+    //       type: 'default',
+    //       backgroundColor: colors.error,
+    //       color: colors.white,
+    //     });
+    //   });
   };
   return (
     <ScrollView style={styles.page}>
@@ -122,6 +155,22 @@ const VehicleDetail = ({ route, navigation }) => {
 export default VehicleDetail;
 
 const styles = StyleSheet.create({
+  addPicture: {
+    height: 100,
+    width: 100,
+    backgroundColor: colors.lightGrey,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  addPictureText: {
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 12,
+    color: colors.white,
+    position: 'absolute',
+    bottom: 13,
+  },
   page: {
     flex: 1,
     backgroundColor: colors.white,
