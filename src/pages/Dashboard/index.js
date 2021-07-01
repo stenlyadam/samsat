@@ -1,12 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { colors, fonts, getData, IMGDashboard } from '../../assets';
+import { colors, fonts, getData, IMGDashboard, storeData } from '../../assets';
 import { Button, Carousel } from '../../components';
 import VehicleList from './VehicleList';
 import IconBadge from 'react-native-icon-badge';
+import { firebase } from '../../config';
 
 let notification = 6;
+
 const Dashboard = ({ navigation }) => {
+  // const [uid, setUid] = useState('');
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      // setUid(data.uid);
+      // console.log('wkwkwkwk', response);
+      firebase
+        .database()
+        .ref(`users/${response.uid}/`)
+        .on('value', res => {
+          console.log('hehehehe', res.val());
+          if (res.val()) {
+            storeData('user', res.val());
+          }
+        });
+      // .then(responseDB => {
+      //   console.log('Response :', responseDB.val());
+      //   // if (responseDB.val()) {
+      //   //   storeData('user', responseDB.val());
+      //   // }
+      // });
+    });
+  }, []);
   return (
     <View style={styles.page}>
       <Image source={IMGDashboard} style={styles.backgroundImage} />

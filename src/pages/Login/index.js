@@ -18,13 +18,13 @@ import {
   IMGUnklab,
   storeData,
 } from '../../assets';
-import {useForm} from '../../assets/useForm';
-import {Gap, TextInput, CheckBox, Button} from '../../components';
-import {firebase} from '../../config';
-import {useDispatch} from 'react-redux';
-import {showError} from '../../utils';
+import { useForm } from '../../assets/useForm';
+import { Gap, TextInput, CheckBox, Button } from '../../components';
+import { firebase } from '../../config';
+import { useDispatch } from 'react-redux';
+import { showError } from '../../utils';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [form, setForm] = useForm({
     email: '',
     password: '',
@@ -33,12 +33,12 @@ const Login = ({navigation}) => {
 
   const onContinue = () => {
     console.log('onContinue', form);
-    dispatch({type: 'SET_LOADING', value: true});
+    dispatch({ type: 'SET_LOADING', value: true });
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
       .then(response => {
-        dispatch({type: 'SET_LOADING', value: false});
+        dispatch({ type: 'SET_LOADING', value: false });
         firebase
           .database()
           .ref(`users/${response.user.uid}/`)
@@ -53,7 +53,7 @@ const Login = ({navigation}) => {
         setForm('reset');
       })
       .catch(error => {
-        dispatch({type: 'SET_LOADING', value: false});
+        dispatch({ type: 'SET_LOADING', value: false });
         console.log(error.message);
         showError(error.message);
       });

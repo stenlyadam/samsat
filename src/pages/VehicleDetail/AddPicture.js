@@ -83,8 +83,6 @@ const AddPicture = ({ text, count, vehicle }) => {
       }
     });
   };
-  console.log('Key sent : ', vehicle);
-  console.log('Vehicle image list : ', kendaraan);
 
   if (kendaraan.vehicle.fotoKendaraan[count] || image[count]) {
     return (

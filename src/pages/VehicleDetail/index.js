@@ -29,40 +29,34 @@ import { showError } from '../../utils';
 const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
   const vehicle = values.vehicle.data;
+  const [namaKendaraan, setNamaKendaraan] = useState('');
+  const [uid, setUid] = useState('');
+  var inputNama = '';
+  if (vehicle.vehicleName === '') {
+    inputNama = <TextInput placeholder="Berikan nama untuk kendaraan anda" />;
+  } else {
+    inputNama = (
+      <TextInput
+        placeholder={vehicle.vehicleName}
+        value={namaKendaraan}
+        onChangeText={value => setNamaKendaraan(value)}
+      />
+    );
+  }
+
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      setUid(data.uid);
+    });
+  }, []);
+
   const Simpan = () => {
-    console.log('Simpan Clicked!');
-    // const data = form;
-    // if (getImageCheck) {
-    //   data.photo = photoForDB;
-    //   console.log('data from get Image: ', data.photo);
-    // }
-    // if (!getImageCheck) {
-    //   data.photo = form.photo;
-    //   console.log('data from useEffect: ', data.photo);
-    // }
-    // firebase
-    //   .database()
-    //   .ref('users/' + form.uid + '/')
-    //   .update(data)
-    //   .then(() => {
-    //     firebase
-    //       .database()
-    //       .ref(`users/${form.uid}/`)
-    //       .once('value')
-    //       .then(snapshot => {
-    //         console.log('snapshot success:' + JSON.stringify(snapshot.val()));
-    //         storeData('user', snapshot.val());
-    //         navigation.replace('HomeScreen');
-    //       });
-    //   })
-    //   .catch(error => {
-    //     showMessage({
-    //       message: error.message,
-    //       type: 'default',
-    //       backgroundColor: colors.error,
-    //       color: colors.white,
-    //     });
-    //   });
+    console.log('Simpan Clicked!', uid);
+    firebase
+      .database()
+      .ref(`users/${uid}/vehicles/${vehicle.id}`)
+      .update({ vehicleName: namaKendaraan });
   };
   return (
     <ScrollView style={styles.page}>
@@ -116,7 +110,14 @@ const VehicleDetail = ({ route, navigation }) => {
             <Text style={styles.title}>Nama Kendaraan</Text>
             <View>
               <View style={styles.textInputContainer}>
+                {inputNama}
+                {/* { {
+                <TextInput placeholder={vehicle.vehicleName} />
+
+                }else{
+
                 <TextInput placeholder="Berikan nama untuk kendaraan anda" />
+                }} */}
                 <IconEdit />
               </View>
               <View style={styles.vehicleDetailSubContainer}>
