@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,9 +9,10 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
-import { colors, fonts, getData, IMGVehicle } from '../../assets';
+import { colors, fonts, getData, IMGVehicle, storeData } from '../../assets';
 import NumberFormat from 'react-number-format';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { firebase } from '../../config';
 
 const Vehicle = ({
   policeNumber,
@@ -21,14 +22,19 @@ const Vehicle = ({
   dueDate,
   vehicle,
   id,
+  fotoKendaraan,
 }) => {
   const navigation = useNavigation();
+  console.log('fotoKendaraan : ', fotoKendaraan);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
       <View style={styles.vehicleContainer}>
         <View style={styles.pictureContainer}>
-          <Image source={IMGVehicle} />
+          <Image
+            source={{ uri: `data:image/png;base64,${fotoKendaraan}` }}
+            style={styles.fotoKendaraan}
+          />
         </View>
         <View style={styles.vehicleText}>
           <Text style={styles.policeNumber}>{policeNumber}</Text>
@@ -61,54 +67,83 @@ const Vehicle = ({
   );
 };
 
-const VehicleList = () => {
-  const [vehicles, setVehicles] = useState([]);
-  const [uid, setUid] = useState('');
-  const [vehiclesList, setVehiclesList] = useState(vehicles);
+// const VehicleList = () => {
+//   const [vehicles, setVehicles] = useState([]);
+//   const [uid, setUid] = useState('');
+//   const [vehiclesList, setVehiclesList] = useState(vehicles);
 
-  useEffect(() => {
-    getData('user').then(response => {
-      const data = response;
-      console.log('get DATA', response);
-      setVehicles(data.vehicles);
-      setUid(data.uid);
-    });
-  }, []);
+//   useEffect(() => {
+//     getData('user').then(response => {
+//       const data = response;
+//       console.log('get DATA', response);
+//       setVehicles(data.vehicles);
+//       setUid(data.uid);
+//       firebase
+//         .database()
+//         .ref(`users/${response.uid}/`)
+//         .on('value', res => {
+//           console.log('hehehehe', res.val());
+//           if (res.val()) {
+//             storeData('user', res.val());
+//           }
+//         });
+//     });
+//   }, []);
+//   // useEffect(() => {
+//   //   const unsubscribe = navigation.addListener('focus', () => {
+//   //     getData('user').then(response => {
+//   //       const data = response;
+//   //       console.log('get DATA', response);
+//   //       setVehicles(data.vehicles);
+//   //       setUid(data.uid);
+//   //       // firebase
+//   //       //   .database()
+//   //       //   .ref(`users/${response.uid}/`)
+//   //       //   .on('value', res => {
+//   //       //     console.log('hehehehe', res.val());
+//   //       //     if (res.val()) {
+//   //       //       storeData('user', res.val());
+//   //       //     }
+//   //       //   });
+//   //     });
+//   //   });
+//   //   return unsubscribe;
+//   // }, [navigation]);
 
-  useEffect(() => {
-    if (vehicles) {
-      const oldData = vehicles;
-      const data = [];
-      Object.keys(oldData).map(key => {
-        data.push({
-          id: key,
-          data: oldData[key],
-        });
-      });
-      setVehiclesList(data);
-    }
-    console.log('vehicles wkwkwkwkwk', vehicles);
-  }, [uid]);
+//   useEffect(() => {
+//     if (vehicles) {
+//       const oldData = vehicles;
+//       const data = [];
+//       Object.keys(oldData).map(key => {
+//         data.push({
+//           id: key,
+//           data: oldData[key],
+//         });
+//       });
+//       setVehiclesList(data);
+//     }
+//     console.log('vehicles wkwkwkwkwk', vehicles);
+//   }, [uid]);
 
-  return (
-    <ScrollView horizontal={true} style={styles.container}>
-      {vehiclesList.map((vehicle, i) => {
-        return (
-          <Vehicle
-            policeNumber={vehicle.data.nomorPolisi}
-            vehicleName={vehicle.data.vehicleName}
-            vehicleType={vehicle.data.vehicleType}
-            price={vehicle.data.price}
-            dueDate={vehicle.data.masaBerlakuSTNK}
-            vehicle={vehicle}
-            id={vehicle.id}
-            key={i}
-          />
-        );
-      })}
-    </ScrollView>
-  );
-};
+//   return (
+//     <ScrollView horizontal={true} style={styles.container}>
+//       {vehiclesList.map((vehicle, i) => {
+//         return (
+//           <Vehicle
+//             policeNumber={vehicle.data.nomorPolisi}
+//             vehicleName={vehicle.data.vehicleName}
+//             vehicleType={vehicle.data.vehicleType}
+//             price={vehicle.data.price}
+//             dueDate={vehicle.data.masaBerlakuSTNK}
+//             vehicle={vehicle}
+//             id={vehicle.id}
+//             key={i}
+//           />
+//         );
+//       })}
+//     </ScrollView>
+//   );
+// };
 
 const styles = StyleSheet.create({
   container: {
@@ -120,6 +155,10 @@ const styles = StyleSheet.create({
     width: 160,
     borderRadius: 18,
     marginTop: -60,
+  },
+  fotoKendaraan: {
+    height: 160,
+    width: 160,
   },
   vehicleContainer: {
     height: 228,
@@ -183,4 +222,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VehicleList;
+export default Vehicle;

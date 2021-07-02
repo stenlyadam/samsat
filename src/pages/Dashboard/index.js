@@ -1,74 +1,139 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
 import { colors, fonts, getData, IMGDashboard, storeData } from '../../assets';
 import { Button, Carousel } from '../../components';
-import VehicleList from './VehicleList';
 import IconBadge from 'react-native-icon-badge';
 import { firebase } from '../../config';
+import Vehicle from './Vehicle';
+import { useNavigation } from '@react-navigation/native';
 
 let notification = 6;
 
-const Dashboard = ({ navigation }) => {
-  // const [uid, setUid] = useState('');
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
+const VehicleList = () => {
+  const [vehicles, setVehicles] = useState([]);
+  const [uid, setUid] = useState('');
+  const [vehiclesList, setVehiclesList] = useState(vehicles);
+  const navigation = useNavigation();
+
   useEffect(() => {
-    getData('user').then(response => {
-      const data = response;
-      // setUid(data.uid);
-      // console.log('wkwkwkwk', response);
-      firebase
-        .database()
-        .ref(`users/${response.uid}/`)
-        .on('value', res => {
-          console.log('hehehehe', res.val());
-          if (res.val()) {
-            storeData('user', res.val());
-          }
-        });
-      // .then(responseDB => {
-      //   console.log('Response :', responseDB.val());
-      //   // if (responseDB.val()) {
-      //   //   storeData('user', responseDB.val());
-      //   // }
-      // });
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData('user').then(response => {
+        const data = response;
+        console.log('get DATA', data);
+        setVehicles(data.vehicles);
+        setUid(data.uid);
+        firebase
+          .database()
+          .ref(`users/${response.uid}/`)
+          .on('value', res => {
+            if (res.val()) {
+              storeData('user', res.val());
+            }
+          });
+      });
     });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    if (vehicles) {
+      const oldData = vehicles;
+      const data = [];
+      Object.keys(oldData).map(key => {
+        data.push({
+          id: key,
+          data: oldData[key],
+        });
+      });
+      setVehiclesList(data);
+    }
+  }, [uid]);
+
+  return (
+    <ScrollView horizontal={true} style={styles.container}>
+      {vehiclesList.map((vehicle, i) => {
+        return (
+          <Vehicle
+            policeNumber={vehicle.data.nomorPolisi}
+            vehicleName={vehicle.data.vehicleName}
+            vehicleType={vehicle.data.vehicleType}
+            price={vehicle.data.price}
+            dueDate={vehicle.data.masaBerlakuSTNK}
+            fotoKendaraan={vehicle.data.fotoKendaraan[0]}
+            vehicle={vehicle}
+            id={vehicle.id}
+            key={i}
+          />
+        );
+      })}
+    </ScrollView>
+  );
+};
+
+const Dashboard = ({ navigation }) => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
   }, []);
+
   return (
     <View style={styles.page}>
-      <Image source={IMGDashboard} style={styles.backgroundImage} />
-      <View style={styles.topIconContainer}>
-        <Button type="icon-only" icon="icon-help" />
+      <ScrollView
+        scrollEnabled={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <Image source={IMGDashboard} style={styles.backgroundImage} />
+        <View style={styles.topIconContainer}>
+          <Button type="icon-only" icon="icon-help" />
 
-        <IconBadge
-          MainElement={
-            <Button
-              type="icon-only"
-              icon="icon-notification"
-              onPress={() => navigation.navigate('Notification')}
-            />
-          }
-          BadgeElement={<Text style={styles.badgeElement}>{notification}</Text>}
-          IconBadgeStyle={styles.iconBadgeStyle}
-          Hidden={notification === 0}
-        />
-      </View>
-      <View style={styles.titleContainer}>
-        <Button
-          type="icon-only"
-          icon="icon-main-profile"
-          style={styles.iconMainProfile}
-          onPress={() => navigation.navigate('Profile')}
-        />
-        <Text style={styles.title}>SAMSAT Minahasa Utara</Text>
-      </View>
-      <Carousel style={styles.carousel} />
-      <View style={styles.listTitleContainer}>
-        <Text style={styles.listTitle}>Daftar Kendaraan</Text>
-        <TouchableOpacity>
-          <Text style={styles.more}>Lihat Semua</Text>
-        </TouchableOpacity>
-      </View>
-      <VehicleList />
-
+          <IconBadge
+            MainElement={
+              <Button
+                type="icon-only"
+                icon="icon-notification"
+                onPress={() => navigation.navigate('Notification')}
+              />
+            }
+            BadgeElement={
+              <Text style={styles.badgeElement}>{notification}</Text>
+            }
+            IconBadgeStyle={styles.iconBadgeStyle}
+            Hidden={notification === 0}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <Button
+            type="icon-only"
+            icon="icon-main-profile"
+            style={styles.iconMainProfile}
+            onPress={() => navigation.navigate('Profile')}
+          />
+          <Text style={styles.title}>SAMSAT Minahasa Utara</Text>
+        </View>
+        <Carousel style={styles.carousel} />
+        <View style={styles.listTitleContainer}>
+          <Text style={styles.listTitle}>Daftar Kendaraan</Text>
+          <TouchableOpacity>
+            <Text style={styles.more}>Lihat Semua</Text>
+          </TouchableOpacity>
+        </View>
+        <VehicleList />
+      </ScrollView>
       <View style={styles.bottomTabContainer}>
         <Button
           type="icon-only"
@@ -163,5 +228,76 @@ const styles = StyleSheet.create({
   },
   badgeElement: {
     color: 'white',
+  },
+
+  container: {
+    height: 350,
+    flexDirection: 'row',
+  },
+  pictureContainer: {
+    height: 160,
+    width: 160,
+    borderRadius: 18,
+    marginTop: -60,
+  },
+  vehicleContainer: {
+    height: 228,
+    width: 200,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    elevation: 10,
+    alignItems: 'center',
+    marginTop: 75,
+    marginHorizontal: 15,
+  },
+  policeNumber: {
+    fontFamily: fonts.Poppins.medium,
+    fontSize: 18,
+    color: colors.primaryBlack,
+  },
+  vehicleName: {
+    fontFamily: fonts.Poppins.medium,
+    fontSize: 12,
+  },
+  vehicleType: {
+    width: 160,
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 10,
+    color: colors.darkGrey,
+  },
+  taxPrice: {
+    fontFamily: fonts.Poppins.medium,
+    fontSize: 18,
+    color: colors.primaryBlack,
+  },
+  vehicleText: {
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  expireContainer: {
+    width: 160,
+    height: 18,
+    flexDirection: 'row',
+  },
+  expireTextContainer: {
+    flex: 2,
+    backgroundColor: colors.primaryBlack,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+  },
+  expireDateContainer: {
+    flex: 2,
+    backgroundColor: colors.darkGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopEndRadius: 3,
+    borderBottomEndRadius: 3,
+  },
+  expire: {
+    fontFamily: fonts.Poppins.regular,
+    fontSize: 8,
+    color: colors.white,
   },
 });

@@ -32,7 +32,6 @@ const AddPicture = ({ text, count, vehicle }) => {
   };
   const [uid, setUid] = useState('');
   const [image, setImage] = useState('');
-  const [user, setUser] = useState('');
   const [kendaraan, setKendaraan] = useState({
     vehicle,
   });
@@ -40,20 +39,10 @@ const AddPicture = ({ text, count, vehicle }) => {
     getData('user').then(response => {
       const data = response;
       setUid(data.uid);
-      setUser(response);
       const item = { vehicle: data.vehicles[vehicle.id] };
       setKendaraan(item);
     });
   }, []);
-  useEffect(() => {
-    console.log('Get data uid : ', uid);
-
-    // firebase
-    //   .database()
-    //   .ref(`users/${uid}/vehicles/${vehicle.id}`)
-    //   .get()
-    //   .then(responseDB => {});
-  }, [uid]);
 
   const openLibrary = () => {
     launchImageLibrary(options, response => {
@@ -85,6 +74,7 @@ const AddPicture = ({ text, count, vehicle }) => {
   };
 
   if (kendaraan.vehicle.fotoKendaraan[count] || image[count]) {
+    // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
     return (
       <View>
         <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>

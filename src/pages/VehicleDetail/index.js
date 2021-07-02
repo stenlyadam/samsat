@@ -33,7 +33,13 @@ const VehicleDetail = ({ route, navigation }) => {
   const [uid, setUid] = useState('');
   var inputNama = '';
   if (vehicle.vehicleName === '') {
-    inputNama = <TextInput placeholder="Berikan nama untuk kendaraan anda" />;
+    inputNama = (
+      <TextInput
+        placeholder="Berikan nama untuk kendaraan anda"
+        value={namaKendaraan}
+        onChangeText={value => setNamaKendaraan(value)}
+      />
+    );
   } else {
     inputNama = (
       <TextInput
@@ -60,7 +66,15 @@ const VehicleDetail = ({ route, navigation }) => {
   };
   return (
     <ScrollView style={styles.page}>
-      <TopBar title="Rincian Kendaraan" onBack={() => navigation.goBack()} />
+      <TopBar
+        title="Rincian Kendaraan"
+        onBack={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          })
+        }
+      />
       <View style={styles.contentContainer}>
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>
