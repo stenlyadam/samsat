@@ -1,20 +1,33 @@
-import React from 'react';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
-import {colors, fonts} from '../../assets';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { colors, fonts } from '../../assets';
 
-const Content = ({title, content, type}) => {
+const Content = ({
+  title,
+  value,
+  type,
+  profile,
+  onChangeText,
+  placeholder,
+}) => {
+  const placeholderText = placeholder ? placeholder : 'edit';
   if (type === 'edit') {
     return (
       <View style={styles.content}>
         <Text style={styles.contentText}>{title}</Text>
-        <TextInput style={styles.textInput} placeholder={content} />
+        <TextInput
+          style={styles.textInput}
+          placeholder={profile ? profile : placeholderText}
+          value={value}
+          onChangeText={onChangeText}
+        />
       </View>
     );
   }
   return (
     <View style={styles.content}>
       <Text style={styles.contentText}>{title}</Text>
-      <Text style={styles.contentText}>{content}</Text>
+      <Text style={styles.contentText}>{profile}</Text>
     </View>
   );
 };

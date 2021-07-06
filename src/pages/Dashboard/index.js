@@ -90,6 +90,8 @@ const Dashboard = ({ navigation }) => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  var date = new Date().getDate(); //Current Date
+  console.log(date);
   return (
     <View style={styles.page}>
       <ScrollView
@@ -128,7 +130,7 @@ const Dashboard = ({ navigation }) => {
         <Carousel style={styles.carousel} />
         <View style={styles.listTitleContainer}>
           <Text style={styles.listTitle}>Daftar Kendaraan</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('VehicleList')}>
             <Text style={styles.more}>Lihat Semua</Text>
           </TouchableOpacity>
         </View>

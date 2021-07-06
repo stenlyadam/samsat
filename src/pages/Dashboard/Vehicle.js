@@ -25,7 +25,6 @@ const Vehicle = ({
   fotoKendaraan,
 }) => {
   const navigation = useNavigation();
-  console.log('fotoKendaraan : ', fotoKendaraan);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
@@ -66,84 +65,6 @@ const Vehicle = ({
     </TouchableWithoutFeedback>
   );
 };
-
-// const VehicleList = () => {
-//   const [vehicles, setVehicles] = useState([]);
-//   const [uid, setUid] = useState('');
-//   const [vehiclesList, setVehiclesList] = useState(vehicles);
-
-//   useEffect(() => {
-//     getData('user').then(response => {
-//       const data = response;
-//       console.log('get DATA', response);
-//       setVehicles(data.vehicles);
-//       setUid(data.uid);
-//       firebase
-//         .database()
-//         .ref(`users/${response.uid}/`)
-//         .on('value', res => {
-//           console.log('hehehehe', res.val());
-//           if (res.val()) {
-//             storeData('user', res.val());
-//           }
-//         });
-//     });
-//   }, []);
-//   // useEffect(() => {
-//   //   const unsubscribe = navigation.addListener('focus', () => {
-//   //     getData('user').then(response => {
-//   //       const data = response;
-//   //       console.log('get DATA', response);
-//   //       setVehicles(data.vehicles);
-//   //       setUid(data.uid);
-//   //       // firebase
-//   //       //   .database()
-//   //       //   .ref(`users/${response.uid}/`)
-//   //       //   .on('value', res => {
-//   //       //     console.log('hehehehe', res.val());
-//   //       //     if (res.val()) {
-//   //       //       storeData('user', res.val());
-//   //       //     }
-//   //       //   });
-//   //     });
-//   //   });
-//   //   return unsubscribe;
-//   // }, [navigation]);
-
-//   useEffect(() => {
-//     if (vehicles) {
-//       const oldData = vehicles;
-//       const data = [];
-//       Object.keys(oldData).map(key => {
-//         data.push({
-//           id: key,
-//           data: oldData[key],
-//         });
-//       });
-//       setVehiclesList(data);
-//     }
-//     console.log('vehicles wkwkwkwkwk', vehicles);
-//   }, [uid]);
-
-//   return (
-//     <ScrollView horizontal={true} style={styles.container}>
-//       {vehiclesList.map((vehicle, i) => {
-//         return (
-//           <Vehicle
-//             policeNumber={vehicle.data.nomorPolisi}
-//             vehicleName={vehicle.data.vehicleName}
-//             vehicleType={vehicle.data.vehicleType}
-//             price={vehicle.data.price}
-//             dueDate={vehicle.data.masaBerlakuSTNK}
-//             vehicle={vehicle}
-//             id={vehicle.id}
-//             key={i}
-//           />
-//         );
-//       })}
-//     </ScrollView>
-//   );
-// };
 
 const styles = StyleSheet.create({
   container: {

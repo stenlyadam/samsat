@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {colors, fonts, IMGVehicle} from '../../assets';
-import {Gap, TopBar} from '../../components';
-import DATA from '../Dashboard/VehicleData';
+import { colors, fonts, getData, IMGVehicle } from '../../assets';
+import { Gap, TopBar } from '../../components';
+import { useNavigation } from '@react-navigation/native';
+import NumberFormat from 'react-number-format';
 
 const VehicleCard = ({
   policeNumber,
@@ -18,63 +19,105 @@ const VehicleCard = ({
   vehicleType,
   price,
   dueDate,
-  onPress,
-}) => (
-  <View style={styles.flatListPadding}>
-    <TouchableOpacity onPress={onPress} style={styles.vehicleCardContainer}>
-      <View style={styles.vehicleCardRow}>
-        <Image source={IMGVehicle} style={styles.image} />
-        <View style={styles.vehicleTextContainer}>
-          <Text style={styles.policeNumber}>{policeNumber}</Text>
-          <Gap width={'100%'} height={2} color={colors.lightGrey} />
-          <View style={styles.vehicleNameContainer}>
-            <Text style={styles.vehicleName}>
-              {vehicleName}{' '}
-              <Text style={styles.vehicleType}>{vehicleType}</Text>
-            </Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.bottomCardContainer}>
-        <View>
-          <View style={styles.expireContainer}>
-            <View style={styles.expireTextContainer}>
-              <Text style={styles.expire}>Berlaku Sampai</Text>
-            </View>
-            <View style={styles.expireDateContainer}>
-              <Text style={styles.expire}>{dueDate}</Text>
+  id,
+  vehicle,
+}) => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.flatListPadding}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('VehicleDetail', { id, vehicle })}
+        style={styles.vehicleCardContainer}>
+        <View style={styles.vehicleCardRow}>
+          <Image source={IMGVehicle} style={styles.image} />
+          <View style={styles.vehicleTextContainer}>
+            <Text style={styles.policeNumber}>{policeNumber}</Text>
+            <Gap width={'100%'} height={2} color={colors.lightGrey} />
+            <View style={styles.vehicleNameContainer}>
+              <Text style={styles.vehicleName}>
+                {vehicleName}{' '}
+                <Text style={styles.vehicleType}>{vehicleType}</Text>
+              </Text>
             </View>
           </View>
         </View>
-        <Text style={styles.bill}>
-          Rp <Text>{price}</Text>
-        </Text>
-      </View>
-    </TouchableOpacity>
-  </View>
-);
-
-const VehicleList = ({navigation}) => {
-  const renderItem = ({item}) => (
-    <VehicleCard
-      policeNumber={item.policeNumber}
-      vehicleName={item.vehicleName}
-      vehicleType={item.vehicleType}
-      price={item.price}
-      dueDate={item.dueDate}
-      onPress={() => navigation.navigate('VehicleDetail')}
-    />
+        <View style={styles.bottomCardContainer}>
+          <View>
+            <View style={styles.expireContainer}>
+              <View style={styles.expireTextContainer}>
+                <Text style={styles.expire}>Berlaku Sampai</Text>
+              </View>
+              <View style={styles.expireDateContainer}>
+                <Text style={styles.expire}>{dueDate}</Text>
+              </View>
+            </View>
+          </View>
+          <Text style={styles.bill}>
+            Rp
+            <NumberFormat
+              value={price}
+              displayType={'text'}
+              thousandSeparator="."
+              decimalSeparator=","
+              renderText={value => <Text style={styles.taxPrice}>{value}</Text>}
+            />
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
+};
+
+const VehicleList = ({ navigation }) => {
+  const [vehicles, setVehicles] = useState([]);
+  const [vehiclesList, setVehiclesList] = useState(vehicles);
+  const [uid, setUid] = useState('');
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      setVehicles(data.vehicles);
+      setUid(data.uid);
+    });
+  }, []);
+  useEffect(() => {
+    if (vehicles) {
+      const oldData = vehicles;
+      const data = [];
+      Object.keys(oldData).map(key => {
+        data.push({
+          id: key,
+          data: oldData[key],
+        });
+      });
+      setVehiclesList(data);
+    }
+  }, [uid]);
+  console.log('Vehicles :', vehicles);
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Daftar Kendaraan" onBack={() => navigation.goBack()} />
       <View style={styles.contentContainer}>
-        <FlatList
-          data={DATA}
+        {vehiclesList.map((vehicle, i) => {
+          return (
+            <VehicleCard
+              policeNumber={vehicle.data.nomorPolisi}
+              vehicleName={vehicle.data.vehicleName}
+              vehicleType={vehicle.data.vehicleType}
+              price={vehicle.data.price}
+              dueDate={vehicle.data.masaBerlakuSTNK}
+              fotoKendaraan={vehicle.data.fotoKendaraan[0]}
+              vehicle={vehicle}
+              id={vehicle.id}
+              key={i}
+            />
+          );
+        })}
+        {/* <FlatList
+          data={vehicles}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );

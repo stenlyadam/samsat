@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,11 +6,134 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {colors, fonts, IconMainProfile} from '../../assets';
-import {Gap, TopBar} from '../../components';
-import ContentHeader from './ContentHeader';
+import {
+  colors,
+  fonts,
+  getData,
+  IconArrowRight,
+  IconMainProfile,
+  storeData,
+} from '../../assets';
+import { Button, Gap, TopBar } from '../../components';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import Content from './Content';
+import { firebase } from '../../config';
 
-const Profile = ({navigation}) => {
+const ContentHeader = ({ headerTitle, type }) => {
+  const [profile, setProfile] = useState({
+    namaLengkap: '',
+    tanggalLahir: '',
+    alamat: '',
+    email: '',
+  });
+  useEffect(() => {
+    getData('user').then(response => {
+      const data = response;
+      console.log('get DATA in Profile', data);
+      setProfile(data);
+    });
+  }, []);
+
+  const changeText = (key, value) => {
+    setProfile({
+      ...profile,
+      [key]: value,
+    });
+  };
+  console.log('setProfile :', profile);
+  const updateProfile = () => {
+    const data = profile;
+    console.log('data to be updated: ', data);
+    firebase
+      .database()
+      .ref(`users/${profile.uid}/`)
+      .update(data)
+      .then(() => {
+        storeData('user', data);
+      });
+  };
+  if (type === 'edit') {
+    return (
+      <Collapse style={styles.contentContainer}>
+        <CollapseHeader>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>{headerTitle}</Text>
+            <IconArrowRight />
+          </View>
+        </CollapseHeader>
+        <CollapseBody style={styles.collapseBody}>
+          <Content
+            type="edit"
+            title="Nama Lengkap:"
+            content="namaLengkap"
+            profile={profile.namaLengkap}
+            value={profile.namaLengkap}
+            onChangeText={value => changeText('namaLengkap', value)}
+          />
+          <Content
+            type="edit"
+            placeholder="dd/mm/yyyy"
+            title="Tanggal Lahir:"
+            content="1 Januari 1999"
+            profile={profile.tanggalLahir}
+            value={profile.tanggalLahir}
+            onChangeText={value => changeText('tanggalLahir', value)}
+          />
+          <Content
+            type="edit"
+            title="Alamat:"
+            content="Airmadidi"
+            profile={profile.alamat}
+            value={profile.alamat}
+            onChangeText={value => changeText('alamat', value)}
+          />
+          <View style={styles.button}>
+            <Button label="Selesai" onPress={updateProfile} />
+          </View>
+        </CollapseBody>
+      </Collapse>
+    );
+  } else {
+    return (
+      <Collapse style={styles.contentContainer}>
+        <CollapseHeader>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>{headerTitle}</Text>
+            <IconArrowRight />
+          </View>
+        </CollapseHeader>
+        <CollapseBody>
+          <Content
+            title="Nama Lengkap:"
+            content="Samsat Minut"
+            profile={profile.namaLengkap}
+          />
+          <Content
+            title="Tanggal Lahir:"
+            content="1 Januari 1999"
+            profile={profile.tanggalLahir}
+          />
+          <Content
+            title="Alamat:"
+            content="Airmadidi"
+            profile={profile.alamat}
+          />
+          <Content
+            title="Email:"
+            content="samsat@gmail.com"
+            profile={profile.email}
+          />
+        </CollapseBody>
+      </Collapse>
+    );
+  }
+};
+
+const Profile = ({ navigation }) => {
   return (
     <ScrollView style={styles.page}>
       <TopBar title="Akun" onBack={() => navigation.goBack()} />
@@ -65,5 +188,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Poppins.regular,
     fontSize: 18,
     color: 'red',
+  },
+  button: {
+    marginTop: 30,
+  },
+  collapseBody: {
+    marginBottom: 30,
   },
 });

@@ -9,15 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {
-  colors,
-  fonts,
-  getData,
-  IconEdit,
-  IconPlus,
-  IMGStnk,
-  IMGVehicle,
-} from '../../assets';
+import { colors, fonts, getData, IconEdit, IMGStnk } from '../../assets';
 import { Button, TopBar } from '../../components';
 import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
