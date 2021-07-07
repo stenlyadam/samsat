@@ -1,26 +1,37 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {colors, fonts, getData, IconAddVehicle} from '../../assets';
-import {Button, TopBar} from '../../components';
-import {showError, showSuccess} from '../../utils';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { colors, fonts, getData, IconAddVehicle } from '../../assets';
+import { Button, TopBar } from '../../components';
+import { showError, showSuccess } from '../../utils';
 import Content from './Content';
-import {firebase} from '../../config';
-import {useDispatch} from 'react-redux';
+import { firebase } from '../../config';
+import { useDispatch } from 'react-redux';
 
-const DetailSTNK = ({navigation, route}) => {
+const DetailSTNK = ({ navigation, route }) => {
   const {
-    nomorMesin,
-    tahunPembuatan,
-    type,
-    seri,
-    nomorPolisi,
-    masaBerlakuSTNK,
+    NOMOR_MESIN,
+    TAHUN_BUAT,
+    TYPE_KB,
+    MEREK_KB,
+    PLAT,
+    KODE_DAERAH_NOMOR_POLISI,
+    NOMOR_POLISI,
+    KODE_LOKASI_NOMOR_POLISI,
+    TANGGAL_BERLAKU_SD,
+    BULAN_BERLAKU_SD,
+    TAHUN_BERLAKU_SD,
+    FOTO_KENDARAN,
+    FOTO_STNK,
+    ID,
+    PKB_TERKAHIR,
+    NOMOR_RANGKA,
   } = route.params;
+  const values = route.params;
+  console.log('vehicle :', values);
 
   const [uid, setUid] = useState('');
   const [id, setId] = useState('');
-  const dispatch = useDispatch();
 
   useEffect(() => {
     getData('user').then(response => {
@@ -32,26 +43,18 @@ const DetailSTNK = ({navigation, route}) => {
   const tambahKendaraan = () => {
     // dispatch({type: 'SET_LOADING', value: true});
 
-    axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
-      // setVehicle(response.data);
-      console.log('searchVehicle response: ', response.data);
-      firebase
-        .database()
-        .ref(`users/${uid}/vehicles`)
-        .child(response.data.id)
-        .set(response.data)
-        .catch(error => {
-          // dispatch({type: 'SET_LOADING', value: false});
-          console.log(error.message);
-          showError(error.message);
-        });
-      // .then(snap => {
-      //   console.log('unique vehicle id', snap.key);
-      // });
-      // dispatch({type: 'SET_LOADING', value: false});
+    console.log('searchVehicle response: ', values);
+    firebase
+      .database()
+      .ref(`users/${uid}/vehicles`)
+      .child(values.ID)
+      .set(values)
+      .catch(error => {
+        console.log(error.message);
+        showError(error.message);
+      });
 
-      showSuccess('Kendaraan berhasil ditambahkan');
-    });
+    showSuccess('Kendaraan berhasil ditambahkan');
   };
 
   return (
@@ -62,12 +65,15 @@ const DetailSTNK = ({navigation, route}) => {
           <IconAddVehicle width={58} height={39} />
           <Text style={styles.contentTitle}>Rincian Kendaraan</Text>
         </View>
-        <Content title="NOMOR MESIN" content={nomorMesin} />
-        <Content title="TAHUN PEMBUATAN" content={tahunPembuatan} />
-        <Content title="TYPE" content={type} />
-        <Content title="SERI" content={seri} />
-        <Content title="NOMOR POLISI" content={nomorPolisi} />
-        <Content title="MASA BERLAKU STNK" content={masaBerlakuSTNK} />
+        <Content title="NOMOR MESIN" content={NOMOR_MESIN} />
+        <Content title="TAHUN PEMBUATAN" content={TAHUN_BUAT} />
+        <Content title="TYPE" content={TYPE_KB} />
+        <Content title="NOMOR RANGKA" content={NOMOR_RANGKA} />
+        <Content
+          title="NOMOR POLISI"
+          content={KODE_DAERAH_NOMOR_POLISI + ' ' + NOMOR_POLISI + ' ' + PLAT}
+        />
+        <Content title="MASA BERLAKU STNK" content={TAHUN_BERLAKU_SD} />
         <Content title="TAMBHAKAN FOTO STNK" content="STNK" />
         <View style={styles.buttonContainer}>
           <Button

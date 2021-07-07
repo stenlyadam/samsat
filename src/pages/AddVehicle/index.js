@@ -30,16 +30,36 @@ const AddVehicle = ({ navigation }) => {
     });
   }, []);
 
+  // const searchVehicle = () => {
+  //   axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
+  //     console.log('searchVehicle response: ', response.data);
+  //     // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
+  //     if (nomorMesin === '') {
+  //       showError('Nomor Mesin perlu diisi');
+  //     } else {
+  //       navigation.navigate('DetailSTNK', response.data);
+  //     }
+  //   });
+  // };
   const searchVehicle = () => {
-    axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
-      console.log('searchVehicle response: ', response.data);
-      // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
-      if (nomorMesin === '') {
-        showError('Nomor Mesin perlu diisi');
-      } else {
-        navigation.navigate('DetailSTNK', response.data);
-      }
-    });
+    console.log('cari nomor mesin', nomorMesin);
+    var scoresRef = firebase.database().ref('vehicles/');
+    scoresRef
+      .orderByChild('ID')
+      .equalTo(`${nomorMesin}`)
+      .on('value', function (snapshot) {
+        // console.log('wkwkwkwkwk : ', snapshot.val());
+        if (snapshot.val() !== null) {
+          snapshot.forEach(function (data) {
+            console.log('The data is ', data.val());
+            navigation.navigate('DetailSTNK', data.val());
+          });
+        } else {
+          console.log('error');
+        }
+      });
+    // .equalTo(`${nomorMesin}`)
+    // .equalTo('7K-0746605')
   };
   return (
     <SafeAreaView style={styles.page}>
