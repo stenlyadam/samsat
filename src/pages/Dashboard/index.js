@@ -66,12 +66,13 @@ const VehicleList = () => {
       {vehiclesList.map((vehicle, i) => {
         return (
           <Vehicle
-            policeNumber={vehicle.data.nomorPolisi}
-            vehicleName={vehicle.data.vehicleName}
-            vehicleType={vehicle.data.vehicleType}
-            price={vehicle.data.price}
-            dueDate={vehicle.data.masaBerlakuSTNK}
-            fotoKendaraan={vehicle.data.fotoKendaraan[0]}
+            policeNumber={vehicle.data.NOMOR_POLISI}
+            // vehicleName={vehicle.data.vehicleName}
+            vehicleName="Vehicle Name"
+            vehicleType={vehicle.data.TYPE_KB}
+            price={vehicle.data.PKB_TERAKHIR}
+            dueDate={vehicle.data.TAHUN_BERLAKU_SD}
+            fotoKendaraan={vehicle.data.FOTO_KENDARAAN[0]}
             vehicle={vehicle}
             id={vehicle.id}
             key={i}

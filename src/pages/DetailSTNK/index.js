@@ -26,9 +26,16 @@ const DetailSTNK = ({ navigation, route }) => {
     ID,
     PKB_TERKAHIR,
     NOMOR_RANGKA,
+    FOTO_KENDARAAN = '',
+    NAMA_KENDARAAN = '',
   } = route.params;
   const values = route.params;
-  console.log('vehicle :', values);
+  const [vehiclesToDB, setVehiclesToDB] = useState({
+    ...values,
+    FOTO_KENDARAAN: '',
+    NAMA_KENDARAAN: '',
+  });
+  console.log('vehicle :', vehiclesToDB);
 
   const [uid, setUid] = useState('');
   const [id, setId] = useState('');
@@ -48,7 +55,7 @@ const DetailSTNK = ({ navigation, route }) => {
       .database()
       .ref(`users/${uid}/vehicles`)
       .child(values.ID)
-      .set(values)
+      .set(vehiclesToDB)
       .catch(error => {
         console.log(error.message);
         showError(error.message);

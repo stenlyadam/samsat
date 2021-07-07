@@ -25,6 +25,7 @@ const Vehicle = ({
   fotoKendaraan,
 }) => {
   const navigation = useNavigation();
+  console.log('wkwkwkwkwkwkwkwkwkwkw: ', vehicle.data);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>

@@ -24,7 +24,7 @@ const VehicleDetail = ({ route, navigation }) => {
   const [namaKendaraan, setNamaKendaraan] = useState('');
   const [uid, setUid] = useState('');
   var inputNama = '';
-  if (vehicle.vehicleName === '') {
+  if (vehicle.VEHICLE_NAME === '') {
     inputNama = (
       <TextInput
         placeholder="Berikan nama untuk kendaraan anda"
@@ -53,8 +53,8 @@ const VehicleDetail = ({ route, navigation }) => {
     console.log('Simpan Clicked!', uid);
     firebase
       .database()
-      .ref(`users/${uid}/vehicles/${vehicle.id}`)
-      .update({ vehicleName: namaKendaraan });
+      .ref(`users/${uid}/vehicles/${vehicle.ID}`)
+      .update({ vehicleName: NAMA_KENDARAAN });
   };
   return (
     <ScrollView style={styles.page}>
@@ -71,9 +71,9 @@ const VehicleDetail = ({ route, navigation }) => {
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>
           <View style={styles.pictureContainer}>
-            <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} />
+            {/* <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} />
             <AddPicture text="Foto Kedua" count={1} vehicle={vehicle} />
-            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} />
+            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} /> */}
           </View>
 
           <View style={styles.taxInformationContainer}>
@@ -95,7 +95,7 @@ const VehicleDetail = ({ route, navigation }) => {
               <View style={styles.paymentTotalContainer}>
                 <Text style={styles.paymentTotal}>Rp</Text>
                 <NumberFormat
-                  value={vehicle.price}
+                  value={vehicle.PKB_TERAKHIR}
                   displayType={'text'}
                   thousandSeparator="."
                   decimalSeparator=","
@@ -106,7 +106,11 @@ const VehicleDetail = ({ route, navigation }) => {
               </View>
               <View style={styles.paymentDueDateContainer}>
                 <Text style={styles.paymentDueText}>
-                  {vehicle.masaBerlakuSTNK}
+                  {vehicle.TANGGAL_BERLAKU_SD +
+                    ' ' +
+                    vehicle.BULAN_BERLAKU_SD +
+                    ' ' +
+                    vehicle.TAHUN_BERLAKU_SD}
                 </Text>
               </View>
             </View>
@@ -130,24 +134,39 @@ const VehicleDetail = ({ route, navigation }) => {
                 <View style={styles.column}>
                   <VehicleDetailContent
                     title="NOMOR MESIN"
-                    content={vehicle.nomorMesin}
+                    content={vehicle.NOMOR_MESIN}
                   />
                   <VehicleDetailContent
                     title="TAHUN PEMBUATAN"
-                    content={vehicle.tahunPembuatan}
+                    content={vehicle.TAHUN_BUAT}
                   />
-                  <VehicleDetailContent title="TYPE" content={vehicle.type} />
+                  <VehicleDetailContent
+                    title="TYPE"
+                    content={vehicle.TYPE_KB}
+                  />
                 </View>
                 <View style={styles.column}>
                   <VehicleDetailContent
                     title="NOMOR POLISI"
-                    content={vehicle.nomorPolisi}
+                    content={
+                      vehicle.KODE_DAERAH_NOMOR_POLISI +
+                      ' ' +
+                      vehicle.NOMOR_POLISI +
+                      ' ' +
+                      vehicle.KODE_LOKASI_NOMOR_POLISI
+                    }
                   />
                   <VehicleDetailContent
                     title="MASA BERLAKU STNK"
-                    content={vehicle.masaBerlakuSTNK}
+                    content={
+                      vehicle.TANGGAL_BERLAKU_SD +
+                      ' ' +
+                      vehicle.BULAN_BERLAKU_SD +
+                      ' ' +
+                      vehicle.TAHUN_BERLAKU_SD
+                    }
                   />
-                  <VehicleDetailContent title="SERI" content={vehicle.seri} />
+                  {/* <VehicleDetailContent title="SERI" content={vehicle.seri} /> */}
                 </View>
               </View>
               <Button label="Simpan" onPress={Simpan} />
