@@ -1,27 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import {
-  colors,
-  fonts,
-  getData,
-  IconEdit,
-  IconPlus,
-  IMGStnk,
-  IMGVehicle,
-  storeData,
-} from '../../assets';
-import { TopBar } from '../../components';
-import VehicleDetailContent from './VehicleDetailContent';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { colors, fonts, getData, IconPlus, storeData } from '../../assets';
 import { firebase } from '../../config';
-import NumberFormat from 'react-number-format';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { showError } from '../../utils';
 
@@ -39,7 +19,7 @@ const AddPicture = ({ text, count, vehicle }) => {
     getData('user').then(response => {
       const data = response;
       setUid(data.uid);
-      const item = { vehicle: data.vehicles[vehicle.id] };
+      const item = { vehicle: data.vehicles[vehicle.ID] };
       setKendaraan(item);
     });
   }, []);
@@ -53,7 +33,7 @@ const AddPicture = ({ text, count, vehicle }) => {
         console.log('response launch image library', response.assets);
         firebase
           .database()
-          .ref(`users/${uid}/vehicles/${vehicle.id}/fotoKendaraan`)
+          .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
           .update({ [count]: imageBase64 })
           .then(res => {
             firebase
@@ -61,7 +41,7 @@ const AddPicture = ({ text, count, vehicle }) => {
               .ref(`users/${uid}`)
               .get()
               .then(responseDB => {
-                setImage(responseDB.val().vehicles[vehicle.id].fotoKendaraan);
+                setImage(responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN);
                 storeData('user', responseDB.val());
               });
           })
@@ -72,8 +52,8 @@ const AddPicture = ({ text, count, vehicle }) => {
       }
     });
   };
-
-  if (kendaraan.vehicle.fotoKendaraan[count] || image[count]) {
+  // return <Text>wkwkwkwk</Text>;
+  if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
     // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
     return (
       <View>
@@ -82,7 +62,7 @@ const AddPicture = ({ text, count, vehicle }) => {
             source={{
               uri: image
                 ? `data:image/jpg;base64,${image[count]}`
-                : `data:image/jpg;base64,${kendaraan.vehicle.fotoKendaraan[count]}`,
+                : `data:image/jpg;base64,${kendaraan.vehicle.FOTO_KENDARAAN[count]}`,
             }}
             style={{ width: 100, height: 100 }}
           />

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { colors, fonts, getData, IconAddVehicle } from '../../assets';
@@ -6,7 +5,7 @@ import { Button, TopBar } from '../../components';
 import { showError, showSuccess } from '../../utils';
 import Content from './Content';
 import { firebase } from '../../config';
-import { useDispatch } from 'react-redux';
+import PushNotification from 'react-native-push-notification';
 
 const DetailSTNK = ({ navigation, route }) => {
   const {
@@ -32,7 +31,9 @@ const DetailSTNK = ({ navigation, route }) => {
   const values = route.params;
   const [vehiclesToDB, setVehiclesToDB] = useState({
     ...values,
-    FOTO_KENDARAAN: '',
+    FOTO_KENDARAAN: {
+      [0]: '',
+    },
     NAMA_KENDARAAN: '',
   });
   console.log('vehicle :', vehiclesToDB);
@@ -48,8 +49,6 @@ const DetailSTNK = ({ navigation, route }) => {
   }, []);
 
   const tambahKendaraan = () => {
-    // dispatch({type: 'SET_LOADING', value: true});
-
     console.log('searchVehicle response: ', values);
     firebase
       .database()
@@ -60,7 +59,16 @@ const DetailSTNK = ({ navigation, route }) => {
         console.log(error.message);
         showError(error.message);
       });
+    PushNotification.localNotificationSchedule({
+      //... You can use all the options from localNotifications
+      message: 'Kendaraan anda perlu bayar pajak', // (required)
+      date: new Date(Date.now() + 5 * 1000), // in 60 secs
+      allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
 
+      /* Android Only Properties */
+      repeatTime: 1, // (optional) Increment of configured repeatType. Check 'Repeating Notifications' section for more info.
+      // channelId: "your-channel-id"
+    });
     showSuccess('Kendaraan berhasil ditambahkan');
   };
 

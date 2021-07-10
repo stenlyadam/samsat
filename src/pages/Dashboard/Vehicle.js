@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   Image,
-  FlatList,
   TouchableWithoutFeedback,
-  ScrollView,
 } from 'react-native';
-import { colors, fonts, getData, IMGVehicle, storeData } from '../../assets';
+import { colors, fonts, IMGVehicleDummy } from '../../assets';
+import { Gap } from '../../components';
 import NumberFormat from 'react-number-format';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { firebase } from '../../config';
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 const Vehicle = ({
   policeNumber,
@@ -25,17 +23,23 @@ const Vehicle = ({
   fotoKendaraan,
 }) => {
   const navigation = useNavigation();
-  console.log('wkwkwkwkwkwkwkwkwkwkw: ', vehicle.data);
+  const dateTime = moment(dueDate).diff(Date(), 'days');
+  console.log('wkwkw: ', dateTime);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
       <View style={styles.vehicleContainer}>
         <View style={styles.pictureContainer}>
-          <Image
-            source={{ uri: `data:image/png;base64,${fotoKendaraan}` }}
-            style={styles.fotoKendaraan}
-          />
+          {fotoKendaraan ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${fotoKendaraan}` }}
+              style={styles.fotoKendaraan}
+            />
+          ) : (
+            <Image source={IMGVehicleDummy} style={styles.image} />
+          )}
         </View>
+        <Gap height={3} />
         <View style={styles.vehicleText}>
           <Text style={styles.policeNumber}>{policeNumber}</Text>
           <Text style={styles.vehicleName}>
@@ -52,14 +56,13 @@ const Vehicle = ({
               renderText={value => <Text style={styles.taxPrice}>{value}</Text>}
             />
           </Text>
-
-          <View style={styles.expireContainer}>
-            <View style={styles.expireTextContainer}>
-              <Text style={styles.expire}>Berlaku Sampai</Text>
-            </View>
-            <View style={styles.expireDateContainer}>
-              <Text style={styles.expire}>{dueDate}</Text>
-            </View>
+        </View>
+        <View style={styles.expireContainer}>
+          <View style={styles.expireTextContainer}>
+            <Text style={styles.expire}>Berlaku Sampai</Text>
+          </View>
+          <View style={styles.expireDateContainer}>
+            <Text style={styles.expire}>{dueDate}</Text>
           </View>
         </View>
       </View>
@@ -77,6 +80,8 @@ const styles = StyleSheet.create({
     width: 160,
     borderRadius: 18,
     marginTop: -60,
+    backgroundColor: colors.white,
+    elevation: 5,
   },
   fotoKendaraan: {
     height: 160,
@@ -120,6 +125,8 @@ const styles = StyleSheet.create({
     width: 160,
     height: 18,
     flexDirection: 'row',
+    position: 'absolute',
+    bottom: 18,
   },
   expireTextContainer: {
     flex: 2,

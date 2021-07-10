@@ -44,7 +44,6 @@ const ContentHeader = ({ headerTitle, type }) => {
       [key]: value,
     });
   };
-  console.log('setProfile :', profile);
   const updateProfile = () => {
     const data = profile;
     console.log('data to be updated: ', data);

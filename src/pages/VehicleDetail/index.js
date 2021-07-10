@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   Image,
   TextInput,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { colors, fonts, getData, IconEdit, IMGStnk } from '../../assets';
@@ -15,8 +13,7 @@ import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
 import { firebase } from '../../config';
 import NumberFormat from 'react-number-format';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { showError } from '../../utils';
+import { showError, showSuccess } from '../../utils';
 
 const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
@@ -24,7 +21,7 @@ const VehicleDetail = ({ route, navigation }) => {
   const [namaKendaraan, setNamaKendaraan] = useState('');
   const [uid, setUid] = useState('');
   var inputNama = '';
-  if (vehicle.VEHICLE_NAME === '') {
+  if (vehicle.NAMA_KENDARAAN === '') {
     inputNama = (
       <TextInput
         placeholder="Berikan nama untuk kendaraan anda"
@@ -35,7 +32,7 @@ const VehicleDetail = ({ route, navigation }) => {
   } else {
     inputNama = (
       <TextInput
-        placeholder={vehicle.vehicleName}
+        placeholder={vehicle.NAMA_KENDARAAN}
         value={namaKendaraan}
         onChangeText={value => setNamaKendaraan(value)}
       />
@@ -50,11 +47,15 @@ const VehicleDetail = ({ route, navigation }) => {
   }, []);
 
   const Simpan = () => {
-    console.log('Simpan Clicked!', uid);
-    firebase
-      .database()
-      .ref(`users/${uid}/vehicles/${vehicle.ID}`)
-      .update({ vehicleName: NAMA_KENDARAAN });
+    if (namaKendaraan !== '') {
+      firebase
+        .database()
+        .ref(`users/${uid}/vehicles/${vehicle.ID}`)
+        .update({ NAMA_KENDARAAN: namaKendaraan });
+      showSuccess('Nama Kendaraan berhasil disimpan');
+    } else {
+      showError('Nama Kendaraan belum berhasil disimpan');
+    }
   };
   return (
     <ScrollView style={styles.page}>
@@ -71,9 +72,9 @@ const VehicleDetail = ({ route, navigation }) => {
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>
           <View style={styles.pictureContainer}>
-            {/* <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} />
+            <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} />
             <AddPicture text="Foto Kedua" count={1} vehicle={vehicle} />
-            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} /> */}
+            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} />
           </View>
 
           <View style={styles.taxInformationContainer}>

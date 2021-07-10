@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "817667071135",
+    "firebase_url": "https://samsat-bapenda-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "samsat-bapenda",
+    "storage_bucket": "samsat-bapenda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817667071135:android:bd995af38be021c917d6aa",
+        "android_client_info": {
+          "package_name": "com.samsat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817667071135-cd34pq628an933hibbgs2a9uh1pk0kfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbapbmYGb8K3-1vEr7rBMxnrZ3e3soNUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817667071135-cd34pq628an933hibbgs2a9uh1pk0kfp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

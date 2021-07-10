@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,12 +18,12 @@ import {
   IMGUnklab,
   storeData,
 } from '../../assets';
-import {useForm} from '../../assets/useForm';
-import {Gap, TextInput, Button, Loading} from '../../components';
-import {firebase} from '../../config';
-import {showError} from '../../utils/showMessage';
+import { useForm } from '../../assets/useForm';
+import { Gap, TextInput, Button, Loading } from '../../components';
+import { firebase } from '../../config';
+import { showError } from '../../utils/showMessage';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [form, setForm] = useForm({
     email: '',
     password: '',

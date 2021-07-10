@@ -7,15 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {
-  colors,
-  fonts,
-  getData,
-  IconAddVehicle,
-  storeData,
-} from '../../assets';
+import { colors, fonts, getData, IconAddVehicle } from '../../assets';
 import { TopBar } from '../../components';
-import axios from 'axios';
 import { firebase } from '../../config';
 import { showError } from '../../utils';
 
@@ -29,18 +22,6 @@ const AddVehicle = ({ navigation }) => {
       setUid(data.uid);
     });
   }, []);
-
-  // const searchVehicle = () => {
-  //   axios.get('http://10.0.2.2:3004/vehicles/' + nomorMesin).then(response => {
-  //     console.log('searchVehicle response: ', response.data);
-  //     // firebase.database().ref(`users/${uid}/`).update({vehicle: response.data});
-  //     if (nomorMesin === '') {
-  //       showError('Nomor Mesin perlu diisi');
-  //     } else {
-  //       navigation.navigate('DetailSTNK', response.data);
-  //     }
-  //   });
-  // };
   const searchVehicle = () => {
     console.log('cari nomor mesin', nomorMesin);
     var scoresRef = firebase.database().ref('vehicles/');
@@ -56,6 +37,7 @@ const AddVehicle = ({ navigation }) => {
           });
         } else {
           console.log('error');
+          showError('Kendaraan tidak ditemukan');
         }
       });
     // .equalTo(`${nomorMesin}`)
@@ -65,7 +47,12 @@ const AddVehicle = ({ navigation }) => {
     <SafeAreaView style={styles.page}>
       <TopBar
         title="Tambah Kendaraan"
-        onBack={() => navigation.navigate('Dashboard')}
+        onBack={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          })
+        }
       />
       <View style={styles.contentContainer}>
         <IconAddVehicle />

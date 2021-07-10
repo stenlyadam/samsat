@@ -9,8 +9,10 @@ import IMGPemprov from './img-pemprov.png';
 import IMGBapenda from './img-bapenda.png';
 import IMGFik from './img-fik.png';
 import IMGUnklab from './img-unklab.png';
+import IMGVehicleDummy from './img-vehicle-dummy.png';
 
 export {
+  IMGVehicleDummy,
   IMGFik,
   IMGUnklab,
   IMGKorlantas,

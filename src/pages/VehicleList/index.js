@@ -6,14 +6,14 @@ import {
   View,
   Image,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
-import { colors, fonts, getData, IMGVehicle } from '../../assets';
+import { colors, fonts, getData, IMGVehicleDummy } from '../../assets';
 import { Gap, TopBar } from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import NumberFormat from 'react-number-format';
 
 const VehicleCard = ({
+  fotoKendaraan,
   policeNumber,
   vehicleName,
   vehicleType,
@@ -29,7 +29,14 @@ const VehicleCard = ({
         onPress={() => navigation.navigate('VehicleDetail', { id, vehicle })}
         style={styles.vehicleCardContainer}>
         <View style={styles.vehicleCardRow}>
-          <Image source={IMGVehicle} style={styles.image} />
+          {fotoKendaraan ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${fotoKendaraan}` }}
+              style={styles.image}
+            />
+          ) : (
+            <Image source={IMGVehicleDummy} style={styles.image} />
+          )}
           <View style={styles.vehicleTextContainer}>
             <Text style={styles.policeNumber}>{policeNumber}</Text>
             <Gap width={'100%'} height={2} color={colors.lightGrey} />
@@ -92,7 +99,6 @@ const VehicleList = ({ navigation }) => {
       setVehiclesList(data);
     }
   }, [uid]);
-  console.log('Vehicles :', vehicles);
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Daftar Kendaraan" onBack={() => navigation.goBack()} />
@@ -100,12 +106,24 @@ const VehicleList = ({ navigation }) => {
         {vehiclesList.map((vehicle, i) => {
           return (
             <VehicleCard
-              policeNumber={vehicle.data.nomorPolisi}
-              vehicleName={vehicle.data.vehicleName}
-              vehicleType={vehicle.data.vehicleType}
-              price={vehicle.data.price}
-              dueDate={vehicle.data.masaBerlakuSTNK}
-              fotoKendaraan={vehicle.data.fotoKendaraan[0]}
+              policeNumber={
+                vehicle.data.KODE_DAERAH_NOMOR_POLISI +
+                ' ' +
+                vehicle.data.NOMOR_POLISI +
+                ' ' +
+                vehicle.data.KODE_LOKASI_NOMOR_POLISI
+              }
+              vehicleName={vehicle.data.NAMA_KENDARAAN}
+              vehicleType={vehicle.data.TYPE_KB}
+              price={vehicle.data.PKB_TERAKHIR}
+              dueDate={
+                vehicle.data.TANGGAL_BERLAKU_SD +
+                '/' +
+                vehicle.data.BULAN_BERLAKU_SD +
+                '/' +
+                vehicle.data.TAHUN_BERLAKU_SD
+              }
+              fotoKendaraan={vehicle.data.FOTO_KENDARAAN[0]}
               vehicle={vehicle}
               id={vehicle.id}
               key={i}

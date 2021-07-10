@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { colors, fonts, getData, IMGDashboard, storeData } from '../../assets';
 import { Button, Carousel } from '../../components';
@@ -14,6 +15,7 @@ import IconBadge from 'react-native-icon-badge';
 import { firebase } from '../../config';
 import Vehicle from './Vehicle';
 import { useNavigation } from '@react-navigation/native';
+import NotifService from '../../../NotifService';
 
 let notification = 6;
 
@@ -64,14 +66,42 @@ const VehicleList = () => {
   return (
     <ScrollView horizontal={true} style={styles.container}>
       {vehiclesList.map((vehicle, i) => {
+        const months = [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
+
+        var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD];
+        console.log('Pengaturan tanggal :', selectedMonthName);
         return (
           <Vehicle
-            policeNumber={vehicle.data.NOMOR_POLISI}
-            // vehicleName={vehicle.data.vehicleName}
-            vehicleName="Vehicle Name"
+            policeNumber={
+              vehicle.data.KODE_DAERAH_NOMOR_POLISI +
+              ' ' +
+              vehicle.data.NOMOR_POLISI +
+              ' ' +
+              vehicle.data.KODE_LOKASI_NOMOR_POLISI
+            }
+            vehicleName={vehicle.data.NAMA_KENDARAAN}
             vehicleType={vehicle.data.TYPE_KB}
             price={vehicle.data.PKB_TERAKHIR}
-            dueDate={vehicle.data.TAHUN_BERLAKU_SD}
+            dueDate={
+              vehicle.data.TANGGAL_BERLAKU_SD +
+              ' ' +
+              selectedMonthName +
+              ' ' +
+              vehicle.data.TAHUN_BERLAKU_SD
+            }
             fotoKendaraan={vehicle.data.FOTO_KENDARAAN[0]}
             vehicle={vehicle}
             id={vehicle.id}
@@ -85,6 +115,25 @@ const VehicleList = () => {
 
 const Dashboard = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
+  //Push Notification
+  const [registerToken, setRegisterToken] = useState('');
+  const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  const onRegister = token => {
+    setRegisterToken(token.token);
+    setFcmRegistered(true);
+  };
+
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const notif = new NotifService(onRegister, onNotif);
+
+  const handlePerm = perms => {
+    Alert.alert('Permissions', JSON.stringify(perms));
+  };
+  //Push Notification
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -102,7 +151,13 @@ const Dashboard = ({ navigation }) => {
         }>
         <Image source={IMGDashboard} style={styles.backgroundImage} />
         <View style={styles.topIconContainer}>
-          <Button type="icon-only" icon="icon-help" />
+          <Button
+            type="icon-only"
+            icon="icon-help"
+            onPress={() => {
+              notif.localNotif();
+            }}
+          />
 
           <IconBadge
             MainElement={

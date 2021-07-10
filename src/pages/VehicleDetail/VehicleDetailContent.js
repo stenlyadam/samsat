@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {colors, fonts} from '../../assets';
-const VehicleDetailContent = ({title, content}) => {
+import { StyleSheet, Text, View } from 'react-native';
+import { colors, fonts } from '../../assets';
+const VehicleDetailContent = ({ title, content }) => {
   return (
     <View style={styles.vehicleDetail}>
       <Text style={styles.vehicleDetailTitle}>{title}</Text>
