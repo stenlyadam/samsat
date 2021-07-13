@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 export const useForm = initialValue => {
   const [values, setValues] = useState(initialValue);
@@ -8,7 +8,7 @@ export const useForm = initialValue => {
       if (formType === 'reset') {
         return setValues(initialValue);
       }
-      return setValues({...values, [formType]: formValue});
+      return setValues({ ...values, [formType]: formValue });
     },
   ];
 };

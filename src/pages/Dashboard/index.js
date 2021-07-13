@@ -61,7 +61,7 @@ const VehicleList = () => {
       });
       setVehiclesList(data);
     }
-  }, [uid]);
+  }, [uid, vehicles]);
 
   return (
     <ScrollView horizontal={true} style={styles.container}>

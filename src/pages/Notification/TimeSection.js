@@ -1,15 +1,21 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
-import {colors, fonts} from '../../assets';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import { colors, fonts } from '../../assets';
 import Content from './Content';
 import DATA_MINGGU_INI from './DATA_MINGGU_INI';
 import DATA_BULAN_INI from './DATA_BULAN_INI';
 import DATA_LAINNYA from './DATA_LAINNYA';
 
-const TimeSection = ({type, onPress}) => {
+const TimeSection = ({ type, onPress }) => {
   const [selectedId] = useState(null);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={onPress}>
         <Content item={item} />

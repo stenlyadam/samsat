@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -98,9 +98,9 @@ const VehicleList = ({ navigation }) => {
       });
       setVehiclesList(data);
     }
-  }, [uid]);
+  }, [uid, vehicles]);
   return (
-    <SafeAreaView style={styles.page}>
+    <ScrollView style={styles.page}>
       <TopBar title="Daftar Kendaraan" onBack={() => navigation.goBack()} />
       <View style={styles.contentContainer}>
         {vehiclesList.map((vehicle, i) => {
@@ -137,7 +137,7 @@ const VehicleList = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
         /> */}
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

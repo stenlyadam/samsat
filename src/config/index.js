@@ -1,3 +1,3 @@
 import firebase from './firebase';
 
-export {firebase};
+export { firebase };

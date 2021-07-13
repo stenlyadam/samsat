@@ -1,5 +1,5 @@
-import {showMessage} from 'react-native-flash-message';
-import {colors} from '../../assets';
+import { showMessage } from 'react-native-flash-message';
+import { colors } from '../../assets';
 
 export const showError = message => {
   showMessage({

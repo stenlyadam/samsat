@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   IconHelp,
   IconMainProfile,
@@ -9,11 +9,19 @@ import {
   IconAdd,
   IconLeftArrow,
   IconAddVehicle,
+  IconDeleteCross,
 } from '../../../assets';
-import {colors} from '../../../assets';
+import { colors } from '../../../assets';
 
-const IconOnly = ({icon, onPress, width, height}) => {
+const IconOnly = ({ icon, onPress, width, height }) => {
   const Icon = () => {
+    if (icon === 'icon-delete-cross') {
+      return (
+        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+          <IconDeleteCross />
+        </View>
+      );
+    }
     if (icon === 'icon-help') {
       return (
         <View style={styles.iconContainer(width, height, colors.primaryBlack)}>

@@ -1,10 +1,10 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {colors, fonts} from '../../assets';
-import {TopBar} from '../../components';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { colors, fonts } from '../../assets';
+import { TopBar } from '../../components';
 import TimeSection from './TimeSection';
 
-const Notification = ({navigation}) => {
+const Notification = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Notifikasi" onBack={() => navigation.goBack()} />

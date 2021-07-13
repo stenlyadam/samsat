@@ -12,34 +12,23 @@ const DetailSTNK = ({ navigation, route }) => {
     NOMOR_MESIN,
     TAHUN_BUAT,
     TYPE_KB,
-    MEREK_KB,
     PLAT,
     KODE_DAERAH_NOMOR_POLISI,
     NOMOR_POLISI,
-    KODE_LOKASI_NOMOR_POLISI,
-    TANGGAL_BERLAKU_SD,
-    BULAN_BERLAKU_SD,
     TAHUN_BERLAKU_SD,
-    FOTO_KENDARAN,
-    FOTO_STNK,
-    ID,
-    PKB_TERKAHIR,
     NOMOR_RANGKA,
-    FOTO_KENDARAAN = '',
-    NAMA_KENDARAAN = '',
   } = route.params;
   const values = route.params;
-  const [vehiclesToDB, setVehiclesToDB] = useState({
+  const vehiclesToDB = {
     ...values,
     FOTO_KENDARAAN: {
       [0]: '',
     },
     NAMA_KENDARAAN: '',
-  });
+  };
   console.log('vehicle :', vehiclesToDB);
 
   const [uid, setUid] = useState('');
-  const [id, setId] = useState('');
 
   useEffect(() => {
     getData('user').then(response => {

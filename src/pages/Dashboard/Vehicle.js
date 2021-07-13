@@ -23,8 +23,8 @@ const Vehicle = ({
   fotoKendaraan,
 }) => {
   const navigation = useNavigation();
-  const dateTime = moment(dueDate).diff(Date(), 'days');
-  console.log('wkwkw: ', dateTime);
+  // const dateTime = moment(dueDate).diff(Date(), 'days');
+  // console.log('wkwkw: ', dateTime);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   fotoKendaraan: {
     height: 160,
     width: 160,
+    borderRadius: 18,
   },
   vehicleContainer: {
     height: 228,

@@ -4,6 +4,7 @@ import { colors, fonts, getData, IconPlus, storeData } from '../../assets';
 import { firebase } from '../../config';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { showError } from '../../utils';
+import { Button } from '../../components';
 
 const AddPicture = ({ text, count, vehicle }) => {
   const options = {
@@ -22,7 +23,7 @@ const AddPicture = ({ text, count, vehicle }) => {
       const item = { vehicle: data.vehicles[vehicle.ID] };
       setKendaraan(item);
     });
-  }, []);
+  }, [vehicle.ID]);
 
   const openLibrary = () => {
     launchImageLibrary(options, response => {
@@ -30,7 +31,7 @@ const AddPicture = ({ text, count, vehicle }) => {
         console.log('Launch Image Library Error');
       } else {
         const imageBase64 = JSON.stringify(response.assets[0].base64);
-        console.log('response launch image library', response.assets);
+        // console.log('response launch image library', response.assets);
         firebase
           .database()
           .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
@@ -52,11 +53,36 @@ const AddPicture = ({ text, count, vehicle }) => {
       }
     });
   };
-  // return <Text>wkwkwkwk</Text>;
+
+  const deletePicture = () => {
+    console.log('delete picture clicked! : ', uid);
+    firebase
+      .database()
+      .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
+      .update({ [count]: '' })
+      .then(res => {
+        firebase
+          .database()
+          .ref(`users/${uid}`)
+          .get()
+          .then(responseDB => {
+            setImage(responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN);
+            storeData('user', responseDB.val());
+            console.log('hehehehe ', responseDB.val());
+          });
+      })
+      .catch(error => {
+        console.log(error.message);
+        showError(error.message);
+      });
+
+    console.log('wkwkwk', kendaraan);
+  };
+
   if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
     // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
     return (
-      <View>
+      <View style={styles.addPicture}>
         <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>
           <Image
             source={{
@@ -64,9 +90,18 @@ const AddPicture = ({ text, count, vehicle }) => {
                 ? `data:image/jpg;base64,${image[count]}`
                 : `data:image/jpg;base64,${kendaraan.vehicle.FOTO_KENDARAAN[count]}`,
             }}
-            style={{ width: 100, height: 100 }}
+            style={styles.image}
           />
         </TouchableOpacity>
+        <View style={styles.deletePictureButton}>
+          <Button
+            type="icon-only"
+            icon="icon-delete-cross"
+            width={25}
+            height={25}
+            onPress={deletePicture}
+          />
+        </View>
       </View>
     );
   } else {
@@ -84,6 +119,11 @@ const AddPicture = ({ text, count, vehicle }) => {
 export default AddPicture;
 
 const styles = StyleSheet.create({
+  // imageContainer: {
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 8,
+  // },
   addPicture: {
     height: 100,
     width: 100,
@@ -99,5 +139,15 @@ const styles = StyleSheet.create({
     color: colors.white,
     position: 'absolute',
     bottom: 13,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  deletePictureButton: {
+    position: 'absolute',
+    bottom: -8,
+    right: -8,
   },
 });

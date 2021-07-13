@@ -10,8 +10,10 @@ import IconInfo from './ic-info.svg';
 import IconPlus from './ic-plus.svg';
 import IconEdit from './ic-edit.svg';
 import IconArrowRight from './ic-arrow-right.svg';
+import IconDeleteCross from './ic-delete-cross.svg';
 
 export {
+  IconDeleteCross,
   IconArrowRight,
   IconEdit,
   IconPlus,

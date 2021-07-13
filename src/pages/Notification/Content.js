@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {colors, fonts, IconInfo, IMGVehicle} from '../../assets';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { colors, fonts, IconInfo, IMGVehicle } from '../../assets';
 
-const Content = ({item}) => {
+const Content = ({ item }) => {
   return (
     <View style={styles.timeSectionContentContainer}>
       <Image source={IMGVehicle} style={styles.image} />

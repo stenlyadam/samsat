@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, StyleSheet, Text, TextInput as Input} from 'react-native';
-import {colors, fonts} from '../../../assets';
+import { View, StyleSheet, Text, TextInput as Input } from 'react-native';
+import { colors, fonts } from '../../../assets';
 
 const TextInput = props => {
   const {

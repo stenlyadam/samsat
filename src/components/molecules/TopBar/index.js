@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {colors, fonts} from '../../../assets';
-import {Button} from '../../../components';
+import { StyleSheet, Text, View } from 'react-native';
+import { colors, fonts } from '../../../assets';
+import { Button } from '../../../components';
 
-const TopBar = ({title, onBack}) => {
+const TopBar = ({ title, onBack }) => {
   return (
     <View style={styles.topBarContainer}>
       <Button type="icon-only" icon="icon-left-arrow" onPress={onBack} />

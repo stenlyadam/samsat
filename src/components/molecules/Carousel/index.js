@@ -1,6 +1,6 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {IMGCarousel} from '../../../assets';
+import { Image, StyleSheet, View } from 'react-native';
+import { IMGCarousel } from '../../../assets';
 import Swiper from 'react-native-swiper';
 
 const Carousel = () => {

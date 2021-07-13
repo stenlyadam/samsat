@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,21 +7,21 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import { colors, fonts, getData, IconAddVehicle } from '../../assets';
+import { colors, fonts, IconAddVehicle } from '../../assets';
 import { TopBar } from '../../components';
 import { firebase } from '../../config';
 import { showError } from '../../utils';
 
 const AddVehicle = ({ navigation }) => {
   const [nomorMesin, setNomorMesin] = useState('');
-  const [uid, setUid] = useState('');
+  // const [uid, setUid] = useState('');
 
-  useEffect(() => {
-    getData('user').then(response => {
-      const data = response;
-      setUid(data.uid);
-    });
-  }, []);
+  // useEffect(() => {
+  //   getData('user').then(response => {
+  //     // const data = response;
+  //     // setUid(data.uid);
+  //   });
+  // }, []);
   const searchVehicle = () => {
     console.log('cari nomor mesin', nomorMesin);
     var scoresRef = firebase.database().ref('vehicles/');
