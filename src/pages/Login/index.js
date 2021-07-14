@@ -58,25 +58,6 @@ const Login = ({ navigation }) => {
         showError(error.message);
       });
   };
-  // const onContinue = () => {
-  //   console.log('Masuk is clicked!');
-  //   firebase
-  //     .database()
-  //     .ref('/')
-  //     .once('value')
-  //     .then(res => {
-  //       console.log('response :', res.val());
-  //     });
-  // var scoresRef = firebase.database().ref('/');
-  // scoresRef
-  //   .orderByChild('id')
-  //   .equalTo('7K-0526428')
-  //   .on('value', function (snapshot) {
-  //     snapshot.forEach(function (data) {
-  //       console.log('The data is ', data.val());
-  //     });
-  //   });
-  // };
 
   return (
     <SafeAreaView style={styles.page}>
@@ -88,7 +69,7 @@ const Login = ({ navigation }) => {
       <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
       <Gap height={45} />
       <TextInput
-        title="No. Ponsel atau Email"
+        title="Email"
         paddingHorizontal={55}
         value={form.email}
         onChangeText={value => setForm('email', value)}

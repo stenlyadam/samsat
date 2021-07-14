@@ -44,6 +44,14 @@ const DetailSTNK = ({ navigation, route }) => {
       .ref(`users/${uid}/vehicles`)
       .child(values.ID)
       .set(vehiclesToDB)
+      .then(res => {
+        setTimeout(() => {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          });
+        }, 1000);
+      })
       .catch(error => {
         console.log(error.message);
         showError(error.message);

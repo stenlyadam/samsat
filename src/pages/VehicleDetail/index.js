@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { colors, fonts, getData, IconEdit, IMGStnk } from '../../assets';
 import { Button, TopBar } from '../../components';
@@ -18,6 +19,7 @@ import { showError, showSuccess } from '../../utils';
 const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
   const vehicle = values.vehicle.data;
+  const vehicleId = vehicle.ID;
   const [namaKendaraan, setNamaKendaraan] = useState('');
   const [uid, setUid] = useState('');
   var inputNama = '';
@@ -57,6 +59,29 @@ const VehicleDetail = ({ route, navigation }) => {
       showError('Nama Kendaraan belum berhasil disimpan');
     }
   };
+  const DeleteVehicle = () => {
+    console.log('delete vehicle clicked!', vehicleId);
+    Alert.alert('Anda yakin menghapus kendaraan ini?', 'Pilihan', [
+      {
+        text: 'Yakin',
+        onPress: () =>
+          firebase
+            .database()
+            .ref(`users/${uid}/vehicles/${vehicle.ID}`)
+            .remove()
+            .then(res => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Dashboard' }],
+              });
+            }),
+      },
+      {
+        text: 'Batalkan',
+        onPress: () => console.log('Batalkan'),
+      },
+    ]);
+  };
   return (
     <ScrollView style={styles.page}>
       <TopBar
@@ -67,6 +92,8 @@ const VehicleDetail = ({ route, navigation }) => {
             routes: [{ name: 'Dashboard' }],
           })
         }
+        trash={true}
+        trashOnPress={DeleteVehicle}
       />
       <View style={styles.contentContainer}>
         <View style={styles.pictureWrapper}>

@@ -11,8 +11,10 @@ import IconPlus from './ic-plus.svg';
 import IconEdit from './ic-edit.svg';
 import IconArrowRight from './ic-arrow-right.svg';
 import IconDeleteCross from './ic-delete-cross.svg';
+import IconTrash from './ic-trash.svg';
 
 export {
+  IconTrash,
   IconDeleteCross,
   IconArrowRight,
   IconEdit,

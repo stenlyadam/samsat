@@ -10,11 +10,19 @@ import {
   IconLeftArrow,
   IconAddVehicle,
   IconDeleteCross,
+  IconTrash,
 } from '../../../assets';
 import { colors } from '../../../assets';
 
 const IconOnly = ({ icon, onPress, width, height }) => {
   const Icon = () => {
+    if (icon === 'icon-trash') {
+      return (
+        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+          <IconTrash />
+        </View>
+      );
+    }
     if (icon === 'icon-delete-cross') {
       return (
         <View style={styles.iconContainer(width, height, colors.primaryBlack)}>

@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
         <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
         <Gap height={45} />
         <TextInput
-          title="No. Ponsel atau Email"
+          title="Email"
           paddingHorizontal={55}
           value={form.email}
           onChangeText={value => setForm('email', value)}
