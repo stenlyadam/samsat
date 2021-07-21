@@ -114,6 +114,10 @@ const VehicleList = () => {
 };
 
 const Dashboard = ({ navigation }) => {
+  const testCallback = callback => {
+    callback('callback working');
+  };
+
   const [refreshing, setRefreshing] = useState(false);
   //Push Notification
   const [registerToken, setRegisterToken] = useState('');
@@ -155,7 +159,10 @@ const Dashboard = ({ navigation }) => {
             type="icon-only"
             icon="icon-help"
             onPress={() => {
-              notif.localNotif();
+              // notif.localNotif();
+              testCallback(data => {
+                console.log('callback data: ', data);
+              });
             }}
           />
 

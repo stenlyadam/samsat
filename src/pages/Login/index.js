@@ -17,6 +17,7 @@ import {
   IMGSatlantas,
   IMGUnklab,
   storeData,
+  windowHeight,
 } from '../../assets';
 import { useForm } from '../../assets/useForm';
 import { Gap, TextInput, CheckBox, Button } from '../../components';
@@ -61,28 +62,28 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.page}>
-      <Gap height={20} />
+      <Gap height={'2%'} />
 
       <Image source={IMGBapenda} style={styles.bapenda} />
       <Gap height={30} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
       <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
-      <Gap height={45} />
+      <Gap height={windowHeight / 40} />
       <TextInput
         title="Email"
-        paddingHorizontal={55}
+        paddingHorizontal={'13%'}
         value={form.email}
         onChangeText={value => setForm('email', value)}
       />
-      <Gap height={26} />
+      <Gap height={'2%'} />
       <TextInput
         title="Password"
-        paddingHorizontal={55}
+        paddingHorizontal={'13%'}
         value={form.password}
         onChangeText={value => setForm('password', value)}
         secureTextEntry={true}
       />
-      <Gap height={10} />
+      <Gap height={'1%'} />
       <View style={styles.passwordExtrasContainer}>
         <View style={styles.checkBoxContainer}>
           <CheckBox label="Ingat" />
@@ -91,7 +92,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
         </TouchableOpacity>
       </View>
-      <Gap height={40} />
+      <Gap height={'5%'} />
       <Button label="Masuk" onPress={onContinue} />
       <Gap height={10} />
       <View style={styles.registerContainer}>
@@ -102,6 +103,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.registerButtonText}>Daftar</Text>
         </TouchableOpacity>
       </View>
+      <Gap height={'2%'} />
       <View style={styles.logoContainer}>
         <Image source={IMGFik} style={styles.fik} />
         <Image source={IMGSatlantas} style={styles.satlantas} />
@@ -129,7 +131,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-around',
-    marginTop: 35,
     paddingHorizontal: 15,
   },
   satlantas: {
