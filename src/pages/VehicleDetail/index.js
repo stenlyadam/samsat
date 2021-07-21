@@ -38,16 +38,26 @@ const VehicleDetail = ({ route, navigation }) => {
     inputNama = (
       <TextInput
         placeholder="Berikan nama untuk kendaraan anda"
-        value={namaKendaraan}
-        onChangeText={value => setNamaKendaraan(value)}
+        value={database.NAMA_KENDARAAN}
+        onChangeText={value =>
+          setDatabase(prevDatabase => ({
+            ...prevDatabase,
+            NAMA_KENDARAAN: value,
+          }))
+        }
       />
     );
   } else {
     inputNama = (
       <TextInput
         placeholder={vehicle.NAMA_KENDARAAN}
-        value={namaKendaraan}
-        onChangeText={value => setNamaKendaraan(value)}
+        value={database.NAMA_KENDARAAN}
+        onChangeText={value =>
+          setDatabase(prevDatabase => ({
+            ...prevDatabase,
+            NAMA_KENDARAAN: value,
+          }))
+        }
       />
     );
   }
@@ -60,16 +70,16 @@ const VehicleDetail = ({ route, navigation }) => {
   }, []);
 
   const Simpan = () => {
-    if (namaKendaraan !== '') {
-      firebase.database().ref(`users/${uid}/vehicles/${vehicle.ID}`).update({
-        NAMA_KENDARAAN: database.NAMA_KENDARAAN,
-        FOTO_KENDARAAN: database.FOTO_KENDARAAN,
-      });
+    // if (namaKendaraan !== '') {
+    firebase.database().ref(`users/${uid}/vehicles/${vehicle.ID}`).update({
+      NAMA_KENDARAAN: database.NAMA_KENDARAAN,
+      FOTO_KENDARAAN: database.FOTO_KENDARAAN,
+    });
 
-      showSuccess('Nama Kendaraan berhasil disimpan');
-    } else {
-      showError('Nama Kendaraan belum berhasil disimpan');
-    }
+    showSuccess('Kendaraan berhasil disimpan');
+    // } else {
+    //   showError('Nama Kendaraan belum berhasil disimpan');
+    // }
   };
   const DeleteVehicle = () => {
     console.log('delete vehicle clicked!', vehicleId);
@@ -120,51 +130,67 @@ const VehicleDetail = ({ route, navigation }) => {
           console.log('Launch Image Library Error');
         } else {
           const imageBase64 = JSON.stringify(response.assets[0].base64);
-          // console.log('response launch image library', response.assets);
-          firebase
-            .database()
-            .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
-            .update({ [count]: imageBase64 })
-            .then(res => {
-              firebase
-                .database()
-                .ref(`users/${uid}`)
-                .get()
-                .then(responseDB => {
-                  setImage(
-                    responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN,
-                  );
-                  storeData('user', responseDB.val());
-                });
-            })
-            .catch(error => {
-              console.log(error.message);
-              showError(error.message);
-            });
+          setKendaraan(prevKendaraan => ({
+            ...prevKendaraan,
+            vehicle: {
+              ...prevKendaraan.vehicle,
+              FOTO_KENDARAAN: {
+                ...prevKendaraan.vehicle.FOTO_KENDARAAN,
+                [count]: imageBase64,
+              },
+            },
+          }));
+          setDatabase(prevDatabase => ({
+            ...prevDatabase,
+            FOTO_KENDARAAN: {
+              ...prevDatabase.FOTO_KENDARAAN,
+              [count]: imageBase64,
+            },
+          }));
+          // firebase
+          //   .database()
+          //   .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
+          //   .update({ [count]: imageBase64 })
+          //   .then(res => {
+          //     firebase
+          //       .database()
+          //       .ref(`users/${uid}`)
+          //       .get()
+          //       .then(responseDB => {
+          //         setImage(
+          //           responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN,
+          //         );
+          //         storeData('user', responseDB.val());
+          //       });
+          //   })
+          //   .catch(error => {
+          //     console.log(error.message);
+          //     showError(error.message);
+          //   });
         }
       });
     };
-
     const deletePicture = () => {
       console.log('delete picture clicked! : ', image);
       console.log('delete picture clicked! : ', database);
 
-      setImage(([count]: ''));
       setKendaraan(prevKendaraan => ({
         ...prevKendaraan,
         vehicle: {
           ...prevKendaraan.vehicle,
-          FOTO_KENDARAAN: false,
+          FOTO_KENDARAAN: {
+            ...prevKendaraan.vehicle.FOTO_KENDARAAN,
+            [count]: false,
+          },
         },
       }));
       setDatabase(prevDatabase => ({
         ...prevDatabase,
         FOTO_KENDARAAN: {
           ...prevDatabase.FOTO_KENDARAAN,
-          [0]: '',
+          [count]: '',
         },
       }));
-      console.log(database);
 
       // firebase
       //   .database()
