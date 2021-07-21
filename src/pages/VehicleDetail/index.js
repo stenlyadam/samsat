@@ -32,6 +32,7 @@ const VehicleDetail = ({ route, navigation }) => {
   const vehicleId = vehicle.ID;
   const [namaKendaraan, setNamaKendaraan] = useState('');
   const [uid, setUid] = useState('');
+  const [database, setDatabase] = useState(vehicle);
   var inputNama = '';
   if (vehicle.NAMA_KENDARAAN === '') {
     inputNama = (
@@ -60,10 +61,11 @@ const VehicleDetail = ({ route, navigation }) => {
 
   const Simpan = () => {
     if (namaKendaraan !== '') {
-      firebase
-        .database()
-        .ref(`users/${uid}/vehicles/${vehicle.ID}`)
-        .update({ NAMA_KENDARAAN: namaKendaraan });
+      firebase.database().ref(`users/${uid}/vehicles/${vehicle.ID}`).update({
+        NAMA_KENDARAAN: database.NAMA_KENDARAAN,
+        FOTO_KENDARAAN: database.FOTO_KENDARAAN,
+      });
+
       showSuccess('Nama Kendaraan berhasil disimpan');
     } else {
       showError('Nama Kendaraan belum berhasil disimpan');
@@ -145,7 +147,7 @@ const VehicleDetail = ({ route, navigation }) => {
 
     const deletePicture = () => {
       console.log('delete picture clicked! : ', image);
-      console.log('delete picture clicked! : ', kendaraan);
+      console.log('delete picture clicked! : ', database);
 
       setImage(([count]: ''));
       setKendaraan(prevKendaraan => ({
@@ -155,6 +157,14 @@ const VehicleDetail = ({ route, navigation }) => {
           FOTO_KENDARAAN: false,
         },
       }));
+      setDatabase(prevDatabase => ({
+        ...prevDatabase,
+        FOTO_KENDARAAN: {
+          ...prevDatabase.FOTO_KENDARAAN,
+          [0]: '',
+        },
+      }));
+      console.log(database);
 
       // firebase
       //   .database()
@@ -175,8 +185,6 @@ const VehicleDetail = ({ route, navigation }) => {
       //     console.log(error.message);
       //     showError(error.message);
       //   });
-
-      console.log('wkwkwk', kendaraan);
     };
     if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
       // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
