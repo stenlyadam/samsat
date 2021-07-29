@@ -16,21 +16,18 @@ import {
   IconEdit,
   IconPlus,
   IMGStnk,
-  storeData,
 } from '../../assets';
 import { Button, TopBar } from '../../components';
-// import AddPicture from './AddPicture';
 import VehicleDetailContent from './VehicleDetailContent';
 import { firebase } from '../../config';
 import NumberFormat from 'react-number-format';
-import { showError, showSuccess } from '../../utils';
+import { showSuccess } from '../../utils';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
   const vehicle = values.vehicle.data;
   const vehicleId = vehicle.ID;
-  const [namaKendaraan, setNamaKendaraan] = useState('');
   const [uid, setUid] = useState('');
   const [database, setDatabase] = useState(vehicle);
   var inputNama = '';
@@ -50,7 +47,7 @@ const VehicleDetail = ({ route, navigation }) => {
   } else {
     inputNama = (
       <TextInput
-        placeholder={vehicle.NAMA_KENDARAAN}
+        placeholder="Berikan nama untuk kendaraan anda"
         value={database.NAMA_KENDARAAN}
         onChangeText={value =>
           setDatabase(prevDatabase => ({
@@ -70,20 +67,20 @@ const VehicleDetail = ({ route, navigation }) => {
   }, []);
 
   const Simpan = () => {
-    // if (namaKendaraan !== '') {
     firebase.database().ref(`users/${uid}/vehicles/${vehicle.ID}`).update({
       NAMA_KENDARAAN: database.NAMA_KENDARAAN,
       FOTO_KENDARAAN: database.FOTO_KENDARAAN,
     });
 
     showSuccess('Kendaraan berhasil disimpan');
-    // } else {
-    //   showError('Nama Kendaraan belum berhasil disimpan');
-    // }
   };
   const DeleteVehicle = () => {
     console.log('delete vehicle clicked!', vehicleId);
     Alert.alert('Anda yakin menghapus kendaraan ini?', 'Pilihan', [
+      {
+        text: 'Batalkan',
+        onPress: () => console.log('Batalkan'),
+      },
       {
         text: 'Yakin',
         onPress: () =>
@@ -98,18 +95,12 @@ const VehicleDetail = ({ route, navigation }) => {
               });
             }),
       },
-      {
-        text: 'Batalkan',
-        onPress: () => console.log('Batalkan'),
-      },
     ]);
   };
-  //Add Picture
   const options = {
     includeBase64: true,
     quality: 0.3,
   };
-  // const [uid, setUid] = useState('');
   const [image, setImage] = useState('');
   const [kendaraan, setKendaraan] = useState({
     vehicle,
@@ -122,6 +113,8 @@ const VehicleDetail = ({ route, navigation }) => {
       setKendaraan(item);
     });
   }, [vehicle.ID]);
+
+  // ===========> add picture
 
   const AddPicture = ({ count, text }) => {
     const openLibrary = () => {
@@ -147,33 +140,10 @@ const VehicleDetail = ({ route, navigation }) => {
               [count]: imageBase64,
             },
           }));
-          // firebase
-          //   .database()
-          //   .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
-          //   .update({ [count]: imageBase64 })
-          //   .then(res => {
-          //     firebase
-          //       .database()
-          //       .ref(`users/${uid}`)
-          //       .get()
-          //       .then(responseDB => {
-          //         setImage(
-          //           responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN,
-          //         );
-          //         storeData('user', responseDB.val());
-          //       });
-          //   })
-          //   .catch(error => {
-          //     console.log(error.message);
-          //     showError(error.message);
-          //   });
         }
       });
     };
     const deletePicture = () => {
-      console.log('delete picture clicked! : ', image);
-      console.log('delete picture clicked! : ', database);
-
       setKendaraan(prevKendaraan => ({
         ...prevKendaraan,
         vehicle: {
@@ -191,29 +161,8 @@ const VehicleDetail = ({ route, navigation }) => {
           [count]: '',
         },
       }));
-
-      // firebase
-      //   .database()
-      //   .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
-      //   .update({ [count]: '' })
-      //   .then(res => {
-      //     firebase
-      //       .database()
-      //       .ref(`users/${uid}`)
-      //       .get()
-      //       .then(responseDB => {
-      //         setImage(responseDB.val().vehicles[vehicle.ID].FOTO_KENDARAAN);
-      //         storeData('user', responseDB.val());
-      //         console.log('hehehehe ', responseDB.val());
-      //       });
-      //   })
-      //   .catch(error => {
-      //     console.log(error.message);
-      //     showError(error.message);
-      //   });
     };
     if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
-      // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
       return (
         <View style={styles.addPicture}>
           <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>
@@ -248,7 +197,24 @@ const VehicleDetail = ({ route, navigation }) => {
       );
     }
   };
-  //add picture
+  // ===========> add picture
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  var selectedMonthName = months[vehicle.BULAN_BERLAKU_SD];
   return (
     <ScrollView style={styles.page}>
       <TopBar
@@ -269,9 +235,6 @@ const VehicleDetail = ({ route, navigation }) => {
             <AddPicture count={0} text="Foto Pertama" />
             <AddPicture count={1} text="Foto Kedua" />
             <AddPicture count={2} text="Foto Ketiga" />
-            {/* <AddPicture text="Foto Pertama" count={0} vehicle={vehicle} data />
-            <AddPicture text="Foto Kedua" count={1} vehicle={vehicle} />
-            <AddPicture text="Foto Ketiga" count={2} vehicle={vehicle} /> */}
           </View>
 
           <View style={styles.taxInformationContainer}>
@@ -306,7 +269,7 @@ const VehicleDetail = ({ route, navigation }) => {
                 <Text style={styles.paymentDueText}>
                   {vehicle.TANGGAL_BERLAKU_SD +
                     ' ' +
-                    vehicle.BULAN_BERLAKU_SD +
+                    selectedMonthName +
                     ' ' +
                     vehicle.TAHUN_BERLAKU_SD}
                 </Text>
@@ -319,13 +282,6 @@ const VehicleDetail = ({ route, navigation }) => {
             <View>
               <View style={styles.textInputContainer}>
                 {inputNama}
-                {/* { {
-                <TextInput placeholder={vehicle.vehicleName} />
-
-                }else{
-
-                <TextInput placeholder="Berikan nama untuk kendaraan anda" />
-                }} */}
                 <IconEdit />
               </View>
               <View style={styles.vehicleDetailSubContainer}>

@@ -1,7 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { IMGCarousel } from '../../../assets';
+import { IMGCarousel, windowHeight } from '../../../assets';
 import Swiper from 'react-native-swiper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Carousel = () => {
   return (
@@ -28,19 +32,19 @@ export default Carousel;
 
 const styles = StyleSheet.create({
   carouselContainer: {
-    height: 200,
+    height: hp('25%'),
   },
   carouselWrapper: {
-    height: 180,
-    marginTop: 20,
+    height: '100%',
+    // marginTop: hp('1%'),
   },
   slide: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   carouselPicture: {
-    height: 180,
-    width: 360,
+    height: hp('25%'),
+    resizeMode: 'contain',
     borderRadius: 8,
   },
 });

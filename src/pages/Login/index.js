@@ -128,10 +128,15 @@ const styles = StyleSheet.create({
     height: 77.63,
   },
   logoContainer: {
+    // position: 'absolute',
+    // bottom: '8%',
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-around',
+    alignItems: 'center',
     paddingHorizontal: 15,
+    paddingBottom: '8%',
+    flex: 1,
   },
   satlantas: {
     width: 48,

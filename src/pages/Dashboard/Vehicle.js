@@ -11,6 +11,10 @@ import { Gap } from '../../components';
 import NumberFormat from 'react-number-format';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Vehicle = ({
   policeNumber,
@@ -42,9 +46,9 @@ const Vehicle = ({
         <Gap height={3} />
         <View style={styles.vehicleText}>
           <Text style={styles.policeNumber}>{policeNumber}</Text>
-          <Text style={styles.vehicleName}>
-            {vehicleName}
-            <Text style={styles.vehicleType}> {vehicleType}</Text>
+          <Text style={styles.vehicleName} numberOfLines={2}>
+            {vehicleName ? `${vehicleName} ` : vehicleName}
+            <Text style={styles.vehicleType}>{vehicleType}</Text>
           </Text>
           <Text style={styles.taxPrice}>
             Rp
@@ -76,46 +80,58 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   pictureContainer: {
-    height: 160,
-    width: 160,
+    // height: 160,
+    // width: 160,
+    height: hp('20%'),
+    width: hp('20%'),
     borderRadius: 18,
-    marginTop: -60,
+    marginTop: -70,
     backgroundColor: colors.white,
+    // backgroundColor: 'blue',
     elevation: 5,
   },
   fotoKendaraan: {
-    height: 160,
-    width: 160,
-    borderRadius: 18,
+    // height: 160,
+    // width: 160,
+    height: hp('20%'),
+    // borderRadius: 18,
+    borderRadius: hp('2%'),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   vehicleContainer: {
-    height: 228,
-    width: 200,
+    // height: 228,
+    height: hp('25%'),
+    width: wp('45%'),
     backgroundColor: colors.white,
     borderRadius: 20,
     elevation: 10,
     alignItems: 'center',
-    marginTop: 75,
+    marginTop: hp('11%'),
     marginHorizontal: 15,
   },
   policeNumber: {
     fontFamily: fonts.Poppins.medium,
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize: wp('3%'),
     color: colors.primaryBlack,
   },
   vehicleName: {
     fontFamily: fonts.Poppins.medium,
-    fontSize: 12,
+    // fontSize: 12,
+    fontSize: wp('3.5%'),
   },
   vehicleType: {
     width: 160,
     fontFamily: fonts.Poppins.regular,
-    fontSize: 10,
+    fontSize: wp('2.5%'),
+    lineHeight: 15,
     color: colors.darkGrey,
   },
   taxPrice: {
     fontFamily: fonts.Poppins.medium,
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize: wp('3.5%'),
     color: colors.primaryBlack,
   },
   vehicleText: {
@@ -123,11 +139,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   expireContainer: {
-    width: 160,
-    height: 18,
+    // width: 160,
+    // height: 18,
+    width: '100%',
+    height: '10%',
+    paddingHorizontal: '10%',
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 18,
+    bottom: '8%',
   },
   expireTextContainer: {
     flex: 2,
@@ -147,7 +166,8 @@ const styles = StyleSheet.create({
   },
   expire: {
     fontFamily: fonts.Poppins.regular,
-    fontSize: 8,
+    // fontSize: 8,
+    fontSize: wp('2%'),
     color: colors.white,
   },
 });

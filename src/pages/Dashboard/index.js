@@ -16,6 +16,10 @@ import { firebase } from '../../config';
 import Vehicle from './Vehicle';
 import { useNavigation } from '@react-navigation/native';
 import NotifService from '../../../NotifService';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 let notification = 6;
 
@@ -64,7 +68,7 @@ const VehicleList = () => {
   }, [uid, vehicles]);
 
   return (
-    <ScrollView horizontal={true} style={styles.container}>
+    <ScrollView horizontal={true} style={styles.vehicleListContainer}>
       {vehiclesList.map((vehicle, i) => {
         const months = [
           'January',
@@ -114,10 +118,6 @@ const VehicleList = () => {
 };
 
 const Dashboard = ({ navigation }) => {
-  const testCallback = callback => {
-    callback('callback working');
-  };
-
   const [refreshing, setRefreshing] = useState(false);
   //Push Notification
   const [registerToken, setRegisterToken] = useState('');
@@ -155,24 +155,32 @@ const Dashboard = ({ navigation }) => {
         }>
         <Image source={IMGDashboard} style={styles.backgroundImage} />
         <View style={styles.topIconContainer}>
-          <Button
-            type="icon-only"
-            icon="icon-help"
-            onPress={() => {
-              // notif.localNotif();
-              testCallback(data => {
-                console.log('callback data: ', data);
-              });
-            }}
-          />
+          <View style={{ width: 30, height: '100%' }}>
+            <Button
+              // height={40}
+              // width={40}
+              type="icon-only"
+              icon="icon-help"
+              onPress={() => {
+                notif.localNotif();
+              }}
+            />
+          </View>
 
           <IconBadge
             MainElement={
-              <Button
-                type="icon-only"
-                icon="icon-notification"
-                onPress={() => navigation.navigate('Notification')}
-              />
+              <View
+                style={{
+                  // backgroundColor: 'yellow',
+                  width: 30,
+                  height: '100%',
+                }}>
+                <Button
+                  type="icon-only"
+                  icon="icon-notification"
+                  onPress={() => navigation.navigate('Notification')}
+                />
+              </View>
             }
             BadgeElement={
               <Text style={styles.badgeElement}>{notification}</Text>
@@ -182,12 +190,14 @@ const Dashboard = ({ navigation }) => {
           />
         </View>
         <View style={styles.titleContainer}>
-          <Button
-            type="icon-only"
-            icon="icon-main-profile"
-            style={styles.iconMainProfile}
-            onPress={() => navigation.navigate('Profile')}
-          />
+          <View style={{ width: 53, height: '50%' }}>
+            <Button
+              type="icon-only"
+              icon="icon-main-profile"
+              style={styles.iconMainProfile}
+              onPress={() => navigation.navigate('Profile')}
+            />
+          </View>
           <Text style={styles.title}>SAMSAT Minahasa Utara</Text>
         </View>
         <Carousel style={styles.carousel} />
@@ -200,11 +210,13 @@ const Dashboard = ({ navigation }) => {
         <VehicleList />
       </ScrollView>
       <View style={styles.bottomTabContainer}>
-        <Button
-          type="icon-only"
-          icon="icon-vehicle"
-          onPress={() => navigation.navigate('VehicleList')}
-        />
+        <View style={styles.buttonLeftRight}>
+          <Button
+            type="icon-only"
+            icon="icon-vehicle"
+            onPress={() => navigation.navigate('VehicleList')}
+          />
+        </View>
         <View style={styles.add}>
           <Button
             type="icon-only"
@@ -212,11 +224,13 @@ const Dashboard = ({ navigation }) => {
             onPress={() => navigation.navigate('AddVehicle')}
           />
         </View>
-        <Button
-          type="icon-only"
-          icon="icon-profile"
-          onPress={() => navigation.navigate('Profile')}
-        />
+        <View style={styles.buttonLeftRight}>
+          <Button
+            type="icon-only"
+            icon="icon-profile"
+            onPress={() => navigation.navigate('Profile')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -225,18 +239,31 @@ const Dashboard = ({ navigation }) => {
 export default Dashboard;
 
 const styles = StyleSheet.create({
+  buttonLeftRight: {
+    width: '13%',
+    // height: '100%',
+    aspectRatio: 1,
+    // backgroundColor: 'yellow',
+  },
   page: {
     flex: 1,
     backgroundColor: colors.white,
   },
   backgroundImage: {
     position: 'absolute',
+    resizeMode: 'cover',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   topIconContainer: {
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: 16,
-    marginTop: 16,
+    height: '4%',
+    // paddingHorizontal: 16,
+    // marginTop: 16,
+    paddingHorizontal: '5%',
+    marginTop: '4%',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -244,6 +271,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25,
+    height: '20%',
+    // backgroundColor: 'blue',
   },
   title: {
     color: colors.white,
@@ -256,7 +285,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 40,
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: hp('0.5%'),
   },
   listTitle: {
     fontFamily: fonts.Poppins.semibold,
@@ -270,34 +299,40 @@ const styles = StyleSheet.create({
   },
   bottomTabContainer: {
     width: '100%',
-    height: 58,
+    // height: 58,
+    height: hp('7%'),
     backgroundColor: colors.primaryRed,
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingBottom: 10,
+    alignItems: 'center',
+    // paddingBottom: 10,
     paddingHorizontal: 60,
+    paddingVertical: '1%',
   },
   add: {
-    marginBottom: 15,
-    left: -5,
+    width: hp('12%'),
+    height: hp('12%'),
+    // backgroundColor: 'blue',
+    top: hp('-3%'),
   },
   iconBadgeStyle: {
     width: 20,
     height: 20,
     backgroundColor: 'red',
-    top: -0,
-    right: -10,
+    top: -5,
+    right: -3,
   },
   badgeElement: {
     color: 'white',
   },
 
-  container: {
-    height: 350,
+  vehicleListContainer: {
+    // height: 350,
+    height: hp('55%'),
     flexDirection: 'row',
+    // backgroundColor: 'yellow',
   },
   pictureContainer: {
     height: 160,

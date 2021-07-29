@@ -11,6 +11,8 @@ import {
   IconAddVehicle,
   IconDeleteCross,
   IconTrash,
+  windowHeight,
+  windowWidth,
 } from '../../../assets';
 import { colors } from '../../../assets';
 
@@ -32,6 +34,9 @@ const IconOnly = ({ icon, onPress, width, height }) => {
     }
     if (icon === 'icon-help') {
       return (
+        // <View style={{ width: '10%', height: '10%' }}>
+        //   <IconHelp />
+        // </View>
         <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
           <IconHelp />
         </View>
@@ -107,7 +112,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    width: width,
-    height: height,
+    // width: width,
+    // height: height,
+    aspectRatio: 1,
+
+    // backgroundColor: color,
   }),
 });
