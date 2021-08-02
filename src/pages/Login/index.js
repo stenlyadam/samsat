@@ -35,7 +35,8 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     getData('user').then(data => {
-      if (data !== null) {
+      console.log('wkwkwkwk', data);
+      if (data != null || data != undefined) {
         navigation.reset({
           index: 0,
           routes: [{ name: 'Dashboard' }],

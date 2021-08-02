@@ -40,7 +40,7 @@ const Vehicle = ({
               style={styles.fotoKendaraan}
             />
           ) : (
-            <Image source={IMGVehicleDummy} style={styles.image} />
+            <Image source={IMGVehicleDummy} style={styles.fotoKendaraan} />
           )}
         </View>
         <Gap height={3} />
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     // height: 160,
     // width: 160,
     height: hp('20%'),
+    width: hp('20%'),
     // borderRadius: 18,
     borderRadius: hp('2%'),
     justifyContent: 'center',
