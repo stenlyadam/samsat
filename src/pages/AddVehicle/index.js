@@ -14,14 +14,7 @@ import { showError } from '../../utils';
 
 const AddVehicle = ({ navigation }) => {
   const [nomorMesin, setNomorMesin] = useState('');
-  // const [uid, setUid] = useState('');
 
-  // useEffect(() => {
-  //   getData('user').then(response => {
-  //     // const data = response;
-  //     // setUid(data.uid);
-  //   });
-  // }, []);
   const searchVehicle = () => {
     console.log('cari nomor mesin', nomorMesin);
     var scoresRef = firebase.database().ref('vehicles/');

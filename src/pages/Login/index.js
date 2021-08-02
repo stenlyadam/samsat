@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 import {
   colors,
   fonts,
+  getData,
   IMGBapenda,
   IMGFik,
   IMGJasaRaharja,
@@ -31,6 +32,17 @@ const Login = ({ navigation }) => {
     password: '',
   });
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getData('user').then(data => {
+      if (data !== null) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        });
+      }
+    });
+  }, []);
 
   const onContinue = () => {
     console.log('onContinue', form);

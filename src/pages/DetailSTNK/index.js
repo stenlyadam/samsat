@@ -6,6 +6,8 @@ import { showError, showSuccess } from '../../utils';
 import Content from './Content';
 import { firebase } from '../../config';
 import PushNotification from 'react-native-push-notification';
+import NotifService from '../../../NotifService';
+import moment from 'moment-timezone';
 
 const DetailSTNK = ({ navigation, route }) => {
   const {
@@ -15,8 +17,11 @@ const DetailSTNK = ({ navigation, route }) => {
     PLAT,
     KODE_DAERAH_NOMOR_POLISI,
     NOMOR_POLISI,
-    TAHUN_BERLAKU_SD,
     NOMOR_RANGKA,
+    TANGGAL_BERLAKU_SD,
+    BULAN_BERLAKU_SD,
+    TAHUN_BERLAKU_SD,
+    PKB_TERAKHIR,
   } = route.params;
   const values = route.params;
   const vehiclesToDB = {
@@ -28,6 +33,23 @@ const DetailSTNK = ({ navigation, route }) => {
   };
   console.log('vehicle :', vehiclesToDB);
 
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  var selectedMonthName = months[BULAN_BERLAKU_SD].toUpperCase();
+
   const [uid, setUid] = useState('');
 
   useEffect(() => {
@@ -36,6 +58,33 @@ const DetailSTNK = ({ navigation, route }) => {
       setUid(data.uid);
     });
   }, []);
+  //NOTIFICATION
+
+  const [registerToken, setRegisterToken] = useState('');
+  const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  const onRegister = token => {
+    setRegisterToken(token.token);
+    setFcmRegistered(true);
+  };
+
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const date = moment(
+    `${TANGGAL_BERLAKU_SD}/${BULAN_BERLAKU_SD}/${TAHUN_BERLAKU_SD}/8`,
+    'DD/MM/YYYY/h',
+  )
+    .tz('Asia/Makassar')
+    .format();
+
+  const notif = new NotifService(onRegister, onNotif);
+  const notifTitle =
+    'Notifikasi batas pemberlakuan surat pajak kendaraan anda dengan nomor polisi : ';
+  const bigText = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${PLAT} sebesar Rp.${PKB_TERAKHIR}`;
+  const scheduledFor = date;
+  //NOTIFICATION
 
   const tambahKendaraan = () => {
     console.log('searchVehicle response: ', values);
@@ -50,22 +99,23 @@ const DetailSTNK = ({ navigation, route }) => {
             index: 0,
             routes: [{ name: 'Dashboard' }],
           });
+          notif.scheduleNotif(bigText, notifTitle, scheduledFor);
         }, 1000);
       })
       .catch(error => {
         console.log(error.message);
         showError(error.message);
       });
-    PushNotification.localNotificationSchedule({
-      //... You can use all the options from localNotifications
-      message: 'Kendaraan anda perlu bayar pajak', // (required)
-      date: new Date(Date.now() + 5 * 1000), // in 60 secs
-      allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+    // PushNotification.localNotificationSchedule({
+    //   //... You can use all the options from localNotifications
+    //   message: 'Kendaraan anda perlu bayar pajak', // (required)
+    //   date: new Date(Date.now() + 5 * 1000), // in 60 secs
+    //   allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
 
-      /* Android Only Properties */
-      repeatTime: 1, // (optional) Increment of configured repeatType. Check 'Repeating Notifications' section for more info.
-      // channelId: "your-channel-id"
-    });
+    //   /* Android Only Properties */
+    //   repeatTime: 1, // (optional) Increment of configured repeatType. Check 'Repeating Notifications' section for more info.
+    //   // channelId: "your-channel-id"
+    // });
     showSuccess('Kendaraan berhasil ditambahkan');
   };
 
@@ -85,7 +135,16 @@ const DetailSTNK = ({ navigation, route }) => {
           title="NOMOR POLISI"
           content={KODE_DAERAH_NOMOR_POLISI + ' ' + NOMOR_POLISI + ' ' + PLAT}
         />
-        <Content title="MASA BERLAKU STNK" content={TAHUN_BERLAKU_SD} />
+        <Content
+          title="MASA BERLAKU STNK"
+          content={
+            TANGGAL_BERLAKU_SD +
+            ' ' +
+            selectedMonthName +
+            ' ' +
+            TAHUN_BERLAKU_SD
+          }
+        />
         <Content title="TAMBHAKAN FOTO STNK" content="STNK" />
         <View style={styles.buttonContainer}>
           <Button

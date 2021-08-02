@@ -133,6 +133,13 @@ const ContentHeader = ({ headerTitle, type }) => {
 };
 
 const Profile = ({ navigation }) => {
+  const logout = () => {
+    storeData('user', null);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  };
   return (
     <ScrollView style={styles.page}>
       <TopBar title="Akun" onBack={() => navigation.goBack()} />
@@ -143,7 +150,7 @@ const Profile = ({ navigation }) => {
         </View>
         <ContentHeader type="detail" headerTitle="Detail Profil" />
         <ContentHeader type="edit" headerTitle="Edit Profil" />
-        <TouchableOpacity style={styles.header}>
+        <TouchableOpacity style={styles.header} onPress={logout}>
           <Text style={styles.headerTitle}>Logout</Text>
         </TouchableOpacity>
       </View>

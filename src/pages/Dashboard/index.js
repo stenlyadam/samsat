@@ -20,6 +20,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+// import moment from 'moment';
 
 let notification = 6;
 
@@ -37,7 +38,7 @@ const VehicleList = () => {
     const unsubscribe = navigation.addListener('focus', () => {
       getData('user').then(response => {
         const data = response;
-        console.log('get DATA', data);
+        // console.log('get DATA', data);
         setVehicles(data.vehicles);
         setUid(data.uid);
         firebase
@@ -67,6 +68,7 @@ const VehicleList = () => {
     }
   }, [uid, vehicles]);
 
+  // console.log('testing kalau ada kendaraan', vehiclesList);
   return (
     <ScrollView horizontal={true} style={styles.vehicleListContainer}>
       {vehiclesList.map((vehicle, i) => {
@@ -85,8 +87,8 @@ const VehicleList = () => {
           'December',
         ];
 
-        var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD];
-        console.log('Pengaturan tanggal :', selectedMonthName);
+        var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
+        // console.log('Pengaturan tanggal :', selectedMonthName);
         return (
           <Vehicle
             policeNumber={
@@ -134,9 +136,9 @@ const Dashboard = ({ navigation }) => {
 
   const notif = new NotifService(onRegister, onNotif);
 
-  const handlePerm = perms => {
-    Alert.alert('Permissions', JSON.stringify(perms));
-  };
+  // const handlePerm = perms => {
+  //   Alert.alert('Permissions', JSON.stringify(perms));
+  // };
   //Push Notification
 
   const onRefresh = useCallback(() => {
@@ -144,8 +146,30 @@ const Dashboard = ({ navigation }) => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  var date = new Date().getDate(); //Current Date
-  console.log(date);
+  const onDebug = () => {
+    var moment = require('moment-timezone');
+    // var date = new Date().getDate(); //Current Date
+
+    // const date = moment().format(); //Time Stamp Now
+    // const date = moment().tz('Asia/Makassar').format('MMMM Do YYYY, h:mm:ss a');
+    // const date = moment('31/7/2021', 'DD/MM/YYYY')
+    //   .tz('Asia/Makassar')
+    //   .fromNow();
+    // const scheduledDate = new Date(
+    //   moment('2/8/2021/8/9', 'DD/MM/YYYY/h/m').tz('Asia/Makassar').format(),
+    // );
+    const date = new Date(Date.now() + 5 * 1000);
+    const bigText = `THIS IS BIG TEXT + ${date}`;
+    const title = 'This Is The Title';
+    // const date = scheduledDate;
+    // const date = moment().format();
+    // notif.cancelAll();
+    // notif.scheduleNotif(bigText, title, date);
+    notif.getScheduledLocalNotifications(notifs => console.log(notifs));
+
+    // console.log(date);
+  };
+
   return (
     <View style={styles.page}>
       <ScrollView
@@ -162,8 +186,9 @@ const Dashboard = ({ navigation }) => {
               type="icon-only"
               icon="icon-help"
               onPress={() => {
-                notif.localNotif();
+                onDebug();
               }}
+              // notif.localNotif(bigText, notifTitle);
             />
           </View>
 
@@ -200,7 +225,7 @@ const Dashboard = ({ navigation }) => {
           </View>
           <Text style={styles.title}>SAMSAT Minahasa Utara</Text>
         </View>
-        <Carousel style={styles.carousel} />
+        <Carousel />
         <View style={styles.listTitleContainer}>
           <Text style={styles.listTitle}>Daftar Kendaraan</Text>
           <TouchableOpacity onPress={() => navigation.navigate('VehicleList')}>
@@ -271,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25,
-    height: '20%',
+    height: hp('15%'),
     // backgroundColor: 'blue',
   },
   title: {

@@ -113,13 +113,14 @@ const styles = StyleSheet.create({
   policeNumber: {
     fontFamily: fonts.Poppins.medium,
     // fontSize: 18,
-    fontSize: wp('3%'),
+    fontSize: wp('3.5%'),
     color: colors.primaryBlack,
   },
   vehicleName: {
+    top: '-5%',
     fontFamily: fonts.Poppins.medium,
     // fontSize: 12,
-    fontSize: wp('3.5%'),
+    fontSize: wp('3%'),
   },
   vehicleType: {
     width: 160,
@@ -133,10 +134,15 @@ const styles = StyleSheet.create({
     // fontSize: 18,
     fontSize: wp('3.5%'),
     color: colors.primaryBlack,
+    position: 'absolute',
+    bottom: '33%',
+    width: '100%',
+    left: '13%',
   },
   vehicleText: {
     width: '100%',
     paddingHorizontal: 20,
+    flex: 1,
   },
   expireContainer: {
     // width: 160,
@@ -167,7 +173,7 @@ const styles = StyleSheet.create({
   expire: {
     fontFamily: fonts.Poppins.regular,
     // fontSize: 8,
-    fontSize: wp('2%'),
+    fontSize: wp('1.9%'),
     color: colors.white,
   },
 });

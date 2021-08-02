@@ -33,6 +33,7 @@ export default Carousel;
 const styles = StyleSheet.create({
   carouselContainer: {
     height: hp('25%'),
+    // backgroundColor: 'yellow',
   },
   carouselWrapper: {
     height: '100%',

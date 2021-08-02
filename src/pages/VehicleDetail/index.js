@@ -214,7 +214,7 @@ const VehicleDetail = ({ route, navigation }) => {
     'December',
   ];
 
-  var selectedMonthName = months[vehicle.BULAN_BERLAKU_SD];
+  var selectedMonthName = months[vehicle.BULAN_BERLAKU_SD - 1];
   return (
     <ScrollView style={styles.page}>
       <TopBar
@@ -315,7 +315,7 @@ const VehicleDetail = ({ route, navigation }) => {
                     content={
                       vehicle.TANGGAL_BERLAKU_SD +
                       ' ' +
-                      vehicle.BULAN_BERLAKU_SD +
+                      selectedMonthName +
                       ' ' +
                       vehicle.TAHUN_BERLAKU_SD
                     }
