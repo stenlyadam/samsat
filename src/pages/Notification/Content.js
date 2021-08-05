@@ -1,20 +1,33 @@
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { colors, fonts, IconInfo, IMGVehicle } from '../../assets';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { colors, fonts, IconInfo, IMGVehicleDummy } from '../../assets';
 
-const Content = ({ item }) => {
+const Content = ({ policeNumber, dueDate, image, vehicle, id }) => {
+  const navigation = useNavigation();
+  const days = moment(dueDate).diff(new Date(), 'days');
   return (
-    <View style={styles.timeSectionContentContainer}>
-      <Image source={IMGVehicle} style={styles.image} />
+    <TouchableOpacity
+      style={styles.timeSectionContentContainer}
+      onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
+      {image ? (
+        <Image
+          source={{ uri: `data:image/png;base64,${image}` }}
+          style={styles.image}
+        />
+      ) : (
+        <Image source={IMGVehicleDummy} style={styles.image} />
+      )}
       <Text style={styles.informationText}>
-        <Text style={styles.bold}>{item.days}</Text> lagi batas pembayaran pajak
+        <Text style={styles.bold}>{days} hari</Text> lagi batas pembayaran pajak
         kendaraan dengan nomor polisi{' '}
-        <Text style={styles.bold}>{item.policeNumber}</Text>
+        <Text style={styles.bold}>{policeNumber}</Text>
       </Text>
       <View style={styles.iconInfoContainer}>
         <IconInfo />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -30,7 +43,7 @@ const styles = StyleSheet.create({
   image: {
     width: 47,
     height: 47,
-    borderRadius: 18,
+    borderRadius: 10,
   },
   informationText: {
     fontFamily: fonts.Poppins.regular,

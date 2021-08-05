@@ -22,8 +22,6 @@ import {
 } from 'react-native-responsive-screen';
 // import moment from 'moment';
 
-let notification = 6;
-
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
@@ -33,7 +31,6 @@ const VehicleList = () => {
   const [uid, setUid] = useState('');
   const [vehiclesList, setVehiclesList] = useState(vehicles);
   const navigation = useNavigation();
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getData('user').then(response => {
@@ -120,21 +117,28 @@ const VehicleList = () => {
 };
 
 const Dashboard = ({ navigation }) => {
+  const [notification, setNotification] = useState(0);
+  getData('user').then(data => {
+    setNotification(Object.keys(data.vehicles).length);
+  });
   const [refreshing, setRefreshing] = useState(false);
   //Push Notification
-  const [registerToken, setRegisterToken] = useState('');
-  const [fcmRegistered, setFcmRegistered] = useState(false);
+  // const [registerToken, setRegisterToken] = useState(''); //not used
+  // const [fcmRegistered, setFcmRegistered] = useState(false); //not used
 
-  const onRegister = token => {
-    setRegisterToken(token.token);
-    setFcmRegistered(true);
-  };
+  // const onRegister = token => { //not used
+  // setRegisterToken(token.token);
+  // setFcmRegistered(true);
+  // };
 
   const onNotif = notif => {
     Alert.alert(notif.title, notif.message);
   };
 
-  const notif = new NotifService(onRegister, onNotif);
+  const notif = new NotifService(
+    // onRegister,// not used
+    onNotif,
+  );
 
   // const handlePerm = perms => {
   //   Alert.alert('Permissions', JSON.stringify(perms));
@@ -165,7 +169,8 @@ const Dashboard = ({ navigation }) => {
     // const date = moment().format();
     // notif.cancelAll();
     // notif.scheduleNotif(bigText, title, date);
-    notif.getScheduledLocalNotifications(notifs => console.log(notifs));
+    notif.localNotif(bigText, title);
+    // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
 
     // console.log(date);
   };
