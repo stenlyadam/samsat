@@ -20,6 +20,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import * as GLOBAL from '../../components/globalState';
 // import moment from 'moment';
 
 const wait = timeout => {
@@ -64,7 +65,6 @@ const VehicleList = () => {
       setVehiclesList(data);
     }
   }, [uid, vehicles]);
-
   // console.log('testing kalau ada kendaraan', vehiclesList);
   return (
     <ScrollView horizontal={true} style={styles.vehicleListContainer}>
@@ -169,7 +169,7 @@ const Dashboard = ({ navigation }) => {
     // const date = moment().format();
     // notif.cancelAll();
     // notif.scheduleNotif(bigText, title, date);
-    notif.localNotif(bigText, title);
+    // notif.localNotif(bigText, title);
     // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
 
     // console.log(date);

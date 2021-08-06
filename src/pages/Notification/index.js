@@ -13,21 +13,21 @@ import { Gap, TopBar } from '../../components';
 import Content from './Content';
 import TimeSection from './TimeSection';
 import moment from 'moment-timezone';
+import * as GLOBAL from '../../components/globalState';
 
 const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
   // const [vehicleCount, setVehicleCount] = useState(0);
-  const date = moment(`${dueDate}`, 'DD MMMM YYYY')
-    .tz('Asia/Makassar')
-    .format();
+  const date = moment(`${dueDate}`, 'D-MMMM-YYYY').tz('Asia/Makassar').format();
+  const today = moment().tz('Asia/Makassar');
   const [checkWeek, setCheckWeek] = useState(false);
   const [checkMonth, setCheckMonth] = useState(false);
   const [checkYear, setCheckYear] = useState(false);
   useEffect(() => {
-    setCheckWeek(moment(date).isSame(new Date(), 'week'));
-    setCheckMonth(moment(date).isSame(new Date(), 'month'));
-    setCheckYear(moment(date).isSame(new Date(), 'year'));
+    setCheckWeek(moment(date).isSame(today, 'week'));
+    setCheckMonth(moment(date).isSame(today, 'month'));
+    setCheckYear(moment(date).isSame(today, 'year'));
   }, []);
-
+  GLOBAL.notification++;
   switch (check) {
     case 'week':
       if (checkWeek) {
@@ -79,7 +79,23 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
       } else {
         return <View></View>;
       }
-
+      break;
+    case 'other':
+      if (checkYear === false && checkMonth === false && checkWeek === false) {
+        return (
+          <View>
+            <Content
+              policeNumber={policeNumber}
+              dueDate={dueDate}
+              image={image}
+              vehicle={vehicle}
+              id={id}
+            />
+          </View>
+        );
+      } else {
+        return <View></View>;
+      }
     default:
       break;
   }
@@ -130,10 +146,18 @@ const Notification = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.page}>
-      <TopBar title="Notifikasi" onBack={() => navigation.goBack()} />
+    <ScrollView style={styles.page}>
+      <TopBar
+        title="Notifikasi"
+        onBack={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          })
+        }
+      />
       <View style={styles.contentContainer}>
-        <Text style={styles.timeSectionTitle}>This Week</Text>
+        <Text style={styles.timeSectionTitle}>Minggu Ini</Text>
         {vehiclesList.map((vehicle, i) => {
           var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
           const image = checkArray(vehicle.data.FOTO_KENDARAAN);
@@ -150,9 +174,9 @@ const Notification = ({ navigation }) => {
               }
               dueDate={
                 vehicle.data.TANGGAL_BERLAKU_SD +
-                ' ' +
+                '-' +
                 selectedMonthName +
-                ' ' +
+                '-' +
                 vehicle.data.TAHUN_BERLAKU_SD
               }
               vehicle={vehicle}
@@ -161,7 +185,7 @@ const Notification = ({ navigation }) => {
             />
           );
         })}
-        <Text style={styles.timeSectionTitle}>This Month</Text>
+        <Text style={styles.timeSectionTitle}>Bulan Ini</Text>
         {vehiclesList.map((vehicle, i) => {
           var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
           const image = checkArray(vehicle.data.FOTO_KENDARAAN);
@@ -190,7 +214,7 @@ const Notification = ({ navigation }) => {
           );
         })}
 
-        <Text style={styles.timeSectionTitle}>This Year</Text>
+        <Text style={styles.timeSectionTitle}>Tahun Ini</Text>
         {vehiclesList.map((vehicle, i) => {
           var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
           const image = checkArray(vehicle.data.FOTO_KENDARAAN);
@@ -218,11 +242,39 @@ const Notification = ({ navigation }) => {
             />
           );
         })}
+
+        <Text style={styles.timeSectionTitle}>Lainnya</Text>
+        {vehiclesList.map((vehicle, i) => {
+          var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
+          const image = checkArray(vehicle.data.FOTO_KENDARAAN);
+          return (
+            <VehiclesList
+              check="other"
+              image={image}
+              policeNumber={
+                vehicle.data.KODE_DAERAH_NOMOR_POLISI +
+                ' ' +
+                vehicle.data.NOMOR_POLISI +
+                ' ' +
+                vehicle.data.KODE_LOKASI_NOMOR_POLISI
+              }
+              dueDate={
+                vehicle.data.TANGGAL_BERLAKU_SD +
+                ' ' +
+                selectedMonthName +
+                ' ' +
+                vehicle.data.TAHUN_BERLAKU_SD
+              }
+              vehicle={vehicle}
+              id={vehicle.id}
+              key={i}
+            />
+          );
+        })}
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
-
 export default Notification;
 
 const styles = StyleSheet.create({
