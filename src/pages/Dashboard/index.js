@@ -65,10 +65,18 @@ const VehicleList = () => {
       setVehiclesList(data);
     }
   }, [uid, vehicles]);
-  // console.log('testing kalau ada kendaraan', vehiclesList);
+  console.log('testing kalau ada kendaraan', vehiclesList);
   return (
     <ScrollView horizontal={true} style={styles.vehicleListContainer}>
       {vehiclesList.map((vehicle, i) => {
+        // console.log(
+        //   'vehicle one by one :',
+        //   vehicle.data.TANGGAL_BERLAKU_SD +
+        //     ' ' +
+        //     vehicle.data.BULAN_BERLAKU_SD +
+        //     ' ' +
+        //     vehicle.data.TAHUN_BERLAKU_SD,
+        // );
         const months = [
           'January',
           'February',
@@ -170,7 +178,7 @@ const Dashboard = ({ navigation }) => {
     // notif.cancelAll();
     // notif.scheduleNotif(bigText, title, date);
     // notif.localNotif(bigText, title);
-    // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
+    notif.getScheduledLocalNotifications(notifs => console.log(notifs));
 
     // console.log(date);
   };

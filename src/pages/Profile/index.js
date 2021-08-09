@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -22,6 +23,7 @@ import {
 } from 'accordion-collapse-react-native';
 import Content from './Content';
 import { firebase } from '../../config';
+import NotifService from '../../../NotifService';
 
 const ContentHeader = ({ headerTitle, type }) => {
   const [profile, setProfile] = useState({
@@ -33,7 +35,7 @@ const ContentHeader = ({ headerTitle, type }) => {
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
-      console.log('get DATA in Profile', data);
+      // console.log('get DATA in Profile', data);
       setProfile(data);
     });
   }, []);
@@ -106,26 +108,10 @@ const ContentHeader = ({ headerTitle, type }) => {
           </View>
         </CollapseHeader>
         <CollapseBody>
-          <Content
-            title="Nama Lengkap:"
-            content="Samsat Minut"
-            profile={profile.namaLengkap}
-          />
-          <Content
-            title="Tanggal Lahir:"
-            content="1 Januari 1999"
-            profile={profile.tanggalLahir}
-          />
-          <Content
-            title="Alamat:"
-            content="Airmadidi"
-            profile={profile.alamat}
-          />
-          <Content
-            title="Email:"
-            content="samsat@gmail.com"
-            profile={profile.email}
-          />
+          <Content title="Nama Lengkap:" profile={profile.namaLengkap} />
+          <Content title="Tanggal Lahir:" profile={profile.tanggalLahir} />
+          <Content title="Alamat:" profile={profile.alamat} />
+          <Content title="Email:" profile={profile.email} />
         </CollapseBody>
       </Collapse>
     );
@@ -133,12 +119,23 @@ const ContentHeader = ({ headerTitle, type }) => {
 };
 
 const Profile = ({ navigation }) => {
+  //Push Notification
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const notif = new NotifService(
+    // onRegister,// not used
+    onNotif,
+  );
+  //Push Notification
   const logout = () => {
     storeData('user', null);
     navigation.reset({
       index: 0,
       routes: [{ name: 'Login' }],
     });
+    notif.cancelAll();
   };
   return (
     <ScrollView style={styles.page}>

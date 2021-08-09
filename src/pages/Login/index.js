@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -25,25 +26,43 @@ import { Gap, TextInput, CheckBox, Button } from '../../components';
 import { firebase } from '../../config';
 import { useDispatch } from 'react-redux';
 import { showError } from '../../utils';
+import moment from 'moment-timezone';
+import NotifService from '../../../NotifService';
 
 const Login = ({ navigation }) => {
   const [form, setForm] = useForm({
     email: '',
     password: '',
   });
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     getData('user').then(data => {
-      console.log('wkwkwk', data);
-      if (data != null || data != undefined) {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Dashboard' }],
-        });
-      }
+      // console.log('wkwkwk', data);
+      // if (data != null || data != undefined) {
+      //   navigation.reset({
+      //     index: 0,
+      //     routes: [{ name: 'Dashboard' }],
+      //   });
+      // }
     });
   }, []);
+
+  //Push Notification
+  const [registerToken, setRegisterToken] = useState('');
+  const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  const onRegister = token => {
+    setRegisterToken(token.token);
+    setFcmRegistered(true);
+  };
+
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  //Push Notification
 
   const onContinue = () => {
     console.log('onContinue', form);
@@ -58,11 +77,40 @@ const Login = ({ navigation }) => {
           .ref(`users/${response.user.uid}/`)
           .once('value')
           .then(responseDB => {
-            console.log('Response :', responseDB.val());
+            // const vehicles = responseDB.val().vehicles;
+            // console.log('Response :', responseDB.val());
+            // console.log('hehehehe :', vehicles);
             if (responseDB.val()) {
               storeData('user', responseDB.val());
               navigation.navigate('Dashboard');
             }
+            getData('user').then(dataRes => {
+              const oldData = dataRes.vehicles;
+              const data = [];
+              Object.keys(oldData).map(key => {
+                data.push({
+                  id: key,
+                  data: oldData[key],
+                });
+              });
+              data.map((vehicle, i) => {
+                const notif = new NotifService(onNotif);
+                const date = moment(
+                  `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
+                  'DD/MM/YYYY/h',
+                )
+                  .tz('Asia/Makassar')
+                  .format();
+                const notifTitle =
+                  'Notifikasi batas pemberlakuan surat pajak kendaraan anda dengan nomor polisi : ';
+
+                const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT} sebesar Rp.${vehicle.data.PKB_TERAKHIR}`;
+                const scheduledFor = date;
+
+                notif.scheduleNotif(bigText, notifTitle, scheduledFor);
+                console.log('vehicle one by one :', bigText);
+              });
+            });
           });
         setForm('reset');
       })
