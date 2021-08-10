@@ -20,7 +20,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import * as GLOBAL from '../../components/globalState';
 // import moment from 'moment';
 
 const wait = timeout => {
@@ -65,7 +64,7 @@ const VehicleList = () => {
       setVehiclesList(data);
     }
   }, [uid, vehicles]);
-  console.log('testing kalau ada kendaraan', vehiclesList);
+  // console.log('testing kalau ada kendaraan', vehiclesList);
   return (
     <ScrollView horizontal={true} style={styles.vehicleListContainer}>
       {vehiclesList.map((vehicle, i) => {
@@ -162,7 +161,7 @@ const Dashboard = ({ navigation }) => {
     var moment = require('moment-timezone');
     // var date = new Date().getDate(); //Current Date
 
-    // const date = moment().format(); //Time Stamp Now
+    const date = moment().format(); //Time Stamp Now
     // const date = moment().tz('Asia/Makassar').format('MMMM Do YYYY, h:mm:ss a');
     // const date = moment('31/7/2021', 'DD/MM/YYYY')
     //   .tz('Asia/Makassar')
@@ -170,7 +169,7 @@ const Dashboard = ({ navigation }) => {
     // const scheduledDate = new Date(
     //   moment('2/8/2021/8/9', 'DD/MM/YYYY/h/m').tz('Asia/Makassar').format(),
     // );
-    const date = new Date(Date.now() + 5 * 1000);
+    // const date = new Date(Date.now() + 5 * 1000);
     const bigText = `THIS IS BIG TEXT + ${date}`;
     const title = 'This Is The Title';
     // const date = scheduledDate;
@@ -179,7 +178,8 @@ const Dashboard = ({ navigation }) => {
     // notif.scheduleNotif(bigText, title, date);
     // notif.localNotif(bigText, title);
     notif.getScheduledLocalNotifications(notifs => console.log(notifs));
-
+    // console.log('wkwkwkwk :', date);
+    // console.log('wkwkwkwk :', wkwk);
     // console.log(date);
   };
 

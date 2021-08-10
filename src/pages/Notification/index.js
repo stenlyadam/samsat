@@ -13,7 +13,6 @@ import { Gap, TopBar } from '../../components';
 import Content from './Content';
 import TimeSection from './TimeSection';
 import moment from 'moment-timezone';
-import * as GLOBAL from '../../components/globalState';
 
 const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
   // const [vehicleCount, setVehicleCount] = useState(0);

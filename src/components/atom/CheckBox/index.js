@@ -4,14 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { colors, fonts } from '../../../assets';
 
 const CheckBox = ({ label, value, onValueChange }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   return (
     <View style={styles.container}>
-      <Check
-        disabled={false}
-        value={toggleCheckBox}
-        onValueChange={newValue => setToggleCheckBox(newValue)}
-      />
+      <Check disabled={false} value={value} onValueChange={onValueChange} />
       <Text style={styles.label}>{label}</Text>
     </View>
   );

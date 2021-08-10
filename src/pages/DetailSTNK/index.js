@@ -48,7 +48,7 @@ const DetailSTNK = ({ navigation, route }) => {
     'December',
   ];
 
-  var selectedMonthName = months[BULAN_BERLAKU_SD].toUpperCase();
+  var selectedMonthName = months[BULAN_BERLAKU_SD - 1].toUpperCase();
 
   const [uid, setUid] = useState('');
 

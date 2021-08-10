@@ -30,6 +30,10 @@ import moment from 'moment-timezone';
 import NotifService from '../../../NotifService';
 
 const Login = ({ navigation }) => {
+  // const [email, setEmail] = useState('');
+  const [tempIngat, setTempIngat] = useState(false);
+  const [ingat, setIngat] = useState(false);
+
   const [form, setForm] = useForm({
     email: '',
     password: '',
@@ -39,13 +43,22 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     getData('user').then(data => {
-      // console.log('wkwkwk', data);
-      // if (data != null || data != undefined) {
-      //   navigation.reset({
-      //     index: 0,
-      //     routes: [{ name: 'Dashboard' }],
-      //   });
-      // }
+      console.log('wkwkwk', data);
+      if (data != null || data != undefined) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        });
+      }
+    });
+    getData('ingat').then(res => {
+      if (res) {
+        getData('email').then(getEmail => {
+          setForm('email', getEmail);
+          console.log('test');
+        });
+        setIngat(res);
+      }
     });
   }, []);
 
@@ -82,9 +95,14 @@ const Login = ({ navigation }) => {
             // console.log('hehehehe :', vehicles);
             if (responseDB.val()) {
               storeData('user', responseDB.val());
+              if (ingat) {
+                storeData('email', form.email);
+              }
+              storeData('ingat', ingat);
               navigation.navigate('Dashboard');
             }
             getData('user').then(dataRes => {
+              const notif = new NotifService(onNotif);
               const oldData = dataRes.vehicles;
               const data = [];
               Object.keys(oldData).map(key => {
@@ -94,25 +112,34 @@ const Login = ({ navigation }) => {
                 });
               });
               data.map((vehicle, i) => {
-                const notif = new NotifService(onNotif);
                 const date = moment(
-                  `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
-                  'DD/MM/YYYY/h',
-                )
-                  .tz('Asia/Makassar')
-                  .format();
-                const notifTitle =
-                  'Notifikasi batas pemberlakuan surat pajak kendaraan anda dengan nomor polisi : ';
-
-                const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT} sebesar Rp.${vehicle.data.PKB_TERAKHIR}`;
+                  `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}//8`,
+                  'DD/MM/YYYY//hh',
+                ).format();
+                const notifTitle = 'Surat pajak kendaraan';
+                const total = vehicle.data.PKB_TERAKHIR.toFixed(2).replace(
+                  /\d(?=(\d{3})+\.)/g,
+                  '$&.',
+                );
+                const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT}`;
+                const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT} sebesar Rp.${total}`;
                 const scheduledFor = date;
 
-                notif.scheduleNotif(bigText, notifTitle, scheduledFor);
+                notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
+                // notif.localNotif(bigText, notifTitle);
                 console.log('vehicle one by one :', bigText);
+                // notif.getScheduledLocalNotifications(hehe => {
+                //   console.log(hehe);
+                // });
               });
             });
           });
-        setForm('reset');
+        if (ingat) {
+          setForm('password', null);
+          // email = form.email;
+        } else {
+          setForm('reset');
+        }
       })
       .catch(error => {
         dispatch({ type: 'SET_LOADING', value: false });
@@ -124,7 +151,30 @@ const Login = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.page}>
       <Gap height={'2%'} />
-
+      {/* <TouchableOpacity
+        style={{ width: 50, height: 50, backgroundColor: 'blue' }}
+        onPress={onContinue}
+        onPress={() => {
+          const notif = new NotifService(onNotif);
+          const scheduledFor1 = moment(
+            '10/8/2021/9/33',
+            'DD/MM/YYYY/h/mm',
+          ).format();
+          const scheduledFor2 = moment(
+            '10/8/2021/9/34',
+            'DD/MM/YYYY/h/mm',
+          ).format();
+          // console.log('heheheh: ', ubi);
+          const bigText = 'bigText';
+          const notifTitle = 'notifTitle';
+          notif.scheduleNotif(bigText, notifTitle, scheduledFor1);
+          notif.scheduleNotif(bigText, notifTitle, scheduledFor2);
+          notif.getScheduledLocalNotifications(getNotif => {
+            console.log('getnotif: ', getNotif);
+            console.log('time for scheduled: ', scheduledFor1);
+          });
+        }}
+      /> */}
       <Image source={IMGBapenda} style={styles.bapenda} />
       <Gap height={30} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
@@ -147,7 +197,11 @@ const Login = ({ navigation }) => {
       <Gap height={'1%'} />
       <View style={styles.passwordExtrasContainer}>
         <View style={styles.checkBoxContainer}>
-          <CheckBox label="Ingat" />
+          <CheckBox
+            label="Ingat"
+            value={ingat}
+            onValueChange={newValue => setIngat(newValue)}
+          />
         </View>
         <TouchableOpacity>
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
