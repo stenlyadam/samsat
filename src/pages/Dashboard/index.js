@@ -161,7 +161,7 @@ const Dashboard = ({ navigation }) => {
     var moment = require('moment-timezone');
     // var date = new Date().getDate(); //Current Date
 
-    const date = moment().format(); //Time Stamp Now
+    const date = moment(); //Time Stamp Now
     // const date = moment().tz('Asia/Makassar').format('MMMM Do YYYY, h:mm:ss a');
     // const date = moment('31/7/2021', 'DD/MM/YYYY')
     //   .tz('Asia/Makassar')
@@ -177,10 +177,20 @@ const Dashboard = ({ navigation }) => {
     // notif.cancelAll();
     // notif.scheduleNotif(bigText, title, date);
     // notif.localNotif(bigText, title);
-    notif.getScheduledLocalNotifications(notifs => console.log(notifs));
+    // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
     // console.log('wkwkwkwk :', date);
     // console.log('wkwkwkwk :', wkwk);
     // console.log(date);
+    const todayDate = moment();
+    const pastDate = moment('11-08-2021', 'DD-MM-YYYY');
+    console.log('today', date);
+    const check = todayDate.isBefore(pastDate);
+    console.log('wkwkwk', check);
+    if (todayDate.isAfter(pastDate)) {
+      console.log('Date is not past');
+    } else {
+      console.log('Date is past');
+    }
   };
 
   return (

@@ -18,18 +18,37 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
   // const [vehicleCount, setVehicleCount] = useState(0);
   const date = moment(`${dueDate}`, 'D-MMMM-YYYY').tz('Asia/Makassar').format();
   const today = moment().tz('Asia/Makassar');
+  const [checkLewat, setCheckLewat] = useState(false);
   const [checkWeek, setCheckWeek] = useState(false);
   const [checkMonth, setCheckMonth] = useState(false);
   const [checkYear, setCheckYear] = useState(false);
   useEffect(() => {
+    setCheckLewat(moment(date).isBefore(today));
     setCheckWeek(moment(date).isSame(today, 'week'));
     setCheckMonth(moment(date).isSame(today, 'month'));
     setCheckYear(moment(date).isSame(today, 'year'));
   }, []);
   GLOBAL.notification++;
   switch (check) {
+    case 'lewat':
+      if (checkLewat) {
+        return (
+          <View>
+            <Content
+              policeNumber={policeNumber}
+              dueDate={dueDate}
+              image={image}
+              vehicle={vehicle}
+              id={id}
+            />
+          </View>
+        );
+      } else {
+        return <View></View>;
+      }
+      break;
     case 'week':
-      if (checkWeek) {
+      if (checkWeek && checkLewat == false) {
         return (
           <View>
             <Content
@@ -156,6 +175,34 @@ const Notification = ({ navigation }) => {
         }
       />
       <View style={styles.contentContainer}>
+        <Text style={styles.timeSectionTitle}>Masa berlaku lewat</Text>
+        {vehiclesList.map((vehicle, i) => {
+          var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
+          const image = checkArray(vehicle.data.FOTO_KENDARAAN);
+          return (
+            <VehiclesList
+              check="lewat"
+              image={image}
+              policeNumber={
+                vehicle.data.KODE_DAERAH_NOMOR_POLISI +
+                ' ' +
+                vehicle.data.NOMOR_POLISI +
+                ' ' +
+                vehicle.data.KODE_LOKASI_NOMOR_POLISI
+              }
+              dueDate={
+                vehicle.data.TANGGAL_BERLAKU_SD +
+                '-' +
+                selectedMonthName +
+                '-' +
+                vehicle.data.TAHUN_BERLAKU_SD
+              }
+              vehicle={vehicle}
+              id={vehicle.id}
+              key={i}
+            />
+          );
+        })}
         <Text style={styles.timeSectionTitle}>Minggu Ini</Text>
         {vehiclesList.map((vehicle, i) => {
           var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
