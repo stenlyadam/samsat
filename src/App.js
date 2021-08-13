@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Router from './router';
 import FlashMessage from 'react-native-flash-message';
 import { LogBox } from 'react-native';
-import store from './redux/store';
+import { store } from './redux/store';
 import { Provider, useSelector } from 'react-redux';
 import { Loading } from './components';
 
@@ -17,7 +17,7 @@ LogBox.ignoreLogs(['Setting a timer']);
 // };
 LogBox.ignoreLogs(['Remote debugger']);
 const MainApp = () => {
-  const stateGlobal = useSelector(state => state);
+  const stateGlobal = useSelector(state => state.loading);
   LogBox.ignoreLogs(['Setting a timer']);
   return (
     <>

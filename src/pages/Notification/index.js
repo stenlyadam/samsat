@@ -28,7 +28,6 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
     setCheckMonth(moment(date).isSame(today, 'month'));
     setCheckYear(moment(date).isSame(today, 'year'));
   }, []);
-  GLOBAL.notification++;
   switch (check) {
     case 'lewat':
       if (checkLewat) {

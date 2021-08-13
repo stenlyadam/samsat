@@ -24,22 +24,25 @@ import {
 import { useForm } from '../../assets/useForm';
 import { Gap, TextInput, CheckBox, Button } from '../../components';
 import { firebase } from '../../config';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showError } from '../../utils';
 import moment from 'moment-timezone';
 import NotifService from '../../../NotifService';
+import { SET_LOADING } from '../../redux/counter/loadingSlice';
+import { remember } from '../../redux/counter/rememberSlice';
 
 const Login = ({ navigation }) => {
-  // const [email, setEmail] = useState('');
-  const [tempIngat, setTempIngat] = useState(false);
-  const [ingat, setIngat] = useState(false);
-
+  //login logic
+  const [ingat, setIngat] = useState(true);
   const [form, setForm] = useForm({
     email: '',
     password: '',
   });
 
+  //redux
+  const rememberState = useSelector(state => state.remember);
   const dispatch = useDispatch();
+  //redux
 
   useEffect(() => {
     getData('user').then(data => {
@@ -51,14 +54,8 @@ const Login = ({ navigation }) => {
         });
       }
     });
-    getData('ingat').then(res => {
-      if (res) {
-        getData('email').then(getEmail => {
-          setForm('email', getEmail);
-          console.log('test');
-        });
-        setIngat(res);
-      }
+    getData('email').then(data => {
+      setForm('email', data);
     });
   }, []);
 
@@ -74,32 +71,31 @@ const Login = ({ navigation }) => {
   const onNotif = notif => {
     Alert.alert(notif.title, notif.message);
   };
-
   //Push Notification
 
   const onContinue = () => {
     console.log('onContinue', form);
-    dispatch({ type: 'SET_LOADING', value: true });
+    dispatch(SET_LOADING(true));
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
       .then(response => {
-        dispatch({ type: 'SET_LOADING', value: false });
+        dispatch(SET_LOADING(false));
         firebase
           .database()
           .ref(`users/${response.user.uid}/`)
           .once('value')
           .then(responseDB => {
-            // const vehicles = responseDB.val().vehicles;
-            // console.log('Response :', responseDB.val());
-            // console.log('hehehehe :', vehicles);
             if (responseDB.val()) {
-              storeData('user', responseDB.val());
+              storeData('user', responseDB.val()); //asyncstorage user data
               if (ingat) {
+                //Login logic
                 storeData('email', form.email);
+                console.log('email stored in storedata');
+              } else {
+                storeData('email', null);
               }
-              storeData('ingat', ingat);
-              navigation.navigate('Dashboard');
+              navigation.navigate('Dashboard'); //Navigate to dashboard
             }
             getData('user').then(dataRes => {
               const notif = new NotifService(onNotif);
@@ -126,55 +122,24 @@ const Login = ({ navigation }) => {
                 const scheduledFor = date;
 
                 notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
-                // notif.localNotif(bigText, notifTitle);
-                console.log('vehicle one by one :', bigText);
-                // notif.getScheduledLocalNotifications(hehe => {
-                //   console.log(hehe);
-                // });
               });
             });
           });
         if (ingat) {
           setForm('password', null);
-          // email = form.email;
         } else {
           setForm('reset');
         }
       })
       .catch(error => {
-        dispatch({ type: 'SET_LOADING', value: false });
+        dispatch(SET_LOADING(false));
         console.log(error.message);
         showError(error.message);
       });
   };
-
   return (
     <SafeAreaView style={styles.page}>
       <Gap height={'2%'} />
-      {/* <TouchableOpacity
-        style={{ width: 50, height: 50, backgroundColor: 'blue' }}
-        onPress={onContinue}
-        onPress={() => {
-          const notif = new NotifService(onNotif);
-          const scheduledFor1 = moment(
-            '10/8/2021/9/33',
-            'DD/MM/YYYY/h/mm',
-          ).format();
-          const scheduledFor2 = moment(
-            '10/8/2021/9/34',
-            'DD/MM/YYYY/h/mm',
-          ).format();
-          // console.log('heheheh: ', ubi);
-          const bigText = 'bigText';
-          const notifTitle = 'notifTitle';
-          notif.scheduleNotif(bigText, notifTitle, scheduledFor1);
-          notif.scheduleNotif(bigText, notifTitle, scheduledFor2);
-          notif.getScheduledLocalNotifications(getNotif => {
-            console.log('getnotif: ', getNotif);
-            console.log('time for scheduled: ', scheduledFor1);
-          });
-        }}
-      /> */}
       <Image source={IMGBapenda} style={styles.bapenda} />
       <Gap height={30} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
@@ -184,7 +149,9 @@ const Login = ({ navigation }) => {
         title="Email"
         paddingHorizontal={'13%'}
         value={form.email}
-        onChangeText={value => setForm('email', value)}
+        onChangeText={value => {
+          setForm('email', value);
+        }}
       />
       <Gap height={'2%'} />
       <TextInput
@@ -200,10 +167,18 @@ const Login = ({ navigation }) => {
           <CheckBox
             label="Ingat"
             value={ingat}
-            onValueChange={newValue => setIngat(newValue)}
+            onValueChange={value => {
+              dispatch(remember(value));
+              setIngat(value);
+            }}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('rememberState: ', rememberState.check);
+            console.log('email: ', rememberState.email);
+            console.log('wkwkwk');
+          }}>
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
         </TouchableOpacity>
       </View>

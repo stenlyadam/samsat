@@ -16,6 +16,7 @@
     "@react-navigation/bottom-tabs": "^5.11.9",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
+    "@reduxjs/toolkit": "^1.6.1",
     "accordion-collapse-react-native": "^1.0.1",
     "axios": "^0.21.1",
     "firebase": "^8.6.7",
