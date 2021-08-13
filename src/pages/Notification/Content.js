@@ -6,7 +6,8 @@ import { colors, fonts, IconInfo, IMGVehicleDummy } from '../../assets';
 
 const Content = ({ policeNumber, dueDate, image, vehicle, id }) => {
   const navigation = useNavigation();
-  const days = moment(dueDate).diff(new Date(), 'days');
+  const thisDay = moment();
+  const days = moment(dueDate, 'DD MMMM YYYY').diff(thisDay, 'days');
   return (
     <TouchableOpacity
       style={styles.timeSectionContentContainer}

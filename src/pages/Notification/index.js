@@ -1,23 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors, fonts, getData } from '../../assets';
-import { Gap, TopBar } from '../../components';
+import { TopBar } from '../../components';
 import Content from './Content';
-import TimeSection from './TimeSection';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
 const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
   // const [vehicleCount, setVehicleCount] = useState(0);
-  const date = moment(`${dueDate}`, 'D-MMMM-YYYY').tz('Asia/Makassar').format();
-  const today = moment().tz('Asia/Makassar');
+  const date = moment(`${dueDate}`, 'DD MMMM YYYY');
+  // .format();
+  const today = moment();
   const [checkLewat, setCheckLewat] = useState(false);
   const [checkWeek, setCheckWeek] = useState(false);
   const [checkMonth, setCheckMonth] = useState(false);
@@ -43,11 +35,10 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
           </View>
         );
       } else {
-        return <View></View>;
+        return <View />;
       }
-      break;
     case 'week':
-      if (checkWeek && checkLewat == false) {
+      if (checkWeek && checkLewat === false) {
         return (
           <View>
             <Content
@@ -60,9 +51,8 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
           </View>
         );
       } else {
-        return <View></View>;
+        return <View />;
       }
-      break;
     case 'month':
       if (checkMonth && checkWeek === false) {
         return (
@@ -77,9 +67,8 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
           </View>
         );
       } else {
-        return <View></View>;
+        return <View />;
       }
-      break;
     case 'year':
       if (checkYear && checkMonth === false && checkWeek === false) {
         return (
@@ -94,9 +83,8 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
           </View>
         );
       } else {
-        return <View></View>;
+        return <View />;
       }
-      break;
     case 'other':
       if (checkYear === false && checkMonth === false && checkWeek === false) {
         return (
@@ -111,10 +99,8 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
           </View>
         );
       } else {
-        return <View></View>;
+        return <View />;
       }
-    default:
-      break;
   }
 };
 
@@ -191,9 +177,9 @@ const Notification = ({ navigation }) => {
               }
               dueDate={
                 vehicle.data.TANGGAL_BERLAKU_SD +
-                '-' +
+                ' ' +
                 selectedMonthName +
-                '-' +
+                ' ' +
                 vehicle.data.TAHUN_BERLAKU_SD
               }
               vehicle={vehicle}
@@ -219,9 +205,9 @@ const Notification = ({ navigation }) => {
               }
               dueDate={
                 vehicle.data.TANGGAL_BERLAKU_SD +
-                '-' +
+                ' ' +
                 selectedMonthName +
-                '-' +
+                ' ' +
                 vehicle.data.TAHUN_BERLAKU_SD
               }
               vehicle={vehicle}
