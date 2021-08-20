@@ -71,7 +71,12 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
         return <View />;
       }
     case 'year':
-      if (checkYear && checkMonth === false && checkWeek === false) {
+      if (
+        checkYear &&
+        checkMonth === false &&
+        checkWeek === false &&
+        checkLewat === false
+      ) {
         return (
           <View>
             <Content
@@ -87,7 +92,12 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
         return <View />;
       }
     case 'other':
-      if (checkYear === false && checkMonth === false && checkWeek === false) {
+      if (
+        checkYear === false &&
+        checkMonth === false &&
+        checkWeek === false &&
+        checkLewat === false
+      ) {
         return (
           <View>
             <Content

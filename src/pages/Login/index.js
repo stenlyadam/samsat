@@ -120,8 +120,15 @@ const Login = ({ navigation }) => {
                 const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT}`;
                 const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT} sebesar Rp.${total}`;
                 const scheduledFor = date;
-
-                notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
+                const repeat = 'days';
+                console.log('repeat');
+                notif.scheduleNotif(
+                  bigText,
+                  notifTitle,
+                  scheduledFor,
+                  message,
+                  repeat,
+                );
               });
             });
           });
