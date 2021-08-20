@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { colors, fonts, IconInfo, IMGVehicleDummy } from '../../assets';
 
-const Content = ({ policeNumber, dueDate, image, vehicle, id }) => {
+const Content = ({ expired, policeNumber, dueDate, image, vehicle, id }) => {
   const navigation = useNavigation();
   const thisDay = moment();
   const days = moment(dueDate, 'DD MMMM YYYY').diff(thisDay, 'days');
@@ -20,11 +20,20 @@ const Content = ({ policeNumber, dueDate, image, vehicle, id }) => {
       ) : (
         <Image source={IMGVehicleDummy} style={styles.image} />
       )}
-      <Text style={styles.informationText}>
-        <Text style={styles.bold}>{days} hari</Text> lagi batas pembayaran pajak
-        kendaraan dengan nomor polisi{' '}
-        <Text style={styles.bold}>{policeNumber}</Text>
-      </Text>
+      {expired ? (
+        <Text style={styles.informationText}>
+          Pajak kendaraan anda dengan nomor polisi{' '}
+          <Text style={styles.bold}>{policeNumber}</Text> sudah melewati masa
+          batas berlaku selama{' '}
+          <Text style={styles.bold}>{Math.abs(days)} hari</Text>{' '}
+        </Text>
+      ) : (
+        <Text style={styles.informationText}>
+          <Text style={styles.bold}>{days} hari</Text> lagi batas pembayaran
+          pajak kendaraan dengan nomor polisi{' '}
+          <Text style={styles.bold}>{policeNumber}</Text>
+        </Text>
+      )}
       <View style={styles.iconInfoContainer}>
         <IconInfo />
       </View>

@@ -26,6 +26,7 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
         return (
           <View>
             <Content
+              expired={true}
               policeNumber={policeNumber}
               dueDate={dueDate}
               image={image}
@@ -54,7 +55,7 @@ const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
         return <View />;
       }
     case 'month':
-      if (checkMonth && checkWeek === false) {
+      if (checkMonth && checkWeek === false && checkLewat === false) {
         return (
           <View>
             <Content
