@@ -45,17 +45,17 @@ const Login = ({ navigation }) => {
   //redux
 
   useEffect(() => {
+    getData('email').then(data => {
+      setForm('email', data);
+    });
     getData('user').then(data => {
-      console.log('wkwkwk', data);
+      // console.log('wkwkwk', data);
       if (data != null || data != undefined) {
         navigation.reset({
           index: 0,
           routes: [{ name: 'Dashboard' }],
         });
       }
-    });
-    getData('email').then(data => {
-      setForm('email', data);
     });
   }, []);
 
@@ -72,9 +72,9 @@ const Login = ({ navigation }) => {
     Alert.alert(notif.title, notif.message);
   };
   //Push Notification
-
+  const [checkLewat, setCheckLewat] = useState(false);
   const onContinue = () => {
-    console.log('onContinue', form);
+    // console.log('onContinue', form);
     dispatch(SET_LOADING(true));
     firebase
       .auth()
@@ -91,7 +91,7 @@ const Login = ({ navigation }) => {
               if (ingat) {
                 //Login logic
                 storeData('email', form.email);
-                console.log('email stored in storedata');
+                // console.log('email stored in storedata');
               } else {
                 storeData('email', null);
               }
@@ -108,9 +108,10 @@ const Login = ({ navigation }) => {
                 });
               });
               data.map((vehicle, i) => {
+                const today = moment();
                 const date = moment(
-                  `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}//8`,
-                  'DD/MM/YYYY//hh',
+                  `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
+                  'D/M/YYYY/H',
                 ).format();
                 const notifTitle = 'Surat pajak kendaraan';
                 const total = vehicle.data.PKB_TERAKHIR.toFixed(2).replace(
@@ -121,19 +122,25 @@ const Login = ({ navigation }) => {
                 const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.PLAT} sebesar Rp.${total}`;
                 const scheduledFor = date;
                 const repeat = 'days';
-                console.log('repeat');
-                notif.scheduleNotif(
-                  bigText,
-                  notifTitle,
-                  scheduledFor,
-                  message,
-                  repeat,
-                );
+                setCheckLewat(moment(date).isBefore(today));
+                console.log('Date scheduled:  ', message + date);
+                if (moment(date).isBefore(today)) {
+                  // console.log('scheduled for wkwkwk : ', date);
+                  notif.localNotif(bigText, notifTitle, message, repeat);
+                } else {
+                  notif.scheduleNotif(
+                    bigText,
+                    notifTitle,
+                    scheduledFor,
+                    message,
+                    repeat,
+                  );
+                }
               });
             });
           });
         if (ingat) {
-          setForm('password', null);
+          // setForm('password', null);
         } else {
           setForm('reset');
         }
@@ -143,6 +150,19 @@ const Login = ({ navigation }) => {
         console.log(error.message);
         showError(error.message);
       });
+  };
+
+  const Debugging = () => {
+    const notif = new NotifService(onNotif);
+    // const date = moment().add(30, 'second').format();
+    const hehe = moment('25/8/2021/9/20', 'D/M/YYYY/H/m');
+    const date = hehe.add(30, 'second').format();
+    console.log('Date : ', date);
+    const bigText = 'Big Text';
+    const notifTitle = 'This is title';
+    const message = 'Testing debuggin push notification';
+    const scheduledFor = date;
+    notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
   };
   return (
     <SafeAreaView style={styles.page}>
@@ -182,15 +202,14 @@ const Login = ({ navigation }) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            console.log('rememberState: ', rememberState.check);
-            console.log('email: ', rememberState.email);
-            console.log('wkwkwk');
+            // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
           }}>
           <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
         </TouchableOpacity>
       </View>
       <Gap height={'5%'} />
       <Button label="Masuk" onPress={onContinue} />
+      {/* <Button label="Masuk" onPress={Debugging} /> */}
       <Gap height={10} />
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Belum memiliki akun? </Text>
