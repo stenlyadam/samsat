@@ -9,14 +9,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {
-  colors,
-  fonts,
-  getData,
-  IconEdit,
-  IconPlus,
-  IMGStnk,
-} from '../../assets';
+import { colors, fonts, getData, IconEdit, IconPlus } from '../../assets';
 import { Button, TopBar } from '../../components';
 import VehicleDetailContent from './VehicleDetailContent';
 import { firebase } from '../../config';
@@ -101,7 +94,6 @@ const VehicleDetail = ({ route, navigation }) => {
     includeBase64: true,
     quality: 0.3,
   };
-  const [image, setImage] = useState('');
   const [kendaraan, setKendaraan] = useState({
     vehicle,
   });
@@ -113,8 +105,6 @@ const VehicleDetail = ({ route, navigation }) => {
       setKendaraan(item);
     });
   }, [vehicle.ID]);
-
-  // ===========> add picture
 
   const AddPicture = ({ count, text }) => {
     const openLibrary = () => {
@@ -162,15 +152,13 @@ const VehicleDetail = ({ route, navigation }) => {
         },
       }));
     };
-    if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
+    if (kendaraan.vehicle.FOTO_KENDARAAN[count]) {
       return (
         <View style={styles.addPicture}>
           <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>
             <Image
               source={{
-                uri: image
-                  ? `data:image/jpg;base64,${image[count]}`
-                  : `data:image/jpg;base64,${kendaraan.vehicle.FOTO_KENDARAAN[count]}`,
+                uri: `data:image/jpg;base64,${kendaraan.vehicle.FOTO_KENDARAAN[count]}`,
               }}
               style={styles.image}
             />
@@ -197,7 +185,6 @@ const VehicleDetail = ({ route, navigation }) => {
       );
     }
   };
-  // ===========> add picture
 
   const months = [
     'January',
@@ -238,15 +225,6 @@ const VehicleDetail = ({ route, navigation }) => {
           </View>
 
           <View style={styles.taxInformationContainer}>
-            <View>
-              <View style={styles.documentPictureContainer}>
-                <Text style={styles.doucmentPictureTitle}>Foto STNK</Text>
-                <Image source={IMGStnk} />
-              </View>
-              <View style={styles.paymentDueTitleContainer}>
-                <Text style={styles.paymentDueText}>Pembayaran Sebelum</Text>
-              </View>
-            </View>
             <View style={styles.paymentContainerLine}>
               <View style={styles.paymentTitleContainer}>
                 <Text style={styles.paymentTitle}>
@@ -266,6 +244,7 @@ const VehicleDetail = ({ route, navigation }) => {
                 />
               </View>
               <View style={styles.paymentDueDateContainer}>
+                <Text style={styles.paymentDueText}>Pembayaran sebelum : </Text>
                 <Text style={styles.paymentDueText}>
                   {vehicle.TANGGAL_BERLAKU_SD +
                     ' ' +
@@ -320,7 +299,6 @@ const VehicleDetail = ({ route, navigation }) => {
                       vehicle.TAHUN_BERLAKU_SD
                     }
                   />
-                  {/* <VehicleDetailContent title="SERI" content={vehicle.seri} /> */}
                 </View>
               </View>
               <Button label="Simpan" onPress={Simpan} />
@@ -415,7 +393,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 7,
+    paddingHorizontal: 20,
   },
   paymentTotal: {
     fontSize: 18,
@@ -423,13 +401,14 @@ const styles = StyleSheet.create({
     color: colors.darkGrey,
   },
   paymentDueDateContainer: {
-    width: 246,
+    width: '100%',
     flex: 1,
     borderBottomRightRadius: 8,
     borderTopColor: colors.white,
     borderTopWidth: 4,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
 
   textInputContainer: {

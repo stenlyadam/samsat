@@ -6,9 +6,7 @@ import Content from './Content';
 import moment from 'moment';
 
 const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
-  // const [vehicleCount, setVehicleCount] = useState(0);
   const date = moment(`${dueDate}`, 'DD MMMM YYYY');
-  // .format();
   const today = moment();
   const [checkLewat, setCheckLewat] = useState(false);
   const [checkWeek, setCheckWeek] = useState(false);
@@ -154,7 +152,9 @@ const Notification = ({ navigation }) => {
 
   function checkArray(my_arr) {
     for (var i = 0; i < my_arr.length; i++) {
-      if (my_arr[i] === '') return false;
+      if (my_arr[i] === '') {
+        return false;
+      }
     }
     return my_arr;
   }

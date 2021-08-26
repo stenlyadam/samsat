@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
     color: colors.darkGrey,
   },
   textInput: {
-    // backgroundColor: 'red',
-    // height: 30,
     textAlign: 'right',
   },
 });

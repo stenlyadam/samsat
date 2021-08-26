@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {
   colors,
@@ -35,7 +34,6 @@ const ContentHeader = ({ headerTitle, type }) => {
   useEffect(() => {
     getData('user').then(response => {
       const data = response;
-      // console.log('get DATA in Profile', data);
       setProfile(data);
     });
   }, []);
@@ -119,16 +117,7 @@ const ContentHeader = ({ headerTitle, type }) => {
 };
 
 const Profile = ({ navigation }) => {
-  //Push Notification
-  const onNotif = notif => {
-    Alert.alert(notif.title, notif.message);
-  };
-
-  const notif = new NotifService(
-    // onRegister,// not used
-    onNotif,
-  );
-  //Push Notification
+  const notif = new NotifService(); //Notification
   const logout = () => {
     storeData('user', null);
     navigation.reset({

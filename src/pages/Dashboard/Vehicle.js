@@ -10,7 +10,6 @@ import { colors, fonts, IMGVehicleDummy } from '../../assets';
 import { Gap } from '../../components';
 import NumberFormat from 'react-number-format';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -27,8 +26,6 @@ const Vehicle = ({
   fotoKendaraan,
 }) => {
   const navigation = useNavigation();
-  // const dateTime = moment(dueDate).diff(Date(), 'days');
-  // console.log('wkwkw: ', dateTime);
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('VehicleDetail', { vehicle, id })}>
@@ -80,28 +77,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   pictureContainer: {
-    // height: 160,
-    // width: 160,
     height: hp('20%'),
     width: hp('20%'),
     borderRadius: 18,
     marginTop: -70,
     backgroundColor: colors.white,
-    // backgroundColor: 'blue',
     elevation: 5,
   },
   fotoKendaraan: {
-    // height: 160,
-    // width: 160,
     height: hp('20%'),
     width: hp('20%'),
-    // borderRadius: 18,
     borderRadius: hp('2%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
   vehicleContainer: {
-    // height: 228,
     height: hp('25%'),
     width: wp('45%'),
     backgroundColor: colors.white,
@@ -113,14 +103,12 @@ const styles = StyleSheet.create({
   },
   policeNumber: {
     fontFamily: fonts.Poppins.medium,
-    // fontSize: 18,
     fontSize: wp('3.5%'),
     color: colors.primaryBlack,
   },
   vehicleName: {
     top: '-5%',
     fontFamily: fonts.Poppins.medium,
-    // fontSize: 12,
     fontSize: wp('3%'),
   },
   vehicleType: {
@@ -132,7 +120,6 @@ const styles = StyleSheet.create({
   },
   taxPrice: {
     fontFamily: fonts.Poppins.medium,
-    // fontSize: 18,
     fontSize: wp('3.5%'),
     color: colors.primaryBlack,
     position: 'absolute',
@@ -146,8 +133,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   expireContainer: {
-    // width: 160,
-    // height: 18,
     width: '100%',
     height: '10%',
     paddingHorizontal: '10%',
@@ -173,7 +158,6 @@ const styles = StyleSheet.create({
   },
   expire: {
     fontFamily: fonts.Poppins.regular,
-    // fontSize: 8,
     fontSize: wp('1.9%'),
     color: colors.white,
   },

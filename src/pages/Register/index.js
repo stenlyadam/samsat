@@ -85,14 +85,7 @@ const Login = ({ navigation }) => {
           secureTextEntry={true}
         />
         <Gap height={10} />
-        <View style={styles.passwordExtrasContainer}>
-          {/* <View style={styles.checkBoxContainer}>
-          <CheckBox label="Ingat" />
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgetPasswordText}>Lupa Password?</Text>
-        </TouchableOpacity> */}
-        </View>
+        <View style={styles.passwordExtrasContainer}></View>
         <Gap height={40} />
         <Button label="Daftar" onPress={onContinue} />
         <Gap height={10} />

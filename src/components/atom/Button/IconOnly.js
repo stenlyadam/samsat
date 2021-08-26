@@ -11,82 +11,76 @@ import {
   IconAddVehicle,
   IconDeleteCross,
   IconTrash,
-  windowHeight,
-  windowWidth,
 } from '../../../assets';
-import { colors } from '../../../assets';
 
-const IconOnly = ({ icon, onPress, width, height }) => {
+const IconOnly = ({ icon, onPress }) => {
   const Icon = () => {
     if (icon === 'icon-trash') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconTrash />
         </View>
       );
     }
     if (icon === 'icon-delete-cross') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconDeleteCross />
         </View>
       );
     }
     if (icon === 'icon-help') {
       return (
-        // <View style={{ width: '10%', height: '10%' }}>
-        //   <IconHelp />
-        // </View>
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconHelp />
         </View>
       );
     }
     if (icon === 'icon-notification') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconNotification />
         </View>
       );
     }
     if (icon === 'icon-main-profile') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconMainProfile />
         </View>
       );
     }
     if (icon === 'icon-vehicle') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconVehicle />
         </View>
       );
     }
     if (icon === 'icon-add') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconAdd />
         </View>
       );
     }
     if (icon === 'icon-profile') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconProfileBottomTab />
         </View>
       );
     }
     if (icon === 'icon-left-arrow') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconLeftArrow />
         </View>
       );
     }
     if (icon === 'icon-add-vehicle') {
       return (
-        <View style={styles.iconContainer(width, height, colors.primaryBlack)}>
+        <View style={styles.iconContainer}>
           <IconAddVehicle />
         </View>
       );
@@ -108,14 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconContainer: (width, height, color) => ({
+  iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    // width: width,
-    // height: height,
     aspectRatio: 1,
-
-    // backgroundColor: color,
-  }),
+  },
 });

@@ -9,21 +9,54 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import IconBadge from 'react-native-icon-badge';
+import Vehicle from './Vehicle';
+import NotifService from '../../../NotifService';
+import { useNavigation } from '@react-navigation/native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { colors, fonts, getData, IMGDashboard, storeData } from '../../assets';
 import { Button, Carousel } from '../../components';
-import IconBadge from 'react-native-icon-badge';
 import { firebase } from '../../config';
-import Vehicle from './Vehicle';
-import { useNavigation } from '@react-navigation/native';
-import NotifService from '../../../NotifService';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-// import moment from 'moment';
+import moment from 'moment';
+import PushNotification from 'react-native-push-notification';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
+};
+const notif = new NotifService();
+
+const sendAllNotification = () => {
+  getData('user').then(dataRes => {
+    if (dataRes.vehicles) {
+      const oldData = dataRes.vehicles;
+      const data = [];
+      Object.keys(oldData).map(key => {
+        data.push({
+          id: key,
+          data: oldData[key],
+        });
+      });
+      data.map((vehicle, i) => {
+        const today = moment();
+        const date = moment(
+          `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
+          'D/M/YYYY/H',
+        ).format();
+        const notifTitle = 'Surat pajak kendaraan';
+        const total = vehicle.data.PKB_TERAKHIR.toFixed(2).replace(
+          /\d(?=(\d{3})+\.)/g,
+          '$&.',
+        );
+        const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI}`;
+        const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
+        const scheduledFor = date;
+        if (moment(date).isBefore(today) === false) {
+          console.log('vehicle map : ', vehicle.data.NOMOR_POLISI);
+          notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
+        }
+      });
+    }
+  });
 };
 
 const VehicleList = () => {
@@ -31,11 +64,11 @@ const VehicleList = () => {
   const [uid, setUid] = useState('');
   const [vehiclesList, setVehiclesList] = useState(vehicles);
   const navigation = useNavigation();
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getData('user').then(response => {
         const data = response;
-        // console.log('get DATA', data);
         setVehicles(data.vehicles);
         setUid(data.uid);
         firebase
@@ -55,6 +88,7 @@ const VehicleList = () => {
     if (vehicles) {
       const oldData = vehicles;
       const data = [];
+
       Object.keys(oldData).map(key => {
         data.push({
           id: key,
@@ -64,18 +98,9 @@ const VehicleList = () => {
       setVehiclesList(data);
     }
   }, [uid, vehicles]);
-  // console.log('testing kalau ada kendaraan', vehiclesList);
   return (
     <ScrollView horizontal={true} style={styles.vehicleListContainer}>
       {vehiclesList.map((vehicle, i) => {
-        // console.log(
-        //   'vehicle one by one :',
-        //   vehicle.data.TANGGAL_BERLAKU_SD +
-        //     ' ' +
-        //     vehicle.data.BULAN_BERLAKU_SD +
-        //     ' ' +
-        //     vehicle.data.TAHUN_BERLAKU_SD,
-        // );
         const months = [
           'January',
           'February',
@@ -92,7 +117,7 @@ const VehicleList = () => {
         ];
 
         var selectedMonthName = months[vehicle.data.BULAN_BERLAKU_SD - 1];
-        // console.log('Pengaturan tanggal :', selectedMonthName);
+
         return (
           <Vehicle
             policeNumber={
@@ -126,73 +151,21 @@ const VehicleList = () => {
 const Dashboard = ({ navigation }) => {
   const [notification, setNotification] = useState(0);
   getData('user').then(data => {
-    setNotification(Object.keys(data.vehicles).length);
+    if (data.vehicles) {
+      setNotification(Object.keys(data.vehicles).length);
+    }
   });
   const [refreshing, setRefreshing] = useState(false);
-  //Push Notification
-  // const [registerToken, setRegisterToken] = useState(''); //not used
-  // const [fcmRegistered, setFcmRegistered] = useState(false); //not used
-
-  // const onRegister = token => { //not used
-  // setRegisterToken(token.token);
-  // setFcmRegistered(true);
-  // };
-
-  const onNotif = notif => {
-    Alert.alert(notif.title, notif.message);
-  };
-
-  const notif = new NotifService(
-    // onRegister,// not used
-    onNotif,
-  );
-
-  // const handlePerm = perms => {
-  //   Alert.alert('Permissions', JSON.stringify(perms));
-  // };
-  //Push Notification
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const onDebug = () => {
-    var moment = require('moment-timezone');
-    // var date = new Date().getDate(); //Current Date
-
-    // const date = moment(); //Time Stamp Now
-    const date = moment().tz('Asia/Makassar').format('MMMM Do YYYY, h:mm:ss a');
-    // const date = moment('31/7/2021', 'DD/MM/YYYY')
-    //   .tz('Asia/Makassar')
-    //   .fromNow();
-    // const scheduledDate = new Date(
-    //   moment('2/8/2021/8/9', 'DD/MM/YYYY/h/m').tz('Asia/Makassar').format(),
-    // );
-    // const date = new Date(Date.now() + 5 * 1000);
-    const bigText = `THIS IS BIG TEXT + ${date}`;
-    const title = 'This Is The Title';
-    // const date = scheduledDate;
-    // const date = moment.utc().format();
-    // notif.cancelAll();
-    // notif.scheduleNotif(bigText, title, date);
-    // notif.localNotif(bigText, title);
-    // notif.getScheduledLocalNotifications(notifs => console.log(notifs));
-    // console.log('wkwkwkwk :', date);
-    // console.log('wkwkwkwk :', wkwk);
-    console.log(date);
-    const todayDate = moment();
-    const pastDate = moment('11-08-2021', 'DD-MM-YYYY');
-    // console.log('today', date);
-    const check = todayDate.isBefore(pastDate);
-    // console.log('wkwkwk', check);
-    // if (todayDate.isAfter(pastDate)) {
-    //   console.log('Date is not past');
-    // } else {
-    //   console.log('Date is past');
-    // }
-  };
-
+  useEffect(() => {
+    notif.cancelAll();
+    sendAllNotification();
+  }, []);
   return (
     <View style={styles.page}>
       <ScrollView
@@ -202,27 +175,24 @@ const Dashboard = ({ navigation }) => {
         }>
         <Image source={IMGDashboard} style={styles.backgroundImage} />
         <View style={styles.topIconContainer}>
-          <View style={{ width: 30, height: '100%' }}>
+          <View style={styles.helpButtonContainer}>
             <Button
-              // height={40}
-              // width={40}
               type="icon-only"
               icon="icon-help"
               onPress={() => {
-                onDebug();
+                PushNotification.getScheduledLocalNotifications(res => {
+                  Object.keys(res).map(i => {
+                    console.log('scheduled for ', res[i].message);
+                    Alert.alert(`${res[i].message}`);
+                  });
+                });
               }}
-              // notif.localNotif(bigText, notifTitle);
             />
           </View>
 
           <IconBadge
             MainElement={
-              <View
-                style={{
-                  // backgroundColor: 'yellow',
-                  width: 30,
-                  height: '100%',
-                }}>
+              <View style={styles.notificationButtonContainer}>
                 <Button
                   type="icon-only"
                   icon="icon-notification"
@@ -238,7 +208,7 @@ const Dashboard = ({ navigation }) => {
           />
         </View>
         <View style={styles.titleContainer}>
-          <View style={{ width: 53, height: '50%' }}>
+          <View style={styles.topProfileButtonContainer}>
             <Button
               type="icon-only"
               icon="icon-main-profile"
@@ -289,9 +259,7 @@ export default Dashboard;
 const styles = StyleSheet.create({
   buttonLeftRight: {
     width: '13%',
-    // height: '100%',
     aspectRatio: 1,
-    // backgroundColor: 'yellow',
   },
   page: {
     flex: 1,
@@ -308,19 +276,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: '4%',
-    // paddingHorizontal: 16,
-    // marginTop: 16,
     paddingHorizontal: '5%',
     marginTop: '4%',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  helpButtonContainer: { width: 30, height: '100%' },
+  notificationButtonContainer: {
+    width: 30,
+    height: '100%',
   },
   titleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -25,
     height: hp('15%'),
-    // backgroundColor: 'blue',
+  },
+  topProfileButtonContainer: {
+    width: 53,
+    height: '50%',
   },
   title: {
     color: colors.white,
@@ -347,7 +321,6 @@ const styles = StyleSheet.create({
   },
   bottomTabContainer: {
     width: '100%',
-    // height: 58,
     height: hp('7%'),
     backgroundColor: colors.primaryRed,
     position: 'absolute',
@@ -355,14 +328,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // paddingBottom: 10,
     paddingHorizontal: 60,
     paddingVertical: '1%',
   },
   add: {
     width: hp('12%'),
     height: hp('12%'),
-    // backgroundColor: 'blue',
     top: hp('-3%'),
   },
   iconBadgeStyle: {
@@ -377,10 +348,8 @@ const styles = StyleSheet.create({
   },
 
   vehicleListContainer: {
-    // height: 350,
     height: hp('55%'),
     flexDirection: 'row',
-    // backgroundColor: 'yellow',
   },
   pictureContainer: {
     height: 160,

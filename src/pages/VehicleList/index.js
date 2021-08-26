@@ -130,12 +130,6 @@ const VehicleList = ({ navigation }) => {
             />
           );
         })}
-        {/* <FlatList
-          data={vehicles}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          showsHorizontalScrollIndicator={false}
-        /> */}
       </View>
     </ScrollView>
   );
@@ -147,9 +141,6 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: colors.white,
-  },
-  contentContainer: {
-    // paddingHorizontal: 24,
   },
   flatListPadding: {
     paddingHorizontal: 24,
@@ -175,7 +166,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 10,
     paddingTop: 10,
-    // justifyContent: 'space-between',
     paddingLeft: 22,
   },
   policeNumber: {

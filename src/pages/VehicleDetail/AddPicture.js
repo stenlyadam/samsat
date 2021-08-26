@@ -31,7 +31,6 @@ const AddPicture = ({ text, count, vehicle }) => {
         console.log('Launch Image Library Error');
       } else {
         const imageBase64 = JSON.stringify(response.assets[0].base64);
-        // console.log('response launch image library', response.assets);
         firebase
           .database()
           .ref(`users/${uid}/vehicles/${vehicle.ID}/FOTO_KENDARAAN`)
@@ -80,7 +79,6 @@ const AddPicture = ({ text, count, vehicle }) => {
   };
 
   if (kendaraan.vehicle.FOTO_KENDARAAN[count] || image[count]) {
-    // console.log('foto kendaraan: ', kendaraan.vehicle.fotoKendaraan[count]);
     return (
       <View style={styles.addPicture}>
         <TouchableOpacity style={styles.addPicture} onPress={openLibrary}>
@@ -119,11 +117,6 @@ const AddPicture = ({ text, count, vehicle }) => {
 export default AddPicture;
 
 const styles = StyleSheet.create({
-  // imageContainer: {
-  //   width: 100,
-  //   height: 100,
-  //   borderRadius: 8,
-  // },
   addPicture: {
     height: 100,
     width: 100,

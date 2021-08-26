@@ -16,16 +16,13 @@ const AddVehicle = ({ navigation }) => {
   const [nomorMesin, setNomorMesin] = useState('');
 
   const searchVehicle = () => {
-    console.log('cari nomor mesin', nomorMesin);
     var scoresRef = firebase.database().ref('vehicles/');
     scoresRef
       .orderByChild('ID')
       .equalTo(`${nomorMesin}`)
       .on('value', function (snapshot) {
-        // console.log('wkwkwkwkwk : ', snapshot.val());
         if (snapshot.val() !== null) {
           snapshot.forEach(function (data) {
-            console.log('The data is ', data.val());
             navigation.navigate('DetailSTNK', data.val());
           });
         } else {
@@ -33,8 +30,6 @@ const AddVehicle = ({ navigation }) => {
           showError('Kendaraan tidak ditemukan');
         }
       });
-    // .equalTo(`${nomorMesin}`)
-    // .equalTo('7K-0746605')
   };
   return (
     <SafeAreaView style={styles.page}>
@@ -58,12 +53,12 @@ const AddVehicle = ({ navigation }) => {
             style={styles.engineNumberInput}
             placeholder="Nomor Mesin"
             textAlign="center"
+            autoCapitalize="characters"
             value={nomorMesin}
             onChangeText={value => setNomorMesin(value)}
           />
           <TouchableOpacity
             style={styles.engineNumberInputButton}
-            // onPress={() => navigation.navigate('DetailSTNK')}>
             onPress={() => searchVehicle()}>
             <Text style={styles.buttonTitle}>Cari Nomor Mesin</Text>
           </TouchableOpacity>
@@ -97,7 +92,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
+    height: '100%',
     backgroundColor: colors.white,
     paddingBottom: 100,
   },

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors, fonts, getData, IconAddVehicle } from '../../assets';
 import { Button, TopBar } from '../../components';
 import { showError, showSuccess } from '../../utils';
 import Content from './Content';
 import { firebase } from '../../config';
-import PushNotification from 'react-native-push-notification';
 import NotifService from '../../../NotifService';
 import moment from 'moment-timezone';
+
+const notif = new NotifService();
 
 const DetailSTNK = ({ navigation, route }) => {
   const {
     NOMOR_MESIN,
     TAHUN_BUAT,
     TYPE_KB,
-    PLAT,
+    KODE_LOKASI_NOMOR_POLISI,
     KODE_DAERAH_NOMOR_POLISI,
     NOMOR_POLISI,
     NOMOR_RANGKA,
@@ -31,7 +32,6 @@ const DetailSTNK = ({ navigation, route }) => {
     },
     NAMA_KENDARAAN: '',
   };
-  console.log('vehicle :', vehiclesToDB);
 
   const months = [
     'January',
@@ -58,36 +58,21 @@ const DetailSTNK = ({ navigation, route }) => {
       setUid(data.uid);
     });
   }, []);
+
   //NOTIFICATION
-
-  const [registerToken, setRegisterToken] = useState('');
-  const [fcmRegistered, setFcmRegistered] = useState(false);
-
-  const onRegister = token => {
-    setRegisterToken(token.token);
-    setFcmRegistered(true);
-  };
-
-  const onNotif = notif => {
-    Alert.alert(notif.title, notif.message);
-  };
-
   const date = moment(
     `${TANGGAL_BERLAKU_SD}/${BULAN_BERLAKU_SD}/${TAHUN_BERLAKU_SD}/8`,
-    'DD/MM/YYYY/h',
-  )
-    .tz('Asia/Makassar')
-    .format();
+    'D/M/YYYY/H',
+  ).format();
 
-  const notif = new NotifService(onRegister, onNotif);
-  const notifTitle =
-    'Notifikasi batas pemberlakuan surat pajak kendaraan anda dengan nomor polisi : ';
-  const bigText = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${PLAT} sebesar Rp.${PKB_TERAKHIR}`;
+  const notifTitle = 'Surat pajak kendaraan';
+  const total = PKB_TERAKHIR.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
+  const bigText = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
   const scheduledFor = date;
+  const message = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${KODE_LOKASI_NOMOR_POLISI}`;
   //NOTIFICATION
 
   const tambahKendaraan = () => {
-    console.log('searchVehicle response: ', values);
     firebase
       .database()
       .ref(`users/${uid}/vehicles`)
@@ -95,34 +80,29 @@ const DetailSTNK = ({ navigation, route }) => {
       .set(vehiclesToDB)
       .then(res => {
         setTimeout(() => {
+          const today = moment();
+          if (moment(date).isBefore(today)) {
+            notif.localNotif(bigText, notifTitle, message);
+          } else {
+            notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
+          }
           navigation.reset({
             index: 0,
             routes: [{ name: 'Dashboard' }],
           });
-          notif.scheduleNotif(bigText, notifTitle, scheduledFor);
         }, 1000);
       })
       .catch(error => {
         console.log(error.message);
         showError(error.message);
       });
-    // PushNotification.localNotificationSchedule({
-    //   //... You can use all the options from localNotifications
-    //   message: 'Kendaraan anda perlu bayar pajak', // (required)
-    //   date: new Date(Date.now() + 5 * 1000), // in 60 secs
-    //   allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-
-    //   /* Android Only Properties */
-    //   repeatTime: 1, // (optional) Increment of configured repeatType. Check 'Repeating Notifications' section for more info.
-    //   // channelId: "your-channel-id"
-    // });
     showSuccess('Kendaraan berhasil ditambahkan');
   };
 
   return (
     <SafeAreaView style={styles.page}>
       <TopBar title="Tambah kendaraan" onBack={() => navigation.goBack()} />
-      <View style={styles.contentWrapper}>
+      <ScrollView style={styles.contentWrapper}>
         <View style={styles.contentTitleContainer}>
           <IconAddVehicle width={58} height={39} />
           <Text style={styles.contentTitle}>Rincian Kendaraan</Text>
@@ -133,7 +113,13 @@ const DetailSTNK = ({ navigation, route }) => {
         <Content title="NOMOR RANGKA" content={NOMOR_RANGKA} />
         <Content
           title="NOMOR POLISI"
-          content={KODE_DAERAH_NOMOR_POLISI + ' ' + NOMOR_POLISI + ' ' + PLAT}
+          content={
+            KODE_DAERAH_NOMOR_POLISI +
+            ' ' +
+            NOMOR_POLISI +
+            ' ' +
+            KODE_LOKASI_NOMOR_POLISI
+          }
         />
         <Content
           title="MASA BERLAKU STNK"
@@ -145,7 +131,6 @@ const DetailSTNK = ({ navigation, route }) => {
             TAHUN_BERLAKU_SD
           }
         />
-        <Content title="TAMBHAKAN FOTO STNK" content="STNK" />
         <View style={styles.buttonContainer}>
           <Button
             label="Tambah"
@@ -154,7 +139,7 @@ const DetailSTNK = ({ navigation, route }) => {
             onPress={() => tambahKendaraan()}
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
