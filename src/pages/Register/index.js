@@ -22,10 +22,12 @@ import { useForm } from '../../assets/useForm';
 import { Gap, TextInput, Button, Loading } from '../../components';
 import { firebase } from '../../config';
 import { showError } from '../../utils/showMessage';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Login = ({ navigation }) => {
   const [form, setForm] = useForm({
     email: '',
+    handphone: '',
     password: '',
   });
 
@@ -42,6 +44,7 @@ const Login = ({ navigation }) => {
         setForm('reset');
         const data = {
           email: form.email,
+          handphone: form.handphone,
           uid: success.user.uid,
         };
         console.log('wkwkwkwkwk');
@@ -63,20 +66,27 @@ const Login = ({ navigation }) => {
   return (
     <>
       <SafeAreaView style={styles.page}>
-        <Gap height={20} />
+        <Gap height={'2%'} />
 
         <Image source={IMGBapenda} style={styles.bapenda} />
         <Gap height={30} />
         <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
         <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
-        <Gap height={45} />
+        <Gap height={hp('1%')} />
         <TextInput
           title="Email"
           paddingHorizontal={55}
           value={form.email}
           onChangeText={value => setForm('email', value)}
         />
-        <Gap height={26} />
+        <Gap height={hp('2%')} />
+        <TextInput
+          title="Nomor Handphone"
+          paddingHorizontal={55}
+          value={form.handphone}
+          onChangeText={value => setForm('handphone', value)}
+        />
+        <Gap height={hp('2%')} />
         <TextInput
           title="Password"
           paddingHorizontal={55}
@@ -84,9 +94,7 @@ const Login = ({ navigation }) => {
           onChangeText={value => setForm('password', value)}
           secureTextEntry={true}
         />
-        <Gap height={10} />
-        <View style={styles.passwordExtrasContainer}></View>
-        <Gap height={40} />
+        <Gap height={hp('5%')} />
         <Button label="Daftar" onPress={onContinue} />
         <Gap height={10} />
         <View style={styles.registerContainer}>
@@ -126,8 +134,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-around',
-    marginTop: 35,
+    alignItems: 'center',
     paddingHorizontal: 15,
+    paddingBottom: '8%',
+    flex: 1,
   },
   satlantas: {
     width: 48,

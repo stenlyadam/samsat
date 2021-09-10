@@ -66,7 +66,8 @@ const DetailSTNK = ({ navigation, route }) => {
   ).format();
 
   const notifTitle = 'Surat pajak kendaraan';
-  const total = PKB_TERAKHIR.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
+  const numberPKB = parseInt(PKB_TERAKHIR);
+  const total = numberPKB.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
   const bigText = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
   const scheduledFor = date;
   const message = `${KODE_DAERAH_NOMOR_POLISI} ${NOMOR_POLISI} ${KODE_LOKASI_NOMOR_POLISI}`;

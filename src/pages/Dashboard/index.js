@@ -42,17 +42,29 @@ const sendAllNotification = () => {
           `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
           'D/M/YYYY/H',
         ).format();
+        const kemarin = moment(date).subtract(1, 'days').format();
+        const mingguLalu = moment(date).subtract(7, 'days').format();
+        const bulanLalu = moment(date).substract(30, 'days').format();
         const notifTitle = 'Surat pajak kendaraan';
-        const total = vehicle.data.PKB_TERAKHIR.toFixed(2).replace(
-          /\d(?=(\d{3})+\.)/g,
-          '$&.',
-        );
+        const pkbNumber = parseInt(vehicle.data.PKB_TERAKHIR);
+        const total = pkbNumber.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
         const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI}`;
-        const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
         const scheduledFor = date;
         if (moment(date).isBefore(today) === false) {
-          console.log('vehicle map : ', vehicle.data.NOMOR_POLISI);
+          const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
           notif.scheduleNotif(bigText, notifTitle, scheduledFor, message);
+        }
+        if (moment(kemarin).isBefore(today) === false) {
+          const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total} besok`;
+          notif.scheduleNotif(bigText, notifTitle, kemarin, message);
+        }
+        if (moment(mingguLalu).isBefore(today) === false) {
+          const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total} minggu depan`;
+          notif.scheduleNotif(bigText, notifTitle, mingguLalu, message);
+        }
+        if (moment(bulanLalu).isBefore(today) === false) {
+          const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total} bulan depan`;
+          notif.scheduleNotif(bigText, notifTitle, bulanLalu, message);
         }
       });
     }
@@ -179,14 +191,20 @@ const Dashboard = ({ navigation }) => {
             <Button
               type="icon-only"
               icon="icon-help"
-              onPress={() => {
-                PushNotification.getScheduledLocalNotifications(res => {
-                  Object.keys(res).map(i => {
-                    console.log('scheduled for ', res[i].message);
-                    Alert.alert(`${res[i].message}`);
-                  });
-                });
-              }}
+              // onPress={() => { //USED FOR DEBUGGING
+              // PushNotification.getScheduledLocalNotifications(res => {
+              //   Object.keys(res).map(i => {
+              //     console.log(
+              //       'scheduled for ' +
+              //         res[i].message +
+              //         'date : ' +
+              //         res[i].date,
+              //     );
+              //     // console.log('date : ', res[i].date);
+              //     Alert.alert(`${res[i].message}`);
+              //   });
+              // });
+              // }}
             />
           </View>
 

@@ -30,6 +30,7 @@ const ContentHeader = ({ headerTitle, type }) => {
     tanggalLahir: '',
     alamat: '',
     email: '',
+    handphone: '',
   });
   useEffect(() => {
     getData('user').then(response => {
@@ -68,7 +69,6 @@ const ContentHeader = ({ headerTitle, type }) => {
           <Content
             type="edit"
             title="Nama Lengkap:"
-            content="namaLengkap"
             profile={profile.namaLengkap}
             value={profile.namaLengkap}
             onChangeText={value => changeText('namaLengkap', value)}
@@ -77,7 +77,6 @@ const ContentHeader = ({ headerTitle, type }) => {
             type="edit"
             placeholder="dd/mm/yyyy"
             title="Tanggal Lahir:"
-            content="1 Januari 1999"
             profile={profile.tanggalLahir}
             value={profile.tanggalLahir}
             onChangeText={value => changeText('tanggalLahir', value)}
@@ -85,10 +84,16 @@ const ContentHeader = ({ headerTitle, type }) => {
           <Content
             type="edit"
             title="Alamat:"
-            content="Airmadidi"
             profile={profile.alamat}
             value={profile.alamat}
             onChangeText={value => changeText('alamat', value)}
+          />
+          <Content
+            type="edit"
+            title="Nomor Handphone:"
+            profile={profile.handphone}
+            value={profile.handphone}
+            onChangeText={value => changeText('handphone', value)}
           />
           <View style={styles.button}>
             <Button label="Selesai" onPress={updateProfile} />
@@ -110,6 +115,7 @@ const ContentHeader = ({ headerTitle, type }) => {
           <Content title="Tanggal Lahir:" profile={profile.tanggalLahir} />
           <Content title="Alamat:" profile={profile.alamat} />
           <Content title="Email:" profile={profile.email} />
+          <Content title="Nomor Handphone:" profile={profile.handphone} />
         </CollapseBody>
       </Collapse>
     );

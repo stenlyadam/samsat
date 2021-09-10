@@ -10,6 +10,8 @@ import IMGBapenda from './img-bapenda.png';
 import IMGFik from './img-fik.png';
 import IMGUnklab from './img-unklab.png';
 import IMGVehicleDummy from './img-vehicle-dummy.png';
+import IMGCarousel2 from './img-carousel-2.png';
+import IMGCarousel3 from './img-carousel-3.png';
 
 export {
   IMGVehicleDummy,
@@ -18,6 +20,8 @@ export {
   IMGKorlantas,
   IMGDashboard,
   IMGCarousel,
+  IMGCarousel2,
+  IMGCarousel3,
   IMGVehicle,
   IMGStnk,
   IMGSatlantas,

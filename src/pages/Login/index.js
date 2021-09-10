@@ -29,6 +29,7 @@ import moment from 'moment-timezone';
 import NotifService from '../../../NotifService';
 import { SET_LOADING } from '../../redux/counter/loadingSlice';
 import { remember } from '../../redux/counter/rememberSlice';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Login = ({ navigation }) => {
   //login logic
@@ -77,7 +78,9 @@ const Login = ({ navigation }) => {
               } else {
                 storeData('email', null);
               }
-              navigation.navigate('Dashboard'); //Navigate to dashboard
+              navigation.navigate('Dashboard', {
+                screen: 'Dashboard',
+              }); //Navigate to dashboard
             }
             getData('user').then(dataRes => {
               if (dataRes.vehicles) {
@@ -123,12 +126,12 @@ const Login = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={styles.page}>
-      <Gap height={'2%'} />
+      <Gap height={hp('2%')} />
       <Image source={IMGBapenda} style={styles.bapenda} />
       <Gap height={30} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
       <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
-      <Gap height={windowHeight / 40} />
+      <Gap height={hp('1%')} />
       <TextInput
         title="Email"
         paddingHorizontal={'13%'}
@@ -137,7 +140,7 @@ const Login = ({ navigation }) => {
           setForm('email', value);
         }}
       />
-      <Gap height={'2%'} />
+      <Gap height={hp('2%')} />
       <TextInput
         title="Password"
         paddingHorizontal={'13%'}
@@ -145,7 +148,7 @@ const Login = ({ navigation }) => {
         onChangeText={value => setForm('password', value)}
         secureTextEntry={true}
       />
-      <Gap height={'1%'} />
+      <Gap height={hp('1%')} />
       <View style={styles.passwordExtrasContainer}>
         <View style={styles.checkBoxContainer}>
           <CheckBox
@@ -158,7 +161,7 @@ const Login = ({ navigation }) => {
           />
         </View>
       </View>
-      <Gap height={'5%'} />
+      <Gap height={hp('5%')} />
       <Button label="Masuk" onPress={onContinue} />
       <Gap height={10} />
       <View style={styles.registerContainer}>
@@ -169,7 +172,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.registerButtonText}>Daftar</Text>
         </TouchableOpacity>
       </View>
-      <Gap height={'2%'} />
+      <Gap height={hp('2%')} />
       <View style={styles.logoContainer}>
         <Image source={IMGFik} style={styles.fik} />
         <Image source={IMGSatlantas} style={styles.satlantas} />

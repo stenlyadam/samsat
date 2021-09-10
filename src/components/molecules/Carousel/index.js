@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { IMGCarousel } from '../../../assets';
+import { IMGCarousel, IMGCarousel2, IMGCarousel3 } from '../../../assets';
 import Swiper from 'react-native-swiper';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -15,10 +15,10 @@ const Carousel = () => {
           <Image source={IMGCarousel} style={styles.carouselPicture} />
         </View>
         <View style={styles.slide}>
-          <Image source={IMGCarousel} style={styles.carouselPicture} />
+          <Image source={IMGCarousel2} style={styles.carouselPicture} />
         </View>
         <View style={styles.slide}>
-          <Image source={IMGCarousel} style={styles.carouselPicture} />
+          <Image source={IMGCarousel3} style={styles.carouselPicture} />
         </View>
       </Swiper>
     </View>

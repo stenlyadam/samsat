@@ -10,12 +10,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { colors, fonts, getData, IconEdit, IconPlus } from '../../assets';
-import { Button, TopBar } from '../../components';
+import { Button, Gap, TopBar } from '../../components';
 import VehicleDetailContent from './VehicleDetailContent';
 import { firebase } from '../../config';
 import NumberFormat from 'react-number-format';
 import { showSuccess } from '../../utils';
 import { launchImageLibrary } from 'react-native-image-picker';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const VehicleDetail = ({ route, navigation }) => {
   const values = route.params;
@@ -218,11 +222,11 @@ const VehicleDetail = ({ route, navigation }) => {
       <View style={styles.contentContainer}>
         <View style={styles.pictureWrapper}>
           <Text style={styles.title}>Foto Kendaraan</Text>
-          <View style={styles.pictureContainer}>
+          <ScrollView horizontal style={styles.pictureContainer}>
             <AddPicture count={0} text="Foto Pertama" />
             <AddPicture count={1} text="Foto Kedua" />
             <AddPicture count={2} text="Foto Ketiga" />
-          </View>
+          </ScrollView>
 
           <View style={styles.taxInformationContainer}>
             <View style={styles.paymentContainerLine}>
@@ -302,6 +306,7 @@ const VehicleDetail = ({ route, navigation }) => {
                 </View>
               </View>
               <Button label="Simpan" onPress={Simpan} />
+              <Gap height={hp('3%')} />
             </View>
           </View>
         </View>

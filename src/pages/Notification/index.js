@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { colors, fonts, getData } from '../../assets';
+import { colors, fonts, getData, storeData } from '../../assets';
 import { TopBar } from '../../components';
 import Content from './Content';
 import moment from 'moment';
+import { firebase } from '../../config';
 
 const VehiclesList = ({ policeNumber, dueDate, check, image, vehicle, id }) => {
   const date = moment(`${dueDate}`, 'DD MMMM YYYY');
@@ -118,9 +119,19 @@ const Notification = ({ navigation }) => {
   const [vehiclesList, setVehiclesList] = useState(vehicles);
   useEffect(() => {
     getData('user').then(data => {
-      setVehicles(data.vehicles);
+      console.log('vehicle data : ', data);
+      firebase
+        .database()
+        .ref(`users/${data.uid}/`)
+        .on('value', snapshot => {
+          console.log('snapshot : ', snapshot.val());
+          storeData('user', snapshot.val());
+          setVehicles(snapshot.val().vehicles);
+        });
+      console.log('succesfully');
     });
   }, []);
+  console.log('wkwkwk', vehicles);
   useEffect(() => {
     if (vehicles) {
       const oldData = vehicles;
