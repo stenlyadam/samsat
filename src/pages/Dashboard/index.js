@@ -44,7 +44,7 @@ const sendAllNotification = () => {
         ).format();
         const kemarin = moment(date).subtract(1, 'days').format();
         const mingguLalu = moment(date).subtract(7, 'days').format();
-        const bulanLalu = moment(date).substract(30, 'days').format();
+        const bulanLalu = moment(date).subtract(30, 'days').format();
         const notifTitle = 'Surat pajak kendaraan';
         const pkbNumber = parseInt(vehicle.data.PKB_TERAKHIR);
         const total = pkbNumber.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
