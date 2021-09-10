@@ -335,6 +335,7 @@ const styles = StyleSheet.create({
   },
   pictureContainer: {
     flexDirection: 'row',
+    height: 110,
   },
   taxInformationContainer: {
     backgroundColor: colors.lightGrey,
@@ -454,5 +455,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -8,
     right: -8,
+    // backgroundColor: 'yellow',
+    // marginBottom:
   },
 });
