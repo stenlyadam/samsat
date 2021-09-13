@@ -82,35 +82,6 @@ const Login = ({ navigation }) => {
                 screen: 'Dashboard',
               }); //Navigate to dashboard
             }
-            getData('user').then(dataRes => {
-              if (dataRes.vehicles) {
-                const oldData = dataRes.vehicles;
-                const data = [];
-                Object.keys(oldData).map(key => {
-                  data.push({
-                    id: key,
-                    data: oldData[key],
-                  });
-                });
-                data.map((vehicle, i) => {
-                  const today = moment();
-                  const date = moment(
-                    `${vehicle.data.TANGGAL_BERLAKU_SD}/${vehicle.data.BULAN_BERLAKU_SD}/${vehicle.data.TAHUN_BERLAKU_SD}/8`,
-                    'D/M/YYYY/H',
-                  ).format();
-                  const notifTitle = 'Surat pajak kendaraan';
-                  const total = vehicle.data.PKB_TERAKHIR.toFixed(2).replace(
-                    /\d(?=(\d{3})+\.)/g,
-                    '$&.',
-                  );
-                  const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI}`;
-                  const bigText = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI} sebesar Rp.${total}`;
-                  if (moment(date).isBefore(today)) {
-                    notif.localNotif(bigText, notifTitle, message);
-                  }
-                });
-              }
-            });
           });
         if (ingat) {
           setForm('password', null);
