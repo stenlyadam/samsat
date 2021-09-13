@@ -191,21 +191,21 @@ const Dashboard = ({ navigation }) => {
             <Button
               type="icon-only"
               icon="icon-help"
-              onPress={() => {
-                //USED FOR DEBUGGING
-                notif.getScheduledLocalNotifications(res => {
-                  Object.keys(res).map(i => {
-                    console.log(
-                      'scheduled for ' +
-                        res[i].message +
-                        'date : ' +
-                        res[i].date,
-                    );
-                    // console.log('date : ', res[i].date);
-                    Alert.alert(`${res[i].message}`);
-                  });
-                });
-              }}
+              // onPress={() => {
+              //   //USED FOR DEBUGGING
+              //   notif.getScheduledLocalNotifications(res => {
+              //     Object.keys(res).map(i => {
+              //       console.log(
+              //         'scheduled for ' +
+              //           res[i].message +
+              //           'date : ' +
+              //           res[i].date,
+              //       );
+              //       // console.log('date : ', res[i].date);
+              //       Alert.alert(`${res[i].message}`);
+              //     });
+              //   });
+              // }}
             />
           </View>
 

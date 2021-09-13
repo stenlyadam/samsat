@@ -18,15 +18,12 @@ import {
   IMGSatlantas,
   IMGUnklab,
   storeData,
-  windowHeight,
 } from '../../assets';
 import { useForm } from '../../assets/useForm';
 import { Gap, TextInput, CheckBox, Button } from '../../components';
 import { firebase } from '../../config';
 import { useDispatch } from 'react-redux';
 import { showError } from '../../utils';
-import moment from 'moment-timezone';
-import NotifService from '../../../NotifService';
 import { SET_LOADING } from '../../redux/counter/loadingSlice';
 import { remember } from '../../redux/counter/rememberSlice';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -56,7 +53,6 @@ const Login = ({ navigation }) => {
   }, []);
 
   //Push Notification
-  const notif = new NotifService();
 
   const onContinue = () => {
     dispatch(SET_LOADING(true));
@@ -99,7 +95,7 @@ const Login = ({ navigation }) => {
     <SafeAreaView style={styles.page}>
       <Gap height={hp('2%')} />
       <Image source={IMGBapenda} style={styles.bapenda} />
-      <Gap height={30} />
+      <Gap height={hp('2%')} />
       <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
       <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
       <Gap height={hp('1%')} />
