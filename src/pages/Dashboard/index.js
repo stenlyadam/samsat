@@ -18,7 +18,6 @@ import { colors, fonts, getData, IMGDashboard, storeData } from '../../assets';
 import { Button, Carousel } from '../../components';
 import { firebase } from '../../config';
 import moment from 'moment';
-import PushNotification from 'react-native-push-notification';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -48,6 +47,7 @@ const sendAllNotification = () => {
         const notifTitle = 'Surat pajak kendaraan';
         const pkbNumber = parseInt(vehicle.data.PKB_TERAKHIR);
         const total = pkbNumber.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
+        console.log('total : ', total);
         const message = `${vehicle.data.KODE_DAERAH_NOMOR_POLISI} ${vehicle.data.NOMOR_POLISI} ${vehicle.data.KODE_LOKASI_NOMOR_POLISI}`;
         const scheduledFor = date;
         if (moment(date).isBefore(today) === false) {
@@ -191,19 +191,20 @@ const Dashboard = ({ navigation }) => {
             <Button
               type="icon-only"
               icon="icon-help"
-              // onPress={() => { //USED FOR DEBUGGING
-              // PushNotification.getScheduledLocalNotifications(res => {
-              //   Object.keys(res).map(i => {
-              //     console.log(
-              //       'scheduled for ' +
-              //         res[i].message +
-              //         'date : ' +
-              //         res[i].date,
-              //     );
-              //     // console.log('date : ', res[i].date);
-              //     Alert.alert(`${res[i].message}`);
+              // onPress={() => {
+              //   //USED FOR DEBUGGING
+              //   notif.getScheduledLocalNotifications(res => {
+              //     Object.keys(res).map(i => {
+              //       console.log(
+              //         'scheduled for ' +
+              //           res[i].message +
+              //           'date : ' +
+              //           res[i].date,
+              //       );
+              //       // console.log('date : ', res[i].date);
+              //       Alert.alert(`${res[i].message}`);
+              //     });
               //   });
-              // });
               // }}
             />
           </View>

@@ -66,27 +66,27 @@ const Login = ({ navigation }) => {
   return (
     <>
       <SafeAreaView style={styles.page}>
-        <Gap height={'2%'} />
+        <Gap height={hp('2%')} />
 
         <Image source={IMGBapenda} style={styles.bapenda} />
-        <Gap height={30} />
+        <Gap height={hp('2%')} />
         <Text style={styles.mainTitle}>SELAMAT DATANG</Text>
         <Text style={styles.subTitle}>Aplikasi Pengingat Pembayaran Pajak</Text>
-        <Gap height={hp('1%')} />
+        {/* <Gap height={hp('0%')} /> */}
         <TextInput
           title="Email"
           paddingHorizontal={55}
           value={form.email}
           onChangeText={value => setForm('email', value)}
         />
-        <Gap height={hp('2%')} />
+        <Gap height={hp('1%')} />
         <TextInput
           title="Nomor Handphone"
           paddingHorizontal={55}
           value={form.handphone}
           onChangeText={value => setForm('handphone', value)}
         />
-        <Gap height={hp('2%')} />
+        <Gap height={hp('1%')} />
         <TextInput
           title="Password"
           paddingHorizontal={55}
@@ -94,7 +94,7 @@ const Login = ({ navigation }) => {
           onChangeText={value => setForm('password', value)}
           secureTextEntry={true}
         />
-        <Gap height={hp('5%')} />
+        <Gap height={hp('3.5%')} />
         <Button label="Daftar" onPress={onContinue} />
         <Gap height={10} />
         <View style={styles.registerContainer}>
